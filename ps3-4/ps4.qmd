@@ -14,13 +14,13 @@ format:
     fig-pos: 'H'
 ---
 
-# Part III - The Populist’s entry decision (part of this will be solved on Thursday 2 February, the rest on Thursday 9 February)
+# Part III - The Populist's entry decision (part of this will be solved on Thursday 2 February, the rest on Thursday 9 February)
 
-In the previous part, we have computed the electoral decision of a voter from group $C$ as a function of her information. We use our previous answers to compute $P$’s electoral chances and entry decision under different scenarios.
+In the previous part, we have computed the electoral decision of a voter from group $C$ as a function of her information. We use our previous answers to compute $P$'s electoral chances and entry decision under different scenarios.
 
 ## Q7
 
-In this question, we suppose that mainstream candidates find it optimal to the commoners’ preferred policy.
+In this question, we suppose that mainstream candidates find it optimal to the commoners' preferred policy.
 
 (a) Using your answers to **Q3**, explain briefly why $P$ never wins the election if he enters in this case.
 
@@ -52,7 +52,7 @@ In this question, we suppose that mainstream candidates find it optimal to the c
 
 ## Q8
 
-In question [Q8] and [Q9], we turn to the case when mainstream candidates converge to the elite citizens’ preferred policy ($x_A = x_B = \omega_E$ and this is anticipated by commoners). In this question, we assume that $\alpha > 1/2$ and look at $P$’s entry decision then.
+In question [Q8] and [Q9], we turn to the case when mainstream candidates converge to the elite citizens' preferred policy ($x_A = x_B = \omega_E$ and this is anticipated by commoners). In this question, we assume that $\alpha > 1/2$ and look at $P$'s entry decision then.
 
 (a) Assume that mainstream candidates propose $x_A=x_B=0$ and the populist offers $x_P =1$. Assume further than the state is $\omega_C = 0$ (i.e., that is the optimal policy happens to be zero for the common voters). Using your answer to **Q5**(i), show that the vote share of candidate $P$ is: $(1 − \sigma)(1 − p)$. Explain why P does not win the election then.
 
@@ -157,7 +157,7 @@ In question [Q8] and [Q9], we turn to the case when mainstream candidates conver
 
 ## Q9
 
-We now look at $P$’s electoral chances and entry decision when $\alpha<1/2$.
+We now look at $P$'s electoral chances and entry decision when $\alpha<1/2$.
 
 (a) Assume that mainstream candidates propose $x_A=x_B=0$ and the populist offers $x_P=1$. Using your answer to **Q5**(i), show that the vote share of candidate $P$ is: ($1 − \sigma$). Explain why $P$ wins the election then.
 
@@ -213,6 +213,62 @@ We now look at $P$’s electoral chances and entry decision when $\alpha<1/2$.
 
     Therefore, the $P$ will enjoy all the votes, and only the votes of the commoners, who account for ($1-\sigma$) of all voters. Since there are more commoners than elite $1-\sigma>1/2$, $P$ will win the election.
 
-We now need to compute $P$’s expected payoff if $P$ enters. We consider the populist’s entry decision so we no longer assume that $x_P = s_{P,C}$ (this has to be a choice of the populist). However, we still assume below that citizens anticipate that $x_P = s_{P,C}$ if the populist enters (we will see that this anticipation is correct below). In turn, both the citizens and the populist anticipate that the mainstream candidates propose $x_A=x_B=\omega_E$ (again, we will see that this anticipation is correct in Part IV).
+We now need to compute $P$'s expected payoff if $P$ enters. We consider the populist's entry decision so we no longer assume that $x_P = s_{P,C}$ (this has to be a choice of the populist). However, we still assume below that citizens anticipate that $x_P = s_{P,C}$ if the populist enters (we will see that this anticipation is correct below). In turn, both the citizens and the populist anticipate that the mainstream candidates propose $x_A=x_B=\omega_E$ (again, we will see that this anticipation is correct in [Part IV - The mainstream parties' adaptation]).
 
-To calculate $P$’s expected utility when he enters, we make use of $\rho(s_{P,C}, x_A, x_B)$ the populist’s posterior that $\omega_C = 1$ given his signal and the mainstream candidates’ platform choices.
+To calculate $P$'s expected utility when he enters, we make use of $\rho(s_{P,C}, x_A, x_B)$ the populist's posterior that $\omega_C = 1$ given his signal and the mainstream candidates' platform choices.
+
+(c) Show that the expected payoff of the populist candidate if he enters the race is:
+    -   $0 − c$ if $x_P = x_A = x_B$
+
+        \color{blue}
+
+        As we have shown previously, $P$ never wins the election if he enters with the same platform as the mainstream candidates, as voters will vote for the mainstream candidate with a positive valence shock.
+
+        In this case, the populist gets 0 from losing an election and $-c$ from entering the race, hence $U_P(x_A=x_B)=0-c$.
+
+        \color{black}
+
+    -   $\rho(s_{P,C}, 0, 0) − c$ if $x_P = 1$ and $x_A = x_B = 0$
+
+        \color{blue}
+
+        When $x_A=x_B=0$, the posterior belief is $Pr(\omega_C=1\mid s_{P,C}, x_A=0, x_B=0)=\rho(s_{P,C},0,0)$.
+
+        If she proposes $x_P=1$, all common voters will vote for her as $\alpha<1/2$. This is shown in **Q5** (j). This means she will certainly win.
+
+        Nevertheless, other than winning, $P$ also cares about implementing the right policy for the people. The probability that she proposes the right policy ($x_P=\omega_C=1$) is $\rho(S_{P,C},0,0)$. Hence her expected payoff:
+
+        $$
+        =Pr(\text{right policy and win})\times1 -c=\rho(s_{P,C},0,0)-c.
+        $$
+
+        \color{black}
+
+    -   $1 − \rho(s_{P,C}, 1, 1) − c$ if $x_P = 0$ and $x_A = x_B = 1$
+
+        \color{blue}
+
+        When $x_A=x_B=1$, the posterior belief is $Pr(\omega_C=1\mid s_{P,C}, x_A=1, x_B=1)=\rho(s_{P,C},1,1)$.
+
+        If she proposes $x_P=0$, all common voters will vote for her as $\alpha<1/2$. This is shown in **Q6** (d). This means she will certainly win.
+
+        Nevertheless, other than winning, $P$ also cares about implementing the right policy for the people. The probability that she proposes the right policy ($x_P=\omega_C=0$) is $1-\rho(S_{P,C},1,1)$. Hence her expected payoff:
+
+        $$
+        =Pr(\text{right policy and win})\times1 -c=1-\rho(s_{P,C},1,1)-c.
+        $$
+
+        \color{black}
+        
+Obviously, $P$ does not enter at the same platform as the mainstream candidates. To see, whether $P$ enters at a different platform, we need to compute $P$’s posterior (belief) that the correct policy for group $C$ is $x = 1$ after observing his own signal $s_{P,C}$ and the other candidates’ platforms $x_A$ and $x_B$. Recall as well that we still assume that mainstream candidates’ platform is the optimal policy for the elite.
+
+By Bayes’ rule,
+
+$$
+\rho(s_{P,C},x_A,x_B)=\frac{Pr(s_{P,C},x_A,x_B\mid\omega_C=1)Pr(\omega_C=1)}{Pr(s_{P,C},x_A,x_B\mid\omega_C=1)Pr(\omega_C=1)+Pr(s_{P,C},x_A,x_B\mid\omega_C=0)Pr(\omega_C=0)}
+$$
+We again take these terms in turn.
+
+(d) Suppose that $x_A = x_B = 0$ (at this point, it should be clear, I hope, that this means that the mainstream candidates propose policy 0). Explain briefly why $Pr(s_{P,C},x_A=0,x_B=0\mid\omega_C=1)=Pr(s_{P,C},\omega_E=0\mid\omega_C=1)$.
+
+# Part IV - The mainstream parties' adaptation
