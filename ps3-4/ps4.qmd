@@ -386,6 +386,71 @@ Now that we know $P$'s belief about what the correct policy is, we can think abo
 
 (i) Recall that $1/2 < c < p$ and $1 − p < \alpha < p$. Show that when $x_A = x_B = 0$, the populist enters with platform $x_P = 1$ if and only if $s_{P,C} = 1$ and does not enter otherwise.
 
+    \color{blue}
+
+    We have shown that in this case the expected payoff of running for $P$ is:
+
+    $$
+    \rho(s_{P,C},0,0)-c.
+    $$
+
+    The two other options for $P$ are, entering with platform $x_P=0$, which gives expected payoff of
+
+    $$
+    1-\rho(s_{P,C},0,0)-c,
+    $$
+
+    and not running, which gives expected payoff of 0.
+
+    When $s_{P,C}=1$,
+
+    \begin{align*}
+    \text{For}~&U_P(x_P=1)>U_P(x_P=0) \\
+    \text{We need}~&\frac{p(1-\alpha)}{p(1-\alpha)+(1-p)\alpha}-c>1-\frac{p(1-\alpha)}{p(1-\alpha)+(1-p)\alpha}-c \\
+    \text{which means}~&p(1-\alpha)-(1-p)\alpha>0. \\
+    \text{This holds as the expression}&>p(1-p)-(1-p)p \\
+    &=0
+    \end{align*}
+
+    \begin{align*}
+    \text{For}~&U_P(x_P=1)>U_P(\text{}x_P=\phi)~\text{we need:} \\
+    &\frac{p(1-\alpha)}{p(1-\alpha)+(1-p)\alpha}-c-0>0 \\
+    &\frac{(p-pc)(1-\alpha)-c(1-p)\alpha}{p(1-\alpha)+(1-p)\alpha}>0 \\
+    &(p-pc)(1-\alpha)-c(1-p)\alpha>0.\\
+    \text{Since}~&\alpha<1/2,~1-\alpha>\alpha\text{, we only need to prove:}\\
+    &p-pc-c(1-p)>0\text{. Given}\\
+    >&c-c^2-c(1-c) \\
+    >&c-c^2-c+c^2=0\\
+    \end{align*}
+
+    This must be true. Therefore, when $s_{P,C}=1$ , $P$ enters with platform $x_P=1$.
+
+    When $s_{P,C}=0$,
+
+    \begin{align*}
+    \text{For}~&U_P(x_P=1)>U_P(x_P=0) \\
+    \text{We need}~&\frac{(1-p)(1-\alpha)}{(1-p)(1-\alpha)+p\alpha} -c>1-\frac{(1-p)(1-\alpha)}{(1-p)(1-\alpha)+p\alpha} -c \\
+    \text{which means}~&(1-p)(1-\alpha)-p\alpha>0. \\
+    \text{This does not hold as the expression}&<(1-p)p-p(1-p) \\
+    &=0
+    \end{align*}
+
+    \begin{align*}
+    \text{For}~&U_P(x_P=1)>U_P(\text{}x_P=\phi)~\text{we need:} \\
+    &\frac{(1-p)(1-\alpha)}{(1-p)(1-\alpha)+p\alpha} -c-0>0 \\
+    &\frac{(1-p)(1-\alpha)-c(1-p)(1-\alpha)-cp\alpha}{(1-p)(1-\alpha)+p\alpha}>0 \\
+    &(1-p)(1-\alpha)-c(1-p)(1-\alpha)-cp\alpha>0 \\
+    &(1-c)(1-p)(1-\alpha)>cp\alpha. \\
+    \text{This requires}~&(1-c)(1-p)p>cp(1-p).\\
+    \text{This is no met as}~&c>1/2~\text{and}~1-c<c.
+    \end{align*}
+
+    Therefore, when $s_{P,C}=0$, entering with platform $x_P=1$ is dominated by the other two options and not chosen by $P$.
+
+    Hence, when $x_A = x_B = 0$, the populist enters with platform $x_P = 1$ if and only if $s_{P,C} = 1$ and does not enter otherwise.
+
+    \color{black}
+
 By a similar reasoning as above, we can also show that when $x_A = x_B = 1$, the populist enters with platform $x_P = 0$ if and only if $s_{P,C} = 0$ and does not enter otherwise (you are encouraged to check this yourself). With this in mind, we turn to the mainstream parties' adaptation under the threat of populist entry.
 
 # Part IV - The mainstream parties' adaptation {#part-iv---the-mainstream-parties-adaptation}
