@@ -14,7 +14,7 @@ format:
     fig-pos: 'H'
 ---
 
-# Part III - The Populist's entry decision (part of this will be solved on Thursday 2 February, the rest on Thursday 9 February)
+# Part III - The Populist's entry decision (part of this will be solved on Thursday 2 February, the rest on Thursday 9 February) {#sec-part3}
 
 In the previous part, we have computed the electoral decision of a voter from group $C$ as a function of her information. We use our previous answers to compute $P$'s electoral chances and entry decision under different scenarios.
 
@@ -213,7 +213,7 @@ We now look at $P$'s electoral chances and entry decision when $\alpha<1/2$.
 
     Therefore, the $P$ will enjoy all the votes, and only the votes of the commoners, who account for ($1-\sigma$) of all voters. Since there are more commoners than elite $1-\sigma>1/2$, $P$ will win the election.
 
-We now need to compute $P$'s expected payoff if $P$ enters. We consider the populist's entry decision so we no longer assume that $x_P = s_{P,C}$ (this has to be a choice of the populist). However, we still assume below that citizens anticipate that $x_P = s_{P,C}$ if the populist enters (we will see that this anticipation is correct below). In turn, both the citizens and the populist anticipate that the mainstream candidates propose $x_A=x_B=\omega_E$ (again, we will see that this anticipation is correct in [Part IV - The mainstream parties' adaptation](#part-iv---the-mainstream-parties-adaptation)).
+We now need to compute $P$'s expected payoff if $P$ enters. We consider the populist's entry decision so we no longer assume that $x_P = s_{P,C}$ (this has to be a choice of the populist). However, we still assume below that citizens anticipate that $x_P = s_{P,C}$ if the populist enters (we will see that this anticipation is correct below). In turn, both the citizens and the populist anticipate that the mainstream candidates propose $x_A=x_B=\omega_E$ (again, we will see that this anticipation is correct in [Part IV](#sec-part4).
 
 To calculate $P$'s expected utility when he enters, we make use of $\rho(s_{P,C}, x_A, x_B)$ the populist's posterior that $\omega_C = 1$ given his signal and the mainstream candidates' platform choices.
 
@@ -453,4 +453,6 @@ Now that we know $P$'s belief about what the correct policy is, we can think abo
 
 By a similar reasoning as above, we can also show that when $x_A = x_B = 1$, the populist enters with platform $x_P = 0$ if and only if $s_{P,C} = 0$ and does not enter otherwise (you are encouraged to check this yourself). With this in mind, we turn to the mainstream parties' adaptation under the threat of populist entry.
 
-# Part IV - The mainstream parties' adaptation {#part-iv---the-mainstream-parties-adaptation}
+# Part IV - The mainstream parties' adaptation {#sec-part4}
+
+In this last part, we consider how the mainstream parties react to the populist’s threat of entry. As we have seen in [part III](#sec-part3), this threat materializes only if $\sigma+(1−\sigma)(1−p)>1/2$ and $\alpha < 1/2$ so we will assume this holds in what follows (in all other cases, it is business as normal for the mainstream candidates). Further, we assume that the populist and citizens anticipate that candidates play an elite-driven strategy ($x_A = x_B = \omega_E$). When they observe diverging platform, all citizens follow their signal as we assumed in **Part I**. In the questions that follow, we consider $A$’s incentive to deviate (keeping $B$’s behavior constant, $x_B = \omega_E$). We ask ourselves: what should $A$ do? Should he propose $x_A = \omega_E$ or should he deviate and go on proposing a different policy? We are going to answer these questions under different possible scenarios.
