@@ -213,7 +213,7 @@ We now look at $P$'s electoral chances and entry decision when $\alpha<1/2$.
 
     Therefore, the $P$ will enjoy all the votes, and only the votes of the commoners, who account for ($1-\sigma$) of all voters. Since there are more commoners than elite $1-\sigma>1/2$, $P$ will win the election.
 
-We now need to compute $P$'s expected payoff if $P$ enters. We consider the populist's entry decision so we no longer assume that $x_P = s_{P,C}$ (this has to be a choice of the populist). However, we still assume below that citizens anticipate that $x_P = s_{P,C}$ if the populist enters (we will see that this anticipation is correct below). In turn, both the citizens and the populist anticipate that the mainstream candidates propose $x_A=x_B=\omega_E$ (again, we will see that this anticipation is correct in [Part IV - The mainstream parties' adaptation]).
+We now need to compute $P$'s expected payoff if $P$ enters. We consider the populist's entry decision so we no longer assume that $x_P = s_{P,C}$ (this has to be a choice of the populist). However, we still assume below that citizens anticipate that $x_P = s_{P,C}$ if the populist enters (we will see that this anticipation is correct below). In turn, both the citizens and the populist anticipate that the mainstream candidates propose $x_A=x_B=\omega_E$ (again, we will see that this anticipation is correct in [Part IV - The mainstream parties' adaptation](#part-iv---the-mainstream-parties-adaptation)).
 
 To calculate $P$'s expected utility when he enters, we make use of $\rho(s_{P,C}, x_A, x_B)$ the populist's posterior that $\omega_C = 1$ given his signal and the mainstream candidates' platform choices.
 
@@ -259,16 +259,133 @@ To calculate $P$'s expected utility when he enters, we make use of $\rho(s_{P,C}
         $$
 
         \color{black}
-        
-Obviously, $P$ does not enter at the same platform as the mainstream candidates. To see, whether $P$ enters at a different platform, we need to compute $P$’s posterior (belief) that the correct policy for group $C$ is $x = 1$ after observing his own signal $s_{P,C}$ and the other candidates’ platforms $x_A$ and $x_B$. Recall as well that we still assume that mainstream candidates’ platform is the optimal policy for the elite.
 
-By Bayes’ rule,
+Obviously, $P$ does not enter at the same platform as the mainstream candidates. To see, whether $P$ enters at a different platform, we need to compute $P$'s posterior (belief) that the correct policy for group $C$ is $x = 1$ after observing his own signal $s_{P,C}$ and the other candidates' platforms $x_A$ and $x_B$. Recall as well that we still assume that mainstream candidates' platform is the optimal policy for the elite.
+
+By Bayes' rule,
 
 $$
 \rho(s_{P,C},x_A,x_B)=\frac{Pr(s_{P,C},x_A,x_B\mid\omega_C=1)Pr(\omega_C=1)}{Pr(s_{P,C},x_A,x_B\mid\omega_C=1)Pr(\omega_C=1)+Pr(s_{P,C},x_A,x_B\mid\omega_C=0)Pr(\omega_C=0)}
-$$
-We again take these terms in turn.
+$$ We again take these terms in turn.
 
 (d) Suppose that $x_A = x_B = 0$ (at this point, it should be clear, I hope, that this means that the mainstream candidates propose policy 0). Explain briefly why $Pr(s_{P,C},x_A=0,x_B=0\mid\omega_C=1)=Pr(s_{P,C},\omega_E=0\mid\omega_C=1)$.
 
-# Part IV - The mainstream parties' adaptation
+    \color{blue}
+
+    This is because we assume in this question that the mainstream candidates converge to the elite's preference.
+
+    \color{black}
+
+(e) Suppose that $x_A = x_B = 0$. Explain why we can write: $$
+    Pr(s_{P,C}, \omega_{E} = 0\mid\omega_{C} = 1) = Pr(s_{P,C}\mid\omega_C = 1)Pr(\omega_E = 0\mid\omega_C = 1)
+    $$
+
+    \color{blue}
+
+    This is because, conditional on $\omega_C=1$, $s_{P,C}$ and $\omega_E$ are independent (not correlated). The former and latter are only correlated with $\omega_C$ and not with each other.
+
+    \color{black}
+
+(f) Suppose that $x_A = x_B = 0$. Show that
+
+    1.  $Pr(s_{P,C}, \omega_E = 0\mid\omega_C = 1) = Pr(s_{P,C}\mid\omega_C = 1)(1 − \alpha)$
+
+        \color{blue}
+
+        ```{=tex}
+        \begin{align*}
+        =&Pr(s_{P,C}\mid\omega_C=1)Pr(\omega_E=0\mid\omega_C=1) \\
+        =&Pr(s_{P,C}\mid\omega_C=1)(1-\alpha)
+        \end{align*}
+        ```
+        \color{black}
+
+    2.  $Pr(s_{P,C}, \omega_E = 0\mid\omega_C = 0) =Pr(s_{P,C}\mid\omega_C = 1)\alpha$
+
+        \color{blue}
+
+        ```{=tex}
+        \begin{align*}
+        =&Pr(s_{P,C}\mid\omega_C=0)Pr(\omega_E=0\mid\omega_C=0) \\
+        =&Pr(s_{P,C}\mid\omega_C=0)\alpha
+        \end{align*}
+        ```
+        \color{black}
+
+    3.  $\rho(s_{P,C},x_A=0,x_B=0)=\frac{Pr(s_{P,C}\mid\omega_C=1)(1−\alpha)}{Pr(s_{P,C}\mid\omega_C=1)(1−\alpha)+Pr(s_{P,C}\mid\omega_C = 0)\alpha}$
+
+        \color{blue}
+
+        ```{=tex}
+        \begin{align*}
+        =&Pr(\omega_C=1\mid s_{P,C},x_A=0,x_B=0) \\
+        =&\frac{Pr(s_{P,C},x_A=0,x_B=0\mid\omega_C=1)Pr(\omega_C=1)}{Pr(s_{P,C},x_A=0,x_B=0\mid\omega_C=1)Pr(\omega_C=1)+Pr(s_{P,C},x_A=0,x_B=0\mid\omega_C=0)Pr(\omega_C=0)}\\
+        =&\frac{Pr(s_{P,C},\omega_E=0\mid\omega_C=1)}{Pr(s_{P,C},\omega_E=0\mid\omega_C=1)+Pr(s_{P,C},\omega_E=0\mid\omega_C=0)}\\
+        =&\frac{Pr(s_{P,C}\mid\omega_C=1)Pr(\omega_E=0\mid\omega_C=1)}{Pr(s_{P,C}\mid\omega_C=1)Pr(\omega_E=0\mid\omega_C=1)+Pr(s_{P,C}\mid\omega_C=0)Pr(\omega_E=0\mid\omega_C=0)}\\
+        =&\frac{Pr(s_{P,C}\mid\omega_C=1)(1-\alpha)}{Pr(s_{P,C}\mid\omega_C=1)(1-\alpha)+Pr(s_{P,C}\mid\omega_C=0)\alpha}
+        \end{align*}
+        ```
+        \color{black}
+
+(g) Using the previous result, show that $$
+    \rho(s_{P,C} = 1, x_A = 0, x_B = 0)=\frac{p(1-\alpha)}{p(1-\alpha)+(1-p)\alpha}
+    $$
+
+    \color{blue}
+
+    ```{=tex}
+    \begin{align*}
+    &\rho(s_{P,C} = 1, x_A = 0, x_B = 0) \\
+    =&\frac{Pr(s_{P,C}=1\mid\omega_C=1)(1−\alpha)}{Pr(s_{P,C}=1\mid\omega_C=1)(1−\alpha)+Pr(s_{P,C}=1\mid\omega_C = 0)\alpha} \\
+    =&\frac{p(1−\alpha)}{p(1−\alpha)+(1-p)\alpha}
+    \end{align*}
+    ```
+    \color{black}
+
+    $$
+    \rho(s_{P,C} = 0, x_A = 0, x_B = 0)=\frac{(1-p)(1-\alpha)}{(1-p)(1-\alpha)+p\alpha}
+    $$
+
+    \color{blue}
+
+    \begin{align*} &\rho(s_{P,C} = 0, x_A = 0, x_B = 0) \\ =&\frac{Pr(s_{P,C}=0\mid\omega_C=1)(1−\alpha)}{Pr(s_{P,C}=0\mid\omega_C=1)(1−\alpha)+Pr(s_{P,C}=0\mid\omega_C = 0)\alpha} \\ =&\frac{(1-p)(1-\alpha)}{(1-p)(1-\alpha)+p\alpha} 
+    \end{align*}
+
+    \color{black}
+
+(h) Suppose now that $x_A = x_B = 1$. Show that $$
+    \rho(s_{P,C} = 1, x_A = 1, x_B = 1)=\frac{p\alpha}{p\alpha+(1-p)(1-\alpha)}
+    $$
+
+    \color{blue}
+
+    ```{=tex}
+    \begin{align*}
+    &\rho(s_{P,C} = 1, x_A = 1, x_B = 1) \\
+    =&\frac{Pr(s_{P,C}=1\mid\omega_C=1)\alpha}{Pr(s_{P,C}=1\mid\omega_C=1)\alpha+Pr(s_{P,C}=1\mid\omega_C = 0)(1-\alpha)} \\
+    =&\frac{p\alpha}{p\alpha+(1-p)(1-\alpha)}
+    \end{align*}
+    ```
+    \color{black}
+
+    $$
+    \rho(s_{P,C} = 0, x_A = 1, x_B = 1)=\frac{(1-p)\alpha}{(1-p)\alpha+p(1-\alpha)}
+    $$
+
+    \color{blue}
+
+    \begin{align*} 
+    &\rho(s_{P,C} = 0, x_A = 1, x_B = 1) \\ 
+    =&\frac{Pr(s_{P,C}=0\mid\omega_C=1)\alpha}{Pr(s_{P,C}=0\mid\omega_C=1)\alpha+Pr(s_{P,C}=0\mid\omega_C = 0)(1-\alpha)} \\ 
+    =&\frac{(1-p)\alpha}{(1-p)\alpha+p(1-\alpha)}
+    \end{align*}
+
+    \color{black}
+
+Now that we know $P$'s belief about what the correct policy is, we can think about his entry decision.
+
+(i) Recall that $1/2 < c < p$ and $1 − p < \alpha < p$. Show that when $x_A = x_B = 0$, the populist enters with platform $x_P = 1$ if and only if $s_{P,C} = 1$ and does not enter otherwise.
+
+By a similar reasoning as above, we can also show that when $x_A = x_B = 1$, the populist enters with platform $x_P = 0$ if and only if $s_{P,C} = 0$ and does not enter otherwise (you are encouraged to check this yourself). With this in mind, we turn to the mainstream parties' adaptation under the threat of populist entry.
+
+# Part IV - The mainstream parties' adaptation {#part-iv---the-mainstream-parties-adaptation}
