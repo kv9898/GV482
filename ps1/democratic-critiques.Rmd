@@ -1,0 +1,227 @@
+---
+title: "The Critiques of Democracy"
+subtitle: "Problem Set - Empirics"
+author: "Dianyi Yang <br>GV482^[Questions? Email [l.bosshart@lse.ac.uk](mailto:l.bosshart@lse.ac.uk).<br>R adaption of Stephane Wolton's STATA problem set implemented by [Felix Wortmann Callejón](https://www.wortmanncallejon.de).]"
+date: ''
+output: bookdown::html_document2
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      message = FALSE,
+	warning = FALSE,
+	dpi=300)
+
+
+#dirname(rstudioapi::getSourceEditorContext()$path)
+setwd("D:/OneDrive - London School of Economics/Desktop/lse assignments/GV482") #change to your own directory
+knitr::opts_knit$set(root.dir = "D:/OneDrive - London School of Economics/Desktop/lse assignments/GV482") #use this option if the command above does not work
+
+rm(list=ls())
+
+#options(repos=structure(c("https://cloud.r-project.org", #"http://www.stats.ox.ac.uk/pub/RWin" ), .Names = c("CRAN", "CRANextra")))
+#devtools::install_github("benmarwick/wordcountaddin",  type = "source", dependencies = TRUE) #for the wordcount addin
+
+need <- c('tidyverse','haven') # list packages
+have <- need %in% rownames(installed.packages()) # checks packages you have
+if(any(!have)) install.packages(need[!have]) # install missing packages
+invisible(lapply(need, library, character.only=T))
+
+data <- read_dta("demcritiques_ps_data.dta") 
+data$wilson1916 <- data$wilson1916 * 100
+data$wilson1912 <- data$wilson1912 * 100
+data$beach <- factor(data$beach)
+data$machine <- factor(data$machine)
+data$attack <- factor(data$attack)
+data$delta_wilson <- data$wilson1916 - data$wilson1912 
+```
+
+In the lecture, we discussed the anti-democratic critiques of democracy. One of the main aspects of the critique is that voters do not have the intellectual capacity to perform the role assigned to them in democratic settings. They are too prone to emotions and this affects their ability to evaluate politicians, elections do not provide the right incentives, democracy cannot function. A prominent paper making this claim is Achen and Bartels' (2004) "Blind retrospection: Electoral responses to drought, flu, and shark attacks," available on Moodle. In this work, the two authors investigate the electoral consequences of different 'acts of God:' drought and wet spells, flu deaths, and shark attacks.^[The use of the 'act of God' terminology is common to contracts to refer to random unlikely events.] Broadly summarised, Achen and Bartels claim that these events are not under the control of incumbent and, as such, should not have an effect on office-holders' electoral chances. Obviously, they find that they do (though not always), which leads them to conclude that 
+
+> "The central fact about democracies is that the voters understand little beyond their own and their community's pains and pleasures (...). The romantic vision of thoughtful democratic participation in the common life is largely mythical. Democracy must be defended some other way, if it is to be defended at all." (pp.35-36)
+
+There has been some debates about the validity of using drought or u deaths to evaluate voters' emotional responses to random events. One result has stuck though: the effect of shark attacks in New Jersey in July 1916 on President Wilson's vote share in the following election in November of that year.^[Trivia: these events serve as an inspiration for Spielberg's Jaws.] According to Achen and Bartels, the economic losses due to holiday cancellations in the summer of 1916 was blamed on Wilson, leading to the incumbent president suffering electorally. A recent study by Fowler and Hall published in the Journal of Politics in 2018 ("Do shark attacks in influence presidential elections? Reassessing a prominent finding on voter competence," also available on Moodle) has cast doubt on the validity of Achen and Bartels' shark attack findings.^[This has led to a discussion between Fowler and Hall and Achen and Bartels, which you can read [here (for Achen and Bartels' reply to the JoP article)](https://www.journals.uchicago.edu/doi/10.1086/699245) and [here (for Fowler and Hall's reply to the reply)](https://drive.google.com/file/d/1XYvjNgJWMaRS8v-O2X7Cy72zeeeH4xSS/view).]
+
+In this problem set, we will replicate and extend Fowler and Hall's replication and extension of Achen and Bartels' shark attacks findings. Fowler and Hall's paper is very rich. They look at the effect of shark attacks on all presidential elections. They consider the effect at the county level and at the town level. We will focus on the setting closest to the original analysis by Achen and Bartels. That is, we will look at the effect of shark attacks on Wilson's electoral vote shares in the 1916 presidential election at the county level (this means 21 observations, but let's not talk about this). Before looking at the empirics, we will work with the potential outcome framework as it will help us better understand some of the results we obtain.
+
+**Q1** We denote $Y_c(\mathord{\cdot})$ the outcome of interest (in our case Wilson's vote share in the 1916 election) in a county $c$. $Y_c(\mathord{\cdot})$ is a function of two variables $T \in \{0,1\}$, whether a shark attack happened, and $Z \in \{0,1\}$ whether the county is affected (possibly indirectly) by the attacks. The idea is to separate the counties where the attacks happened from those affected by a loss of revenues from tourism even though they did not experience an attack. We denote $\overline{Y}(T,Z)$ the average of our outcome of interest and $\alpha(T,Z)$ the proportion of counties in each group. We further assume that if $T = 1$, then $Z = 1$ (that is, places where the attacks happened experienced economic losses), so there are only three possible groups: $(T = 1,Z = 1)$, $(T = 0,Z = 1)$, and $(T = 0,Z = 0)$. Throughout, we assume that $\overline{Y}(0,0) > \overline{Y}(1,1)$ and $\overline{Y}(0,0)) \ge \overline{Y}(0,1)$.
+
+**(a)** In this first question, we suppose that the group of counties not affected by the attacks (neither directly nor indirectly) constitute the baseline (or the control group). The other counties correspond to the affected group. Using the notation above, explain briefly why the difference in means between the baseline and the treated measures:
+
+\begin{equation}
+  \tau^1 = \left( \frac{\alpha(1,1)}{\alpha(1,1)+\alpha(0,1)}\overline{Y}(1,1) + \frac{\alpha(0,1)}{\alpha(1,1) + \alpha(0,1)}\overline{Y}(0,1) \right) - \overline{Y}(0,0) (\#eq:estimand1)
+\end{equation}
+
+
+
+***Answer:*** 
+
+
+**(b)** We now suppose that the group of counties which did not experience the attack ($T=0$) constitute the baseline (or the control group). The other counties, where $T=1$, correspond to the affected group. Using the notation above, explain briefly why the difference in means between the baseline and the treated measures:
+
+\begin{equation}
+\tau^2=\overline{Y}(1,1)-\left(\frac{\alpha(0,1)}{\alpha(0,1)+\alpha(0,0)}\overline{Y}(0,1)+\frac{\alpha(0,0)}{\alpha(0,1)+\alpha(0,0)}\overline{Y}(0,0)\right) (\#eq:estimand2)
+\end{equation}
+
+
+***Answer:*** 
+
+**(c)** Suppose that $\overline{Y}(0,1)=\overline{Y}(1,1)$, show that $\tau^1<\tau^2$ then (recall that $\overline{Y}(0,0)$ is higher than the other two averages). Provide some intuition for this result.
+
+***Answer:*** 
+
+**(d)** Suppose that $\overline{Y}(0,1)=\overline{Y}(0,0)$, show that $\tau^1>\tau^2$ then. Provide some intuition for this result.
+
+***Answer:*** 
+
+Question 1 illustrates the difficulty of interpreting results of some events (here shark attacks) when the effect of these events is not confined to the units directly affected by it (i.e., the counties where shark attacks occurred). That is, it is difficult to interpret estimates in the presence of spillover effects. We will see that it is likely that spillover effects are present in the context we study.
+We now turn to the data. To do so, you need to download the dataset `demcritiques_ps_data.dta` on Moodle. When you work on the empirical part of your problem set, the best practice is to create a do file and save your command there. As this is your first empirical problem set, the questions below contain quite a bit guidance, there will be less of those as we move forward in the course.
+
+**Q2** We first reproduce Table 1 in Achen an Bartels (2004, p. 16). To do so, regress Wilson's vote share in 1916 (`wilson1916`) on the indicator variable for beach county (`beach`), a control for machine counties (`machine`)^[Machine counties are counties where clientelism was rife and many citizens were directed to vote in a particular way. Achen and Bartels define a county with a large number of immigrants as a machine county (Scorcese's Gangs of New York provides a useful illustration of immigrant-heavy, machine-dominated districts).], and Wilson's vote share in 1912 (`wilson1912`). To exactly reproduce the table, notice that the county of Essex is excluded from the analysis. 
+
+***Answer:***
+
+```{r question_2}
+
+# You can insert the code to generate your answer here
+
+
+```
+
+As Fowler and Hall note, Achen and Bartels make several choices when analyzing the impact of shark attacks. Achen and Bartels studies how much votes Wilson received (controlling for lagged vote share) rather than trying to explain the change in vote shares. They also define the treated group as the beach counties (4 counties) rather than the two counties where the attacks took place (2 counties). They exclude one county from the analysis (in a dataset with 21 observations). None of those are necessarily bad or good choices, but we want to be sure that they are not too impactful. In the next questions, we will investigate the consequences of these choices.
+
+**Q3** Compare the results from Achen and Bartels' regression with the estimates from (i) the same regression, but including Essex county, (ii) a regression with the counties where the attacks occurred (`attacks`) rather than beach counties (Essex county excluded), (iii) a regression in first differences (`wilson1916-wilson1912`) with beach counties as dependent variable and Essex county excluded. What do you observe?
+
+***Answer:***
+
+```{r question_3}
+
+# You can insert the code to generate your answer here
+
+```
+
+The previous question only looks at a few possible changes to the specification picked by Achen and Bartels. In the next question, we replicate Figure 1 from Hall and Fowler (2018, p.1430). Hall and Fowler look at all possible specifications: using lagged or first difference, dropping one county at the time or none, using beach counties, attack counties, or coastal counties (`coastal`) as main independent variable, controlling for machine county with Achen and Bartels' measure, an alternative measure (`mayhew`), or not at all. In total, they consider 396 specifications ($2 \times 22 \times 3 \times 3=396$). Reproducing Figure 1 requires to perform several tasks: 
+
+1. Generate a constant variable so that we do not control for whether a county is a machine county in one specification.
+2. Generate an id for each county so that we can drop one county at a time. 
+3. Create an empty data frame or matrix which will store all the relevant information from the many specifications we run, this should include the coefficient, p-value, which variable is used for machine county (if any), which county is dropped (if any), which variable is used to define the affected group, and which regression is run (controlling for lagged vote share or first difference).
+4. Create a series of three loops
+  - Loop 1: loop over the definition of affected counties 
+  - Loop 2: loop over the counties dropped (including no county at all)
+  - Loop 3: loop over the control for machine
+  - In this last loop, run two regressions one with lagged vote share as control and one with first difference as dependent variable. For each regression, we need to save the relevant information 
+
+As some of these steps require relatively advanced `R` coding skills, we display the code for all steps below (the same code will also be provided in the `.Rmd ` file posted with the answer keys). As you advance in your GV482 journey, you will receive less and less guidance in your empirical problem set.
+
+```{r dummy_code}
+
+# Step 1: create a no control variable (i.e., another constant).
+data$nocontrol <- 1 
+# Step 2: create a an id for each county. We also want to keep the name  of the county for future reference.
+
+data$id <-  1:21 # Generate ids
+
+county_names <- rbind.data.frame(subset(data, select = c(county, id)), c("NONE", 0)) # save county names
+
+# Step 3: Create a dummy data frame where we will store all the coefficients and p-value we obtain from the loops
+
+ests <- data.frame(est = numeric(0), 
+                   se = numeric(0),
+                   df = numeric(0),
+                   affected = character(0),
+                   county = numeric(0),
+                   machine = character(0),
+                   lag = numeric(0))
+
+# Step 4: We create the loop. Loops are very useful to save coding time and to conduct more complicated tasks.
+
+# First we loop over the different definitions of being treated
+for (affected in c("beach", "attack", "coastal")) { 
+  
+  # Next we loop over the different county identifiers, to decide which one to drop
+  for (c in c(0:21)) {
+    
+    # Finally, we loop over the different options of controlling for machine counties
+    for (machine in c("mayhew", "machine", "nocontrol")) {
+      
+      # We drop (or don't iff c == 0) the county with id == c
+      temp <- subset(data, id != c)
+      
+      # We first construct the regression specification formulas
+      fml1 <- as.formula(paste0("wilson1916 ~ ",affected," + ", machine, " + wilson1912"))
+      fml2 <- as.formula(paste0("delta_wilson ~ ",affected," + ", machine))
+      
+      # We then run the two regressions and save the coefficients, standard errors, and degrees of freedom
+      mod1 <- summary(lm(fml1, data = temp))[["coefficients"]]
+      df1 <- lm(fml1, data = temp)$df.residual
+      
+      mod2 <- summary(lm(fml2, data = temp))[["coefficients"]]
+      df2 <- lm(fml2, data = temp)$df.residual
+      
+      # We then save these into a dummy data frame, which we then append to our main collection data frame
+      
+      ests <- rbind.data.frame(data.frame(est = c(mod1[2,1], mod2[2,1]), # Here we grab the two beta coefficients of interest 
+                                          se = c(mod1[2,2], mod2[2,2]), # Next the standard errors
+                                          df = c(df1,df2), 
+                                          affected = c(affected, affected), # Then the definition of being affected
+                                          county = c(c, c), # The county that was dropped
+                                          machine = c(machine, machine), # The control used
+                                          lag = c(0,1)), # And whether we use a first difference specification or not
+                               ests)
+    }
+  }
+}
+
+rm(temp, affected, c, machine, mod1, mod2) # remove temp vars
+
+
+# We now calculate the p-value from the information in our table. As this is good practice, I won't explain why I am doing what I am doing.
+ests$t <-  ests$est/ests$se
+ests$p <-  (1 - pt(abs(ests$t),ests$df))*2
+```
+
+
+**Q4** Plot the histograms of the coefficients and the p-values you obtained. Do not forget to have a vertical line for the coefficient and p-value from Achen and Bartels as in Fowler and Hall's figure. What do you observe?
+
+
+***Answer:***
+
+```{r question_4}
+
+# You can insert the code to generate your answer here
+
+```
+
+The histograms in Fowler and Hall are useful, but they make it hard to really observe patterns among estimates since they separate coefficients and p-values. We now try to make sense of the data with different scatter plots.
+
+**Q5** Create a scatter plot of all the values from the estimations with the coefficients on the x-axis and the p-values on the y-axis. Your scatter plot should identify the coefficient/p-value from Achen and Bartels. What do you observe?
+
+***Answer:***
+
+```{r question_5}
+
+# You can insert the code to generate your answer here
+
+```
+
+
+In the following question, we study the patterns we observed in the scatter plot of coefficient and p-values. To do so, we will separate the observations according to the different choices we have iterated over in our loops: (1) the specification (controlling for lagged value or first difference), (2) the variable used for machine control, (3) the county dropped, (4) the definition of the affected group.
+
+**Q6** Display scatter plots separating p-value-coefficient pairs according to the values of the four variables listed above. That is, one scatter plot should display the pairs obtained from controlling for lagged value in one colour (and/or shape) and the pairs obtained with a first difference specification in another. Another should have pairs in different colours and/or shapes for results from (i) no machine control, (ii) Achen and Bartels' measure,  (iii) Mayhew's measure. Etc. Which dimension(s) appear(s) to explain the different types of results we obtained?
+
+```{r question6, fig.cap = "Estimates by combinations of treatment and control variables.", fig.align='center'}
+
+# You can insert the code to generate your answer here
+
+```
+
+
+***Answer:***
+
+
+**Q7** Relate your findings from ***Q6*** to those from ***Q1*** to discuss whether you agree with Achen and Bartels' choice of using Beach counties as affected counties. What does this mean for the interpretation of their findings and Fowler and Hall's critique?
+
+***Answer:***
+
+
+

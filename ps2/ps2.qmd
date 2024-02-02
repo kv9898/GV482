@@ -1,0 +1,276 @@
+---
+title: The Democratic Critiques and Populism
+subtitle: GV482 Problem Set - Game Theory
+date: last-modified
+authors:
+  - name: Dianyi Yang
+    
+format:
+  orcid-pdf:
+    number-sections: false
+---
+
+# Part I - The game without populist (to be solved on Thursday 26 January)
+
+# Q1 {#sec-q1}
+
+In this question, we first show that there is no equilibrium in which the two candidates propose different platforms. To do so, we suppose that one candidate, here *B*, always proposes a policy, which matches the commoners’ state of the world.
+
+(a) Suppose that *A* and *B* propose different platforms. Explain briefly why all commoners vote for *B* under the scenario of this question.
+
+    \color{blue}
+
+    If B always proposes a policy that matches the commoners' state of the world, *B*'s proposal then becomes a perfectly informative signal for the commons:
+
+    ```{=tex}
+    \begin{align*}
+    P(\omega_C=1\mid x_B=1)=1 \\
+    P(\omega_C=0\mid x_B=0)=1
+    \end{align*}
+    ```
+    *B* therefore maximises the expected payoff for the commons compared with *A*:
+
+    ```{=tex}
+    \begin{align*}
+    EU_{i,C}(B)&=1-\delta \\
+    EU_{i,C}(A)&=\delta
+    \end{align*}
+    ```
+    Since $\delta\in[-\bar{\delta},\bar{\delta}]$, and $\bar{\delta}<\max\{\frac{2\alpha-1}{2}, \frac{1-2\alpha}{2}\}$, $\alpha\leq1$, then $\delta\in(-1,1)$. Therefore,
+
+    $$
+    EU_{i,C}(B)>EU_{i,C}(A)
+    $$
+
+    This means all commoners vote for *B* under the scenario of this question.
+
+    \color{black}
+
+(b) Suppose that the state of the world for the elite is $\omega_{E}=0$ and the state of the world for the commoners is $\omega_{c}=0$ (so candidate *B* proposes $x_{B}=0$ ). Suppose candidate *A* proposes $x_{A} =1$. Explain briefly why *A* receives no vote then.
+
+    \color{blue}
+
+    In the same logic to (a), all commoners will vote for candidate *B* in this state of the world.
+
+    As for the elite, their signal is perfectly informative: $Pr(s_{i,E}=1\mid \omega_E=1)=Pr(s_{i,E}=0\mid \omega_E=0)=1$. Therefore, they know that they are in the state of the world that $\omega_{E}=0$:
+
+    $$
+    Pr(\omega_E=0\mid s_{i,E}=0)=\frac{Pr(s_{i,E}=0\mid \omega_E=0)\times Pr(\omega_E=0)}{Pr(s_{i,E}=0)}=\frac{1\times1}{1}=1
+    $$
+
+    Therefore, the elites will also vote for candidate *B* as *B* offers higher expected utility than *A*:
+
+    ```{=tex}
+    \begin{align*}
+    EU_{i,E}(B)&=1-\delta \\
+    EU_{i,E}(A)&=\delta \\
+    EU_{i,E}(B)&>EU_{i,E}(A)
+    \end{align*}
+    ```
+    Hence, candidate *B* receives the votes of both the elite and commoners, and candidate *A* receives no vote.
+
+    \color{black}
+
+(c) Suppose that the state of the world for the elite is $\omega_{E}=0$ and the state of the world for the commoners is $\omega_{c}=0$ (so candidate *B* proposes $x_{B}=0$). Suppose candidate A proposes $x_{A} =0$. Explain briefly why A wins with 50% chances.
+
+    \color{blue}
+
+    Again, since the candidate *B* proposes $x_{B}=0$, this informs the commoners they are in the state where $\omega_{c}=0$:
+
+    $$
+    P(\omega_C=0\mid x_B=0)=1
+    $$
+
+    As demonstrated in (b), the elite signal is perfectly informative, therefore the elite are also informed that they are in the state where $\omega_{E}=0$.
+
+    In this case, the interests of the elite and commoners perfectly align and that their expected utilities are the same:
+
+    $$
+    EU_{i,C}(A)=EU_{i,E}(A)=1+\delta~\text{and}~EU_{i,C}(B)=EU_{i,E}(B)=1-\delta
+    $$
+
+    Voting on candidate *A* or *B* therefore hinges on the common valence shock $\delta$, which is uniformly distributed across $[-\bar{\delta},\bar{\delta}]$, which has a 50% chance of being positive and 50% chance of being negative.
+
+    Therefore, when $\delta>0$ with probability 50%, $EU_{i}(A)>1>EU_{i}(B)$, everyone votes for *A* and *A* wins; when $\delta<0$ with probability 50%, $EU_{i}(A)<1<EU_{i}(B)$, everyone votes for *B* and *B* wins.
+
+    \color{black}
+
+The previous questions show that when the states are equal, all candidates converge to the policy matching $\omega_E$ and $\omega_C$. We now turn to the case when both states are different.
+
+(d) Suppose the voters anticipate that candidate *A* picks a policy that matches the state of the world for the elite (i.e. $x_{A}=\omega_E$). Explain briefly why when $\omega_E=1$ and $\omega_C=0$, *A*’s vote share is $\sigma$ and *B*’s vote share is $1−\sigma$.
+
+    \color{blue}
+
+    In this state of the world, candidate *A* proposes stance 1 ($x_A=\omega_E=1$) and candidate *B* proposes stance 0 ($x_{B}=\omega_C=0$) to match their corresponding constituents.
+
+    In this case, the elite know their interest ($\omega_E=1$) and vote for *A* to maximise their expected utility:
+
+    $$
+    EU_{i,E}(A)=1+\delta~\text{and}~EU_{i,E}(B)=-\delta.
+    $$
+
+    $$
+    \text{Since}~|\delta|<1,~EU_{i,E}(A)>EU_{i,E}(B).
+    $$
+
+    As for the commoners, they are also informed of their state of the world ($\omega_C=0$), thanks to candidate *B*, as shown previously. Hence, the commoners vote for *B* to maximise their expected utility:
+
+    $$
+    EU_{i,C}(A)=\delta~\text{and}~EU_{i,C}(B)=1-\delta.
+    $$
+
+    $$
+    \text{Since}~|\delta|<1,~EU_{i,B}(A)<EU_{i,E}(B).
+    $$
+
+    At the end of the day, all and only the elite vote for *A*, hence *A*'s vote share being $\sigma$; all and only commoners vote for *B*, hence *B*'s vote share being $1-\sigma$.
+
+    \color{black}
+
+(e) Suppose the voters anticipate that candidate *A* picks a policy that matches the state of the world for the elite (i.e., $x_{A}=\omega_{E}$). Explain briefly why *A* wins with probability 50% when he deviates and proposes $\hat{x}_A=\hat{x}_B=0$. Explain why this shows that there is no equilibrium in which one candidate picks a policy that matches the state of the world for the elite and the other picks a policy that matches the state of the world for the commoners.
+
+    \color{blue}
+
+    If *A* deviates and proposes $\hat{x}_A=\hat{x}_B=0$, then the elite would vote for A and B each with probability 50%, depending upon the common valence shock $\delta$:
+
+    $$
+    EU_{i,E}(A)=\delta~\text{and}~EU_{i,E}(B)=-\delta.
+    $$
+
+    Since $\delta$ is uniformly distributed over $[-\bar{\delta},\bar{\delta}]$, it is equally likely to be positive and negative, which means all of the elite vote for *A* and *B* half of the time.
+
+    Similarly, the commoners would vote for A and B each with probability 50%, depending upon the common valence shock $\delta$:
+
+    $$
+    EU_{i,C}(A)=1+\delta~\text{and}~EU_{i,C}(B)=1-\delta.
+    $$
+
+    Therefore, when $\delta>0$ with probability 50%, $EU_{i,C}(A)>1>EU_{i,C}(B)$ and $EU_{i,E}(A)>0>EU_{i,E}(B)$, everyone votes for *A* and *A* wins; when $\delta<0$ with probability 50%, $EU_{i,C}(A)<1<EU_{i,C}(B)$ and $EU_{i,E}(A)<0<EU_{i,E}(B)$, everyone votes for *B* and *B* wins.
+
+    This shows that there is no equilibrium in which one candidate picks a policy that matches the state of the world for the elite and the other picks a policy that matches the state of the world for the commoners, as the candidate that caters to the elite has an incentive to defect to the commoners' preference when the elite's preference and the commoners' preference do not align.
+
+# Q2
+
+From [Q1](#sec-q1) we know that candidates have to converge to one of the two states of the world (either the one for the elite or the one for the commoner).
+
+In this question, we look for conditions under which the two candidates find it optimal to match $\omega_c(x_A=x_B=\omega_c)$. To do so, assume in what follows that when a voter observes $x_A\neq x_B$, she votes according to which candidate provides the highest expected utility given her prior and posterior.
+
+(a) Suppose that $\omega_C=0$ and $\omega_E = 1$. Suppose candidate *A* deviates and proposes $\hat{x_A} = 1$ instead of $\hat{x_A} = 0$ as prescribed. Explain briefly why a commoner who receives signal $s_{i,C} = 1$ believes that $\omega_C = 1$ with probability $p$ given candidates’ platforms ($Pr(\omega_c=1\mid s_{i,C}=1,x_A=1,x_B=0)=p$) and a commoner who receives signal $s_{i,C} = 0$ believes that $\omega_C = 1$ with probability $1-p$ given candidates’ platforms ($Pr(\omega_c=1\mid s_{i,C}=0,x_A=1,x_B=0)=1-p$).
+
+    \color{blue}
+
+    Since the candidates' platforms do not give any new information (if one candidate deviates, the voters cannot tell who deviates), the posterior beliefs will be the same as those when voters only learn from the signals.
+
+    ```{=tex}
+    \begin{align*}
+    Pr(\omega_C&=1\mid s_{i,C}=1, x_A=1, x_B=0) \\
+    &=Pr(\omega_C=1\mid s_{i,C}=1) \\
+    &=\frac{Pr(s_{i,C}=1\mid \omega_C=1)\times Pr(\omega_C=1)}{Pr(s_{i,C}=1\mid \omega_C=1)\times Pr(\omega_C=1)+Pr(s_{i,C}=1\mid \omega_C=0)\times Pr(\omega_C=0)}\\
+    &=\frac{p\times 0.5}{p\times 0.5+(1-p)\times 0.5}\\
+    &=p
+    \end{align*}
+    ```
+    ```{=tex}
+    \begin{align*}
+    Pr(\omega_C&=1\mid s_{i,C}=0, x_A=1, x_B=0) \\
+    &=Pr(\omega_C=1\mid s_{i,C}=0) \\
+    &=\frac{Pr(s_{i,C}=0\mid \omega_C=1)\times Pr(\omega_C=1)}{Pr(s_{i,C}=0\mid \omega_C=1)\times Pr(\omega_C=1)+Pr(s_{i,C}=0\mid \omega_C=0)\times Pr(\omega_C=0)}\\
+    &=\frac{(1-p)\times 0.5}{(1-p)\times 0.5+p\times 0.5}\\
+    &=1-p
+    \end{align*}
+    ```
+    \color{black}
+
+(b) Suppose that $\omega_C=0$ and $\omega_E=1$. Suppose candidate *A* deviates and proposes $\hat{x_A} = 1$ instead of $\hat{x_A} = 0$. Explain briefly why all common voters who receive signal $s_{i,C}=1$ vote for *A*, whereas all common voters who receive signal $s_{i,C}=0$ vote for *B*.
+
+    \color{blue}
+
+    For common voters who receive $s_{i,C}=1$,
+
+    $$
+    EU_{i,C}(A|s_{i,C}=1)=p+\delta~\text{and}~EU_{i,C}(B|s_{i,C}=1)=1-p-\delta
+    $$
+
+    Since $1-p<\alpha<p$ and $\bar{\delta}<\max\{\frac{2\alpha-1}{2},\frac{1-2\alpha}{2}\}$, $EU_{i,C}(A\mid s_{i,C}=1)-EU_{i,C}(B\mid s_{i,C}=1)=2p-1+2\delta>0$, therefore they vote for *A*.
+
+    This is to prove:
+
+    $$
+    \delta>\frac{1-2p}{2}
+    $$
+
+    Which must be true if:
+
+    $$
+    -\bar{\delta}>\frac{1-2p}{2}
+    $$
+
+    This is equivalent to:
+
+    $$
+    \bar{\delta}<\frac{2p-1}{2}
+    $$
+
+    Case 1: $\frac{2\alpha-1}{2}>\frac{1-2\alpha}{2}$
+
+    $$
+    \bar{\delta}<\frac{2\alpha-1}{2}<\frac{2p-1}{2}
+    $$
+
+    Case 2: $\frac{2\alpha-1}{2}<\frac{1-2\alpha}{2}$
+
+    $$
+    \bar{\delta}<\frac{1-2\alpha}{2}<\frac{1-2(1-p)}{2}<\frac{2p-1}{2}
+    $$
+
+    For common voters who receive $s_{i,C}=0$,
+
+    $$
+    EU_{i,C}(A|s_{i,C}=0)=1-p+\delta~\text{and}~EU_{i,C}(B|s_{i,C}=1)=p-\delta
+    $$
+
+    Since $1-p<\alpha<p$ and $\bar{\delta}<\max\{\frac{2\alpha-1}{2},\frac{1-2\alpha}{2}\}$, $EU_{i,C}(A\mid s_{i,C}=1)-EU_{i,C}(B\mid s_{i,C}=1)=1-2p+2\delta<0$, therefore they vote for *B*.
+
+    \color{black}
+
+(c) Suppose that $\omega_C=0$ and $\omega_E=0$. Suppose candidate *A* deviates and proposes $\hat{x_A} = 1$ instead of $\hat{x_A} = 0$. Show that *A*’s vote share is $(1-\sigma)(1-p)$.
+
+    \color{blue}
+
+    Since the elite voters, accounting for $\sigma$ of total voters, have perfect knowledge of their own state of the world ($\omega_E=0$), they all vote for *B* as *B*'s proposal match their preference ($x_B=\omega_E=0$).
+
+    As for the common voters, they account for ($1-\sigma$) of the total voters.
+
+    Among these, those who receive $s_{i,C}=0$, accounting for $p$ of the common voter and ($(1-\sigma)p$) of total voters, vote for B, as discussed above.
+
+    Those common voters who receive $s_{i,C}=1$, accounting for $(1-p)$ of the common voters and ($(1-\sigma)(1-p)$) of total voters, vote for *A*.
+
+    Therefore only those common voters who receive $s_{i,C}=1$ vote for *A*, and *A*'s vote share is $(1-\sigma)(1-p)$.
+
+    \color{black}
+
+(d) Suppose that $\omega_C=0$ and $\omega_E=1$. Suppose candidate *A* deviates and proposes $\hat{x_A} = 1$ instead of $\hat{x_A} = 0$. Show that A's vote share is $\sigma+(1-\sigma)(1-p)$.
+
+    \color{blue}
+
+    Since the elite voters, accounting for $\sigma$ of total voters, have perfect knowledge of their own state of the world ($\omega_E=1$), they all vote for *A* as *A*'s proposal match their preference ($x_A=\omega_E=1$).
+
+    As for the common voters, they account for ($1-\sigma$) of the total voters.
+
+    Among these, those who receive $s_{i,C}=0$, accounting for $p$ of the common voter and ($(1-\sigma)p$) of total voters, vote for B, as discussed above.
+
+    Those common voters who receive $s_{i,C}=1$, accounting for $(1-p)$ of the common voters and ($(1-\sigma)(1-p)$) of total voters, vote for A.
+
+    Therefore the elite voters and those common voters who receive $s_{i,C}=1$ vote for A, and A's vote share is $\sigma+(1-\sigma)(1-p)$.
+
+    \color{black}
+
+(e) Suppose that $\omega_C=0$. Show that an equilibrium in which both candidates match the commoners’ state of the world ($x_A=x_B=0$) exist if and only if $\sigma+(1-\sigma)(1-p)\leq\frac{1}{2}$.
+
+    \color{blue}
+
+    Suppose $\omega_C=\omega_E=0$. Deviation for a candidate will result in an expected vote share of $(1-\sigma)(1-p)$ for the defier, as per part (c). Since $p>\frac{1}{2}$, $(1-\sigma)(1-p)<0.5$ and the defier is expected to lose (expected payoff$<0.5$). Nevertheless, not deviating results in an expected payoff of 0.5 (50% chance of winning). Therefore there is no incentive to deviate in this case.
+
+    Suppose that $\omega_C=0$ and $\omega_E=1$. Deviation for a candidate will result in an vote share of $\sigma+(1-\sigma)(1-p)$, as shown in part (d). It is therefore only profitable for either candidate to deviate when the expected probability of winning from deviation ($\sigma+(1-\sigma)(1-p)$) is greater than that from not deviating (0.5). This means that $\sigma+(1-\sigma)(1-p)\leq\frac{1}{2}$.
+
+    Therefore, an equilibrium in which both candidates match the commoners’ state of the world ($x_A=x_B=0$) exist if and only if $\sigma+(1-\sigma)(1-p)\leq\frac{1}{2}$.

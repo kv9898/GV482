@@ -1,0 +1,770 @@
+---
+title: The Democratic Critiques and Populism
+subtitle: GV482 Problem Set - Game Theory
+date: last-modified
+authors:
+  - name: Dianyi Yang
+execute:
+  echo: false
+  warning: false
+  error: false
+format:
+  orcid-pdf:
+    number-sections: false
+    fig-pos: 'H'
+---
+
+# Part II - Voters’ electoral decision with populist (to be solved on Thursday 2 February)
+
+## Q3 {#sec-q3}
+
+We first consider the voters’ electoral decisions when the mainstream candidates find it optimal to converge to the commoners’ preferred policy (i.e., citizens correctly anticipate that $x_A = x_B = \omega_C$).
+
+```{r}
+library(tidyverse)
+```
+
+(a) Suppose $x_A = x_B = 0$. Explain briefly why the populist gets no vote if $x_P = 0$.
+
+    \color{blue}
+
+    As discussed before, the elite have perfect information of their own state from their signal. The commoners, in this case, also have perfect information of their own state as the candidates' platforms are informative of their state:
+
+    $$
+    Pr(\omega_c=0|x_A=x_B=0)=\frac{Pr(\omega_c=0)\times Pr(x_A=x_B=0\mid \omega_c=0)}{Pr(x_A=x_B=0)}=1
+    $$
+
+    Therefore, for the commoners, they vote for one of the two mainstream candidates who has a positive valence shock, rather than the populist candidate:
+
+    ```{=tex}
+    \begin{align*}
+    U_{i,C}(A|x_A=\omega_C)&=1+\delta \\
+    U_{i,C}(B|x_B=\omega_C)&=1-\delta \\
+    U_{i,C}(P|x_P=\omega_C)&=1
+    \end{align*}
+    ```
+    50% of the time, $\delta>0$ and the commoners vote for candidate $A$, and 50% of the time, $\delta<0$ the commoners vote for candidate $B$. Therefore, the populist candidate $P$ gets no vote from the commoners in this case.
+
+    As for the elite, they also vote for one of the two mainstream candidates who has a positive valence shock rather than the populist candidate, regardless of their state:
+
+    -   When the elite's interest does not align with the common platform of 0:
+
+        ```{=tex}
+        \begin{align*}
+        U_{i,E}(A|x_A\neq\omega_E)&=\delta \\
+        U_{i,E}(B|x_B\neq\omega_E)&=-\delta \\
+        U_{i,E}(P|x_P\neq\omega_E)&=0
+        \end{align*}
+        ```
+        50% of the time, $\delta>0$ and the elite vote for candidate $A$, and 50% of the time, $\delta<0$ the elite vote for candidate $B$. They never vote for the populist candidate $P$.
+
+    -   When the elite's interest aligns with the common platform of 0:
+
+        ```{=tex}
+        \begin{align*}
+        U_{i,E}(A|x_A=\omega_E)&=1+\delta \\
+        U_{i,E}(B|x_B=\omega_E)&=1-\delta \\
+        U_{i,E}(P|x_P=\omega_E)&=1
+        \end{align*}
+        ```
+        50% of the time, $\delta>0$ and the elite vote for candidate $A$, and 50% of the time, $\delta<0$ the elite vote for candidate $B$. They never vote for the populist candidate $P$.
+
+    Therefore, neither the elite nor the commoners vote for the populist candidate $P$ and she receives $0$ vote.
+
+    \color{black}
+
+(b) Suppose $x_A = x_B = 0$ and $\omega_E = 0$. Explain briefly why the populist gets no vote if $x_P = 1$.
+
+    \color{blue}
+
+    As for the elite, they know they are in the state of 0 and do not vote for the populist as her platform does not match their interest ($\omega_E\neq x_p$).
+
+    ```{=tex}
+    \begin{align*}
+    U_{i,E}(A|x_A=\omega_E)&=1+\delta \\
+    U_{i,E}(B|x_B=\omega_E)&=1-\delta \\
+    U_{i,E}(P|x_P\neq\omega_E)&=0
+    \end{align*}
+    ```
+    Since $1<\delta<1$, $U_{i,E}(P|x_P\neq\omega_E)<U_{i,E}(A|x_A=\omega_E)$ and $U_{i,E}(P|x_P\neq\omega_E)<U_{i,E}(B|x_B=\omega_E)$. The elite do not vote for the populist $P$.
+
+    As for the commoners, they also know they are in the state of 0 (they learn that from mainstream candidates' ($A$ and $B$) platforms), and do not vote for the populist as her platform does not match their interest ($\omega_C\neq x_p$).
+
+    ```{=tex}
+    \begin{align*}
+    U_{i,C}(A|x_A=\omega_C)&=1+\delta \\
+    U_{i,C}(B|x_B=\omega_C)&=1-\delta \\
+    U_{i,C}(P|x_P\neq\omega_C)&=0
+    \end{align*}
+    ```
+    Since $1<\delta<1$, $U_{i,C}(P|x_P\neq\omega_C)<U_{i,C}(A|x_A=\omega_C)$ and $U_{i,C}(P|x_P\neq\omega_C)<U_{i,C}(B|x_B=\omega_C)$. The commoners do not vote for the populist $P$.
+
+    Therefore, neither the elite nor the commoners vote for the populist candidate $P$ and she receives $0$ vote.
+
+    \color{black}
+
+(c) Suppose $x_A = x_B = 0$ and $\omega_E = 1$. Explain briefly why the populist gets $σ\%$ of the vote if $x_P = 1$.
+
+    \color{blue}
+
+    As shown in part (b), the commoners do not vote for the populist candidate $P$.
+
+    However, the elite would vote for the populist candidate $P$ in this case as her platform matches their interest, and the mainstream candidates' platform does not:
+
+    ```{=tex}
+    \begin{align*}
+    U_{i,E}(A|x_A\neq\omega_E)&=\delta \\
+    U_{i,E}(B|x_B\neq\omega_E)&=-\delta \\
+    U_{i,E}(P|x_P=\omega_E)&=1
+    \end{align*}
+    ```
+    Since $|\delta|<1$, $U_{i,E}(P|x_P=\omega_E)>U_{i,E}(A|x_A\neq\omega_E)$ and $U_{i,E}(P|x_P=\omega_E)>U_{i,E}(B|x_B\neq\omega_E)$. The elite vote for the populist $P$.
+
+    Therefore, all elite, and only elite vote for the populist candidate $P$, who account for $\sigma\%$ of the vote.
+
+    \color{black}
+
+## Q4 {#sec-Q4}
+
+For now and until noted otherwise, assume that both mainstream candidates propose the same platform and this platform is the elite’s preferred policy.
+
+In this question, we are going to assume that $x_P \neq x_A = x_B$. That is the populist does not propose the same policy as the mainstream candidates. We are going to determine what a common voter $i$ should do.
+
+(a) Suppose a commoner has received signal $s_{i,C} = 1$. Further, the platforms satisfy $x_A = x_B = 1$, and $x_P = 0$. Explain carefully, but briefly why the expected payoff from voting for the populist voter is: $(1 − \mu(1, 1, 1, 0))$.
+
+    \color{blue}
+
+    Since $s_{i,C}=1$, $x_A=x_B=1$ and $x_P=0$, the commoners observe this information and their posterior belief that the state $\omega_C$ takes value 1 is
+
+    $$
+    Pr(\omega_c=1\mid s_{i,c},x_A,x_B,x_P)=\mu(s_{i,C},x_A,x_B,x_P)=\mu(1,1,1,0).
+    $$
+
+    According to this belief, the payoff from voting for the populist for the commoners is:
+
+    ```{=tex}
+    \begin{align*}
+    U_{i,C}(P)=
+    \begin{cases}
+    1~\text{if}~x_p=\omega_c \\
+    0~\text{if}~x_p\neq\omega_C
+    \end{cases}
+    &=1\times Pr(\omega_c=0)+0\times Pr(\omega_C=1) \\
+    &=1\times Pr(\omega_c=0\mid s_{i,c},x_A,x_B,x_P) \\
+    &=Pr(\omega_c=0\mid s_{i,c},x_A,x_B,x_P) \\
+    &=1-Pr(\omega_c=1\mid s_{i,c},x_A,x_B,x_P) \\
+    &=1-\mu(1,1,1,0)
+    \end{align*}
+    ```
+    \color{black}
+
+(b) Suppose a commoner has received signal $s_{i,C} = 1$. Further, the platforms satisfy $x_A = x_B = 1$, and $x_P = 0$. Explain carefully, but briefly why a commoner $i$ votes for the populist if and only if $\mu(1, 1, 1, 0)<\frac{1-|\delta|}{2}$.
+
+    \color{blue}
+
+    As illustrated in part (a), for the commoners, the payoff from voting for the populist is:
+
+    $$
+    U_{i,C}(P)=1-\mu(1,1,1,0)
+    $$
+
+    The payoff of voting from voting for the mainstream candidates are:
+
+    ```{=tex}
+    \begin{align*}
+    U_{i,C}(A)&=1\times Pr(\omega_C=1|s_{i,c},x_A,x_B,x_P)+\delta \\
+             &=\mu(1,1,1,0)+\delta \\
+    U_{i,C}(B)&=1\times Pr(\omega_C=1|s_{i,c},x_A,x_B,x_P)-\delta \\
+             &=\mu(1,1,1,0)-\delta \\
+    \end{align*}
+    ```
+    This means, for the commoners to vote for the populist, it requires:
+
+    ```{=tex}
+    \begin{align*}
+    U_{i,C}(P)&>\max\{U_{i,C}(A),U_{i,C}(B)\} \\
+    1-\mu(1,1,1,0) &> \max\{\mu(1,1,1,0)+\delta,\mu(1,1,1,0)-\delta\} \\
+    1-\mu(1,1,1,0) &> \mu(1,1,1,0)+\max\{\delta,-\delta\} \\
+    1-\mu(1,1,1,0) &> \mu(1,1,1,0)+|\delta| \\
+    1-|\delta|&>2\mu(1,1,1,0) \\
+    2\mu(1,1,1,0)&<1-|\delta| \\
+    \mu(1,1,1,0)&<\frac{1-|\delta|}{2}
+    \end{align*}
+    ```
+    \color{black}
+
+(c) Suppose a commoner has received signal $s_{i,C} = 1$. Further, the platforms satisfy $x_A = x_B = 9$, and $x_P = 1$. Explain carefully, but briefly why the expected payoff from voting for the populist voter is: $\mu(1, 0, 0, 1)$.
+
+    \color{blue}
+
+    Since $s_{i,C}=1$, $x_A=x_B=0$ and $x_P=1$, the commoners observe this information and their posterior belief that the state $\omega_C$ takes value 1 is
+
+    $$
+    Pr(\omega_c=1\mid s_{i,c},x_A,x_B,x_P)=\mu(s_{i,C},x_A,x_B,x_P)=\mu(1,0,0,1).
+    $$
+
+    According to this belief, the payoff from voting for the populist for the commoners is:
+
+    ```{=tex}
+    \begin{align*}
+    U_{i,C}(P)=
+    \begin{cases}
+    1~\text{if}~x_p=\omega_c \\
+    0~\text{if}~x_p\neq\omega_C
+    \end{cases}
+    &=1\times Pr(\omega_c=1)+0\times Pr(\omega_C=0) \\
+    &=1\times Pr(\omega_c=1\mid s_{i,c},x_A,x_B,x_P) \\
+    &=Pr(\omega_c=1\mid s_{i,c},x_A,x_B,x_P) \\
+    &=\mu(1,0,0,1)
+    \end{align*}
+    ```
+    \color{black}
+
+(d) Suppose a commoner has received signal $s_{i,C} = 1$. Further, the platforms satisfy $x_A = x_B = 0$, and $x_P = 1$. Explain carefully, but briefly why a commoner $i$ votes for the populist if and only if $\mu(1, 0, 0, 1)>\frac{1+|\delta|}{2}$.
+
+    \color{blue}
+
+    As illustrated in part (a), for the commoners, the payoff from voting for the populist is:
+
+    $$
+    U_{i,C}(P)=\mu(1,0,0,1)
+    $$
+
+    The payoff of voting from voting for the mainstream candidates are:
+
+    ```{=tex}
+    \begin{align*}
+    U_{i,C}(A)&=1\times Pr(\omega_C=0|s_{i,c},x_A,x_B,x_P)+\delta \\
+             &=1-\mu(1,1,1,0)+\delta \\
+    U_{i,C}(B)&=1\times Pr(\omega_C=0|s_{i,c},x_A,x_B,x_P)-\delta \\
+             &=1-\mu(1,1,1,0)-\delta \\
+    \end{align*}
+    ```
+    This means, for the commoners to vote for the populist, it requires:
+
+    ```{=tex}
+    \begin{align*}
+        U_{i,C}(P)&>\max\{U_{i,C}(A),U_{i,C}(B)\} \\
+        \mu(1,0,0,1) &> \max\{1-\mu(1,0,0,1)+\delta,1-\mu(1,0,0,1)-\delta\} \\
+        \mu(1,0,0,1) &> 1-\mu(1,0,0,1)+\max\{\delta,-\delta\} \\
+        \mu(1,0,0,1) &> 1-\mu(1,0,0,1)+|\delta| \\
+        2\mu(1,0,0,1)&>1+|\delta| \\
+        \mu(1,0,0,1)&>\frac{1+|\delta|}{2}
+    \end{align*}
+    ```
+    \color{black}
+
+(e) More generally, show that after signal $s_{i,C}$, a common voter $i$ casts a ballot for $P$ if and only if:
+
+    -   $\mu(s_{i,C}, x_A, x_B, x_P)<\frac{1-|\delta|}{2}$ if $x_A=x_B=1$ and $x_P=0$.
+
+    -   $\mu(s_{i,C}, x_A, x_B, x_P)>\frac{1+|\delta|}{2}$ if $x_A=x_B=0$ and $x_P=1$.
+
+    \color{blue}
+
+    This is equivalent to showing if either condition is met, the commoner votes for $P$, and if neither is met, the commoner does not vote for $P$.
+
+    Parts (a) and (b) have shown that when the first condition is met, and the signal is 1 ($s_{i,C}=1$), voting for $P$ offers a higher expected payoff for the commoner than voting for the mainstream candidates, therefore the commoner $i$ casts a ballot for $P$ under this condition. If $s_{i,C}=0$, the idea is the same (requires $\mu(0,1,1,0)<\frac{1-|\delta|}{2}$). If $x_A=x_B=1$ and $x_P=0$ and $\mu(s_{i,C}, x_A, x_B, x_P)>\frac{1-|\delta|}{2}$, it is more profitable for the commoner $i$ to vote for a mainstream candidate.
+
+    Parts (c) and (d) have shown that when the second condition is met, and the signal is 1 ($s_{i,C}=1$), voting for $P$ offers a higher expected payoff for the commoner than voting for the mainstream candidates, therefore the commoner $i$ casts a ballot for $P$ under this condition. If $s_{i,C}=0$, the idea is the same (requires $\mu(0,0,0,0)>\frac{1+|\delta|}{2}$). If $x_A=x_B=0$ and $x_P=1$ and $\mu(s_{i,C}, x_A, x_B, x_P)<\frac{1+|\delta|}{2}$, it is more profitable for the commoner $i$ to vote for a mainstream candidate.
+
+    As shown in [Q3](#sec-q3), the commoner $i$ would not vote for $P$ if $P$ proposes the same policy as the two mainstream candidates ($x_P=x_A=x_B=1$ or $x_P=x_A=x_B=0$).
+
+    Therefore, if either condition is met, the commoner votes for $P$, and if neither is met, the commoner does not vote for $P$.
+
+    \color{black}
+
+## Q5 {#sec-Q5}
+
+The previous question shows us the importance of looking at the common voter’s belief. We are going to compute this belief in this question.
+
+$$
+    \mu(s_{i,C},x_A,x_B,x_P)=\frac{Pr(s_{i,C},x_A,x_B,x_P\mid \omega_C=1)Pr(\omega_{C}=1)}{Pr(s_{i,C},x_A,x_B,x_P\mid \omega_C=1)Pr(\omega_{C}=1)+Pr(s_{i,C},x_A,x_B,x_P\mid \omega_C=0)Pr(\omega_{C}=0)}
+$$
+
+(a) The first term, we want to consider is the following: $Pr(s_{i,C},x_A=0,x_B=0,x_P=1\mid\omega_C = 1)$. Justify carefully why, under the assumptions, this probability satisfies:
+
+    $$
+    Pr(s_{i,C},x_A=0,x_B=0,x_P=1\mid\omega_C = 1)=Pr(s_{i,C},\omega_E=0, s_{P,C}= 1\mid\omega_C=1)
+    $$
+
+    \color{blue}
+
+    This assumes that the mainstream candidates ($A$ and $B$) converge on the elite's preference and the populist candidate $P$ proposes a platform the matches her signal ($x_P=s_{P,C}=1$).
+
+    \color{black}
+
+(b) Which assumption allows us to write:
+
+    $$
+    Pr(s_{i,C}, \omega_E=0,s_{P,C}=1\mid\omega_C=1)=Pr(s_{i,C}|\omega_C=1)Pr(\omega_E=0\mid\omega_C=1)Pr(s_{P,C}= 1\mid\omega_C=1)?
+    $$
+
+    \color{blue}
+
+    This implies that we assume, conditional on the actual state ($\omega_C=1$), the signal ($s_{i,C}$), the elite's state ($\omega_E$) and the populist $P$'s signal $s_{P,C}$ are independent.
+
+    \color{black}
+
+(c) We are going to determine this quantity: $Pr(\omega_E=0\mid\omega_C=1)$. Explain carefully why:
+
+    $$
+    Pr(\omega_E=0\mid\omega_C=1)=\frac{Pr(\omega_E=0,\omega_C=1)}{Pr(\omega_C=1)}=\frac{\frac{1}{2}(1-\alpha)}{\frac{1}{2}}
+    $$
+
+    \color{blue}
+
+    Recall the joint distribution of the states:
+
+    ```{=latex}
+    \begin{table}[H]
+    \color{blue}
+    \centering
+    \caption{\label{tbl-joint-dist}Joint distribution of the states.}
+    \begin{tabular}{|c||c|c|}
+    \hline
+    $\omega_C/\omega_E$ & 0                       & 1                       \\ \hline\hline
+    0                   & $\frac{1}{2}\alpha$     & $\frac{1}{2}(1-\alpha)$ \\ \hline
+    1                   & $\frac{1}{2}(1-\alpha)$ & $\frac{1}{2}\alpha$     \\ \hline
+    \end{tabular}
+    \end{table}
+    ```
+    $Pr(\omega_E=0\mid\omega_C=1)$ refers to, given the commoners' state being 1 (within the bottom row in Table \ref{tbl-joint-dist}), the probability of the elite's state being 0 (proportion of the left column). This is equivalent to the proportion of the intersection of $Pr(\omega_E=0)$ and $Pr(\omega_C=1)$ in $Pr(\omega_E=1)$. The former translates to $Pr(\omega_E=0,\omega_C=1)$, which constitutes the numerator; the latter ($Pr(\omega_E=1)$) constitutes the denominator. Hence the first equality. $Pr(\omega_E=0,\omega_C=1)$ corresponds to the bottom left cell in Table \ref{tbl-joint-dist} ($\frac{1}{2}(1-\alpha)$). $Pr(\omega_E=1)$ corresponds to the sum of the bottom row in Table \ref{tbl-joint-dist}:
+
+    $$
+    \frac{1}{2}(1-\alpha)+\frac{1}{2}\alpha=\frac{1}{2}.
+    $$
+
+    Hence the second equality.
+
+    \color{black}
+
+(d) Combining the results from (a) to (c), show that
+
+    $$
+    Pr(s_{i,C},x_A=0,x_B=0,x_P=1\mid\omega_C = 1)=Pr(s_{i,C}\mid\omega_C=1)\times(1-\alpha)\times p
+    $$ \color{blue} \begin{align*}
+    &Pr(s_{i,C},x_A=0,x_B=0,x_P=1\mid\omega_C = 1) \\
+    =& Pr(s_{i,C},\omega_E=0, s_{P,C}= 1\mid\omega_C=1)~\text{from Part (a)} \\
+    =&Pr(s_{i,C}|\omega_C=1)Pr(\omega_E=0\mid\omega_C=1)Pr(s_{P,C}= 1\mid\omega_C=1)~\text{from Part (b)} \\
+    =&Pr(s_{i,C}\mid\omega_C=1)\times\frac{\frac{1}{2}(1-\alpha)}{\frac{1}{2}}Pr(s_{P,C}= 1\mid\omega_C=1)~\text{from Part (c)}\\
+    =&Pr(s_{i,C}\mid\omega_C=1)\times(1-\alpha)\times p~\text{from setting}
+    \end{align*} \color{black}
+
+(e) We are now going to work with $Pr(s_{i,C},x_A=0,x_B=0,x_P=1\mid\omega_C=0)$. Repeating steps (a) to (d) above, show that
+
+    $$
+    Pr(s_{i,C},x_A=0,x_B=0,x_P=1\mid\omega_C = 0)=Pr(s_{i,C}\mid\omega_C=0)\times\alpha\times (1-p)
+    $$ \color{blue} \begin{align*}
+    &Pr(s_{i,C},x_A=0,x_B=0,x_P=1\mid\omega_C = 0) \\
+    =& Pr(s_{i,C},\omega_E=0, s_{P,C}= 1\mid\omega_C=0)~\text{from Part (a)} \\
+    =&Pr(s_{i,C}|\omega_C=0)Pr(\omega_E=0\mid\omega_C=0)Pr(s_{P,C}= 1\mid\omega_C=0)~\text{from Part (b)} \\
+    =&Pr(s_{i,C}\mid\omega_C=1)\times\frac{\frac{1}{2}\alpha}{\frac{1}{2}}Pr(s_{P,C}= 1\mid\omega_C=0)~\text{from Part (c)}\\
+    =&Pr(s_{i,C}\mid\omega_C=1)\times\alpha\times (1-p)~\text{from setting}
+    \end{align*}
+
+    \color{black}
+
+(f) Let’s suppose that $s_{i,C}=1$. Show the following step:
+
+    1.  $Pr(s_{i,C}=1,x_A=0,x_B=0,x_P=1\mid\omega_C=1)=p\times(1−\alpha)\times p$
+
+        \color{blue}
+
+        ```{=tex}
+        \begin{align*}
+        &=Pr(s_{i,C}\mid\omega_C=1)\times(1-\alpha)\times p\\
+        &=p\times(1-\alpha)\times p
+        \end{align*}
+        ```
+        \color{black}
+
+    2.  $Pr(s_{i,C}=1,x_A=0,x_B=0,x_P=1\mid\omega_C=0)=(1−p)\times\alpha\times(1 − p)$
+
+        \color{blue}
+
+        ```{=tex}
+        \begin{align*}
+        &=Pr(s_{i,C}\mid\omega_C=0)\times\alpha\times (1-p)\\
+        &=(1-p)\times\alpha\times(1-p)
+        \end{align*}
+        ```
+        \color{black}
+
+    3.  $\mu(s_{i,C}=1,x_A=0,x_B=0,x_P=1)=\frac{(1-\alpha)p^2}{(1-\alpha)p^2+\alpha(1-p)^2}$
+
+\color{blue}
+
+\begin{align*}
+        &=Pr(\omega_C=1\mid s_{i,C}=1,x_A=0,x_B=0,x_P=1) \\
+        &=Pr(s_{i,C}=1,x_A=0,x_B=0,x_P=1\mid \omega_C=1)Pr(\omega_{C}=1) \\
+        &~~\div [Pr(s_{i,C}=1,x_A=0,x_B=0,x_P=1\mid \omega_C=1)Pr(\omega_{C}=1) \\
+        &~~+Pr(s_{i,C}=1,x_A=0,x_B=0,x_P=1\mid \omega_C=0)Pr(\omega_{C}=0)] \\
+        &=\frac{p(1-\alpha)p\times\frac{1}{2}}{p(1-\alpha)p\times\frac{1}{2}+(1-p)\alpha(1-p)\times\frac{1}{2}} \\
+        &=\frac{p(1-\alpha)p}{p(1-\alpha)p+(1-p)\alpha(1-p)}\\
+        &=\frac{(1-\alpha)p^2}{(1-\alpha)p^2+\alpha(1-p)^2}
+\end{align*} \color{black}
+
+(g) Let’s suppose that $s_{i,C} = 0$. Proceeding with the same steps as in (f), show that
+
+    $$
+    \mu(s_{i,C}=0,x_A=0,x_B=0,x_P=1)=\frac{(1-\alpha)p(1-p)}{(1-\alpha)p(1-p)+\alpha(1-p)p}=1-\alpha
+    $$
+
+\color{blue}
+
+\begin{align*}
+        &=Pr(\omega_C=1\mid s_{i,C}=0,x_A=0,x_B=0,x_P=1) \\
+        &=Pr(s_{i,C}=0,x_A=0,x_B=0,x_P=1\mid \omega_C=1)Pr(\omega_{C}=1) \\
+        &~~\div [Pr(s_{i,C}=0,x_A=0,x_B=0,x_P=1\mid \omega_C=1)Pr(\omega_{C}=1) \\
+        &~~+Pr(s_{i,C}=0,x_A=0,x_B=0,x_P=1\mid \omega_C=0)Pr(\omega_{C}=0)] \\
+        &=\frac{(1-p)(1-\alpha)p\times\frac{1}{2}}{(1-p)(1-\alpha)p\times\frac{1}{2}+p\alpha(1-p)\times\frac{1}{2}} \\
+        &=\frac{(1-p)(1-\alpha)p}{(1-p)(1-\alpha)p+p\alpha(1-p)}\\
+        &=\frac{(1-\alpha)p(1-p)}{(1-\alpha)p(1-p)+\alpha(1-p)p} \\
+        &=\frac{(1-p)p\times(1-\alpha)}{(1-p)p\times(1-\alpha)+(1-p)p\times\alpha} \\
+        &=\frac{(1-p)p\times(1-alpha)}{(1-p)p\times[(1-\alpha)+\alpha]} \\
+        &=\frac{1-\alpha}{1-\alpha+\alpha} \\
+        &=1-\alpha
+\end{align*} \color{black}
+
+We have now recovered the posterior in this case. Now, let’s try to make sense of it. First, we are going to compare a common voter’s posterior (our function $\mu$) to her prior belief that the optimal policy for her group is one, which equals $1/2$.
+
+(h) Show that $\mu(s_{i,C}=1,x_A=0,x_B=0,x_P=1)>1/2$. Provide some intuition why.
+
+    \color{blue}
+
+    $$
+    \mu(s_{i,C}=1,x_A=0,x_B=0,x_P=1)
+    =\frac{(1-\alpha)p^2}{(1-\alpha)p^2+\alpha(1-p)^2}
+    $$
+
+    To prove $\frac{(1-\alpha)p^2}{(1-\alpha)p^2+\alpha(1-p)^2}>1/2$ is equivalent to prove $(1-\alpha)p^2>\alpha(1-p)^2$, since both are positive.
+
+    Note $1-p<\alpha<p$, this implies $1-p<1-\alpha<p$.
+
+    This means $(1-\alpha)p^2>(1-p)p^2$ and $\alpha(1-p)^2<p(1-p)^2$. We therefore only need to show $(1-p)p^2>p(1-p)^2$ or $(1-p)p^2-p(1-p)^2>0$.
+
+    ```{=tex}
+    \begin{align*}
+    &(1-p)p^2-p(1-p)^2 \\
+    =&p(1-p)[p-(1-p)] \\
+    =&p(1-p)(2p-1)
+    \end{align*}
+    ```
+    The three solutions are $p=0$, $p=1$ and $p=\frac{1}{2}$. The highest order coefficient is negative ($-2p^3$), which means the function starts from a positive and ends with a negative value. Therefore, the function is positive when $p<0$, negative when $0<p<\frac{1}{2}$, positive when $\frac{1}{2}<p<1$ and negative when $p>1$.
+
+    This is visualised in @fig-5h.
+
+    ```{r 5h}
+    #| label: fig-5h
+    #| fig-cap: "Plot for $p(1-p)(2p-1)$"
+    data <- data.frame(p=seq(-0.5, 1.5, length.out = 100))
+    data <- data |>
+      mutate(y=p*(1-p)*(2*p-1))
+    ggplot(data, aes(x=p, y=y))+geom_line()+
+      labs(x="p",
+           y='p(1-p)(2p-1)')+
+      theme_bw()
+    ```
+
+    Since in our setting $\frac{1}{2}<p<1$, the expression above is positive, hence $\mu(s_{i,C}=1,x_A=0,x_B=0,x_P=1)>1/2$.
+    
+    Intuition: the signal is 1, which is informative that the state $\omega_C$ is more likely to be 1. The populist $P$'s platform is also one, this suggests that the populist $P$ also gets a signal of one. This confirms that the state $\omega_C$ is more likely to be 1. Therefore, the posterior belief $\mu$ is greater than $1/2$.
+
+    \color{black}
+
+(i) In turn, $\mu(s_{i,C}=0,x_A=0,x_B=0,x_P=1)>1/2$ if and only if $\alpha<1/2$. Why is that?
+
+    \color{blue}
+
+    ```{=tex}
+    \begin{align*}
+    \mu(s_{i,C}=0,x_A=0,x_B=0,x_P=1)=1-\alpha&>\frac{1}{2}~\text{from Part (g)} \\
+    \alpha&<\frac{1}{2}
+    \end{align*}
+    ```
+    \color{black}
+
+(j) Show that all common citizens who receive a signal $s_{i,C}=1$ vote for $P$ for all values of $\alpha$ and common citizens who receive a signal $s_{i,C} = 0$ vote for $P$ if and only if $\alpha<1/2$.
+
+    \color{blue}
+
+    As we have shown in [Q4](#sec-Q4),
+
+    For commoners receiving $s_{i,C}=1$, after signal $s_{i,C}$, a common voter $i$ casts a ballot for $P$ if and only if:
+
+    -   $\mu(s_{i,C}, x_A, x_B, x_P)<\frac{1-|\delta|}{2}$ if $x_A=x_B=1$ and $x_P=0$.
+
+    -   $\mu(s_{i,C}, x_A, x_B, x_P)>\frac{1+|\delta|}{2}$ if $x_A=x_B=0$ and $x_P=1$.
+
+    The second case aligns more with settings in [Q5](#sec-Q5). In this case, it requires $\mu(s_{i,C},0,0,1)>\frac{1+|\delta|}{2}$.
+
+    -   When $s_{i,C}=1$, $\mu(1,0,0,1)=\frac{(1-\alpha)p^2}{(1-\alpha)p^2+\alpha(1-p)^2}$.
+
+        We need to show $\frac{(1-\alpha)p^2}{(1-\alpha)p^2+\alpha(1-p)^2}-\frac{1+|\delta|}{2}>0$.
+
+        This reduces to $(1-|\delta|)(1-\alpha)p^2-(1+|\delta|)\alpha(1-p)^2>0$.
+
+        -   When $\alpha>0.5$, $|\delta|<\frac{2\alpha-1}{2}$.
+
+            ```{=tex}
+            \begin{align*}
+            &(1-|\delta|)(1-\alpha)p^2-(1+|\delta|)\alpha(1-p)^2 \\
+            >&(\frac{1}{2}-\alpha)(1-\alpha)p^2-(\frac{1}{2}+\alpha)\alpha(1-p)^2 \\
+            >&(\frac{1}{2}-p)(1-p)^2-(\frac{1}{2}+p)p(1-p)^2 \\
+            =&p(1-p)[(\frac{1}{2}-p)p-(\frac{1}{2}+p)(1-p)] \\
+            =&-\frac{1}{2}p(1-p)
+            \end{align*}
+            ```
+            This expression is positive when $p\in(0,1)$. As in the setting, $p>0.5$, therefore the condition is met in this case.
+
+        -   When $\alpha<0.5$, $|\delta|<\frac{1-2\alpha}{2}$.
+
+            ```{=tex}
+            \begin{align*}
+            &(1-|\delta|)(1-\alpha)p^2-(1+|\delta|)\alpha(1-p)^2\\
+            =&(\frac{1}{2}+\alpha)(1-\alpha)p^2-(\frac{3}{2}-\alpha)\alpha(1-p)^2\\
+            =&(\frac{1}{2}+\frac{1}{2}\alpha-\alpha^2)-(\frac{3}{2}\alpha-\alpha^2)(1-p)^2\\
+            \end{align*}
+            ```
+            Since $p>1/2$, $p^2>(1-p)^2$. we only need to show $\frac{1}{2}+\frac{1}{2}\alpha-\alpha^2>\frac{3}{2}\alpha-\alpha^2$.
+
+            ```{=tex}
+            \begin{align*}
+            \frac{1}{2}+\frac{1}{2}\alpha-\alpha^2&>\frac{3}{2}\alpha-\alpha^2 \\
+            \frac{1}{2}+\frac{1}{2}\alpha&>\frac{3}{2}\alpha \\
+            \alpha&<0.5
+            \end{align*}
+            ```
+            This is therefore also true.
+
+        Therefore, when $s_{i,C}=1$, $\mu(1,0,0,1)=\frac{(1-\alpha)p^2}{(1-\alpha)p^2+\alpha(1-p)^2}>\frac{1+|\delta|}{2}$.
+
+    -   When $s_{i,C}=0$, $\mu(0,0,0,1)=1-\alpha$.
+
+        To show $\mu(0,0,0,1)>\frac{1+|\delta|}{2}$, is to show the following is positive:
+
+        ```{=tex}
+        \begin{align*}
+        &\mu(0,0,0,1)-\frac{1+|\delta|}{2} \\
+        =&1-\alpha-\frac{1+|\delta|}{2} \\
+        >&1-\alpha-\frac{1+\max(\bar{\delta})}{2} \\
+        =&1-\alpha-\frac{1+\max\{\frac{2\alpha-1}{2},\frac{1-2\alpha}{2}\}}{2}
+        \end{align*}
+        ```
+        From Part (i), we know that for $\mu(0,0,0,1)>\frac{1+|\delta|}{2}>\frac{1}{2}$, it must be that $\alpha<1/2$. Therefore $\frac{2\alpha-1}{2}<\frac{1-2\alpha}{2}$. The expression above:
+
+        ```{=tex}
+        \begin{align*}
+        =&1-\alpha-\frac{1+\frac{1-2\alpha}{2}}{2} \\
+        =&1-\alpha-\frac{3-2\alpha}{4} \\
+        =&\frac{4-4\alpha-3+2\alpha}{4} \\
+        =&\frac{1-2\alpha}{4}.
+        \end{align*}
+        ```
+        For this to be $>0$:
+
+        ```{=tex}
+        \begin{align*}
+        \frac{1-2\alpha}{4}&>0 \\
+        1-2\alpha&>0 \\
+        \alpha&<\frac{1}{2}
+        \end{align*}
+        ```
+        Therefore the commoner only votes for $P$ when $\alpha<1/2$ in this case.
+
+    The first case is discussed in [Q6].
+
+## Q6
+
+We are now considering the case when the mainstream parties are proposing policy 1 ($x_A = x_B = 1$) and the populist candidate is offering the policy 0 ($x_P = 0$).
+
+(a) Show that:
+
+    ```{=tex}
+    \begin{align*}
+    \mu(s_{i,C}=0,x_A=1.x_B=1,x_P=0)&=\frac{(1-p)^2\alpha}{(1-p)^2\alpha+p^2(1-\alpha)}\\
+    \mu(s_{i,C}=1,x_A=1.x_B=1,x_P=0)&=\alpha\\
+    \end{align*}
+
+    
+    \color{blue}
+    
+    \begin{align*}
+    &\mu(0,1,1,0) \\
+    =&\frac{Pr(0,1,1,0\mid\omega_C=1)Pr(\omega_C=1)}{Pr(0,1,1,0\mid\omega_C=1)Pr(\omega_C=1)+Pr(0,1,1,0\mid\omega_C=0)Pr(\omega_C=0)} \\
+    =&\frac{Pr(0,\omega_E=1,s_{P,C}=0\mid1)}{Pr(0,\omega_E=1,s_{P,C}=0\mid1)+Pr(0,\omega_E=1,s_{P,C}=0\mid0)} \\
+    =&\frac{Pr(0\mid1)Pr(\omega_E=1\mid1)Pr(s_{P,C}=0\mid1)}{Pr(0\mid1)Pr(\omega_E=1\mid1)Pr(s_{P,C}=0\mid1)+Pr(0\mid0)Pr(\omega_E=1\mid0)Pr(s_{P,C}=0\mid0)} \\
+    =&\frac{(1-p)\alpha(1-p)}{(1-p)\alpha(1-p)+p(1-\alpha)p} \\
+    =&\frac{(1-p)^2\alpha}{(1-p)^2\alpha+p^2(1-\alpha)}
+    \end{align*}
+
+    \begin{align*}
+    &\mu(1,1,1,0) \\
+    =&\frac{Pr(1,1,1,0\mid\omega_C=1)Pr(\omega_C=1)}{Pr(1,1,1,0\mid\omega_C=1)Pr(\omega_C=1)+Pr(1,1,1,0\mid\omega_C=0)Pr(\omega_C=0)} \\
+    =&\frac{Pr(1,\omega_E=1,s_{P,C}=0\mid1)}{Pr(1,\omega_E=1,s_{P,C}=0\mid1)+Pr(1,\omega_E=1,s_{P,C}=0\mid0)} \\
+    =&\frac{Pr(1\mid1)Pr(\omega_E=1\mid1)Pr(s_{P,C}=0\mid1)}{Pr(1\mid1)Pr(\omega_E=1\mid1)Pr(s_{P,C}=0\mid1)+Pr(1\mid0)Pr(\omega_E=1\mid0)Pr(s_{P,C}=0\mid0)}\\
+    =&\frac{p(1-p)\alpha}{p(1-p)\alpha+p(1-p)(1-\alpha)}\\
+    =&\frac{\alpha}{\alpha+(1-\alpha)}\\
+    =&\alpha
+    \end{align*}
+    
+    \color{black}
+    ```
+
+(b) Show that $\mu(s_{i,C}=0,x_A=1,x_B = 1, x_P = 0)<1/2$. Provide some intuition why.
+
+    \color{blue}
+
+    $$
+    \mu(0,1,1,0) =\frac{(1-p)^2\alpha}{(1-p)^2\alpha+p^2(1-\alpha)}
+    $$
+
+    To prove this is less than 1/2, we need to show:
+
+    \begin{align*}
+    (1-p)^2\alpha&<p^2(1-\alpha) \\
+    (1-p)^2\max\{\alpha\}&<p^2\min\{(1-\alpha)\}=p^2(1-\max\{\alpha\}) \\
+    (1-p)^2p&<p^2(1-p) \\
+    1-p&<p \\
+    p&>\frac{1}{2}
+    \end{align*}
+
+    And this is true.
+
+    Intuition: since we assume the populist $P$ only proposes the same policy as her signal, the commoners know she got a signal of 0. If the commoners also get a signal of 0, the commoners learn that being in the state of 1 ($\omega_C=1$) is very unlikely, given the signal is informative.
+
+    \color{black}
+    
+(c) In turn, $\mu(s_{i,C}=1,x_A=1,x_B = 1, x_P = 0) > 1/2$ if and only if $\alpha > 1/2$. Why is that?
+
+    \color{blue}
+
+    This is to show:
+
+    $$
+    \mu(1,1,1,0)=\alpha>1/2
+    $$
+
+    Which is obvious.
+
+    \color{black}
+
+(d) Show that all common citizens who receive a signal $s_{i,C} = 0$ vote for $P$ for all values of $\alpha$ and common citizens who receive a signal $s_{i,C} = 1$ vote for $P$ if and only if $\alpha < 1/2$.
+
+    \color{blue}
+
+    As we have shown in [Q4](#sec-Q4),
+
+    For commoners receiving $s_{i,C}=1$, after signal $s_{i,C}$, a common voter $i$ casts a ballot for $P$ if and only if:
+
+    -   $\mu(s_{i,C}, x_A, x_B, x_P)<\frac{1-|\delta|}{2}$ if $x_A=x_B=1$ and $x_P=0$.
+
+    -   $\mu(s_{i,C}, x_A, x_B, x_P)>\frac{1+|\delta|}{2}$ if $x_A=x_B=0$ and $x_P=1$.
+
+    We now focus on the first case. We have:
+
+    -   When the signal is 1 ($s_{i,C}=1$),
+
+        $$
+        \mu(1,1,1,0)=\alpha
+        $$
+
+        We need to show:
+
+        $$
+        \alpha<\frac{1-|\delta|}{2}.
+        $$
+
+        -   When $\alpha<0.5$, we only need to show:
+
+            ```{=tex}
+            \begin{align*}
+            \alpha&<\frac{1-\frac{1-2\alpha}{2}}{2} \\
+            \alpha&<\frac{1+2\alpha}{4} \\
+            \frac{1}{2}\alpha&<\frac{1}{4} \\
+            \alpha&<\frac{1}{2}
+            \end{align*}
+            ```
+            This is true.
+
+        -   When $\alpha>0.5$, if the the commoner votes for $P$, we need:
+
+            ```{=tex}
+            \begin{align*}
+            \alpha&<\frac{1-\frac{2\alpha-1}{2}}{2} \\
+            \alpha&<\frac{3-2\alpha}{4} \\
+            \frac{3}{2}\alpha&<\frac{3}{4}\\
+            \alpha&<\frac{1}{2}
+            \end{align*}
+            ```
+            This is contradictory.
+
+        Therefore, common citizens who receive a signal $s_{i,C} = 1$ vote for $P$ if and only if $\alpha < 1/2$.
+
+    -   When the signal is 0 ($s_{i,C}=0$),
+
+        $$
+        \mu(0,1,1,0)=\frac{(1-p)^2\alpha}{(1-p)^2\alpha+p^2(1-\alpha)}
+        $$
+
+        To show this is smaller than $\frac{1-|\delta|}{2}$, we need to show the following:
+
+        ```{=tex}
+        \begin{align*}
+        \frac{(1-p)^2\alpha}{(1-p)^2\alpha+p^2(1-\alpha)}-\frac{1-|\delta|}{2}&<0 \\
+        \frac{2(1-p)^2\alpha-(1-|\delta|)[(1-p)^2\alpha+p^2(1-\alpha)]}{2[(1-p)^2\alpha+p^2(1-\alpha)]}&<0 \\
+        2(1-p)^2\alpha-(1-|\delta|)[(1-p)^2\alpha+p^2(1-\alpha)]&<0 \\
+        2(1-p)^2\alpha-(1-p)^2\alpha-p^2(1-\alpha)+|\delta|(1-p)^2\alpha+|\delta|p^2(1-\alpha)&<0 \\
+        (1+|\delta|)(1-p)^2\alpha-(1-|\delta|)p^2(1-\alpha)&<0
+        \end{align*}
+        ```
+        -   When $\alpha<1/2$,
+
+            ```{=tex}
+            \begin{align*}
+            (1+\max\{|\delta|\})(1-p)^2\alpha-(1-\max\{|\delta|\})p^2(1-\alpha)&<0\\
+            (1+\frac{1-2\alpha}{2})(1-p)^2\alpha-(1-\frac{1-2\alpha}{2})p^2(1-\alpha)&<0 \\
+            (3-2\alpha)(1-p)^2\alpha-(1+2\alpha)p^2(1-\alpha)<0 \\
+            (3\alpha-2\alpha^2)(1-p)^2-(1+\alpha-2\alpha^2)p^2<0
+            \end{align*}
+            ```
+            Since $1/2<p<1$, $(1-p)^2<p^2$. We therefore only need to show:
+
+            ```{=tex}
+            \begin{align*}
+            3\alpha-2\alpha^2&<1+\alpha-2\alpha^2 \\
+            3\alpha&<1+\alpha \\
+            \alpha&<1/2
+            \end{align*}
+            ```
+            Which is true.
+
+        -   When $\alpha>1/2$,
+
+            \begin{align*}
+            (1+\max\{|\delta|\})(1-p)^2\alpha-(1-\max\{|\delta|\})p^2(1-\alpha)&<0\\ (1+\frac{2\alpha-1}{2})(1-p)^2\alpha-(1-\frac{2\alpha-1}{2})p^2(1-\alpha)&<0 \\
+            \max\{(2\alpha+1)\}(1-p)^2\max\{\alpha\}-\min\{(3-2\alpha)\}p^2\min\{(1-\alpha)\}&<0 \\
+            (2\max(\alpha)+1)(1-p)^2\max(\alpha)-(3-2\max(\alpha))p^2(1-\max(\alpha))&<0 \\
+            (2p+1)(1-p)^2p-(3-2p)p^2(1-p)&<0 \\
+            p(1-p)[(2p+1)(1-p)-(3-2p)p]&<0 \\
+            p(1-p)(1-2p)<0
+            \end{align*}
+
+            This function has three roots: $p=0$, $p=1/2$ and $p=1$.
+
+            Since the highest power coefficient is positive ($2p^3$),It is therefore negative on $p\in(1/2,1)$. As $p>1/2$, this is true. This is visualised below in @fig-6d:
+            
+            ```{r 6d}
+            #| label: fig-6d
+            #| fig-cap: "Plot for $p(1-p)(1-2p)$"
+            data <- data.frame(p=seq(-0.5, 1.5, length.out = 100))
+            data <- data |>
+              mutate(y=p*(1-p)*(1-2*p))
+            ggplot(data, aes(x=p, y=y))+geom_line()+
+              labs(x="p",
+                   y='p(1-p)(1-2p)')+
+              theme_bw()
+            ```
+    Therefore, all common citizens who receive a signal $s_{i,C} = 0$ vote for $P$ for all values of $\alpha$ and common citizens who receive a signal $s_{i,C} = 1$ vote for $P$ if and only if $\alpha < 1/2$.
+    \color{black}

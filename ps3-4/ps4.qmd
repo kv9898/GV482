@@ -1,0 +1,218 @@
+---
+title: The Democratic Critiques and Populism
+subtitle: GV482 Problem Set - Game Theory
+date: last-modified
+authors:
+  - name: Dianyi Yang
+execute:
+  echo: false
+  warning: false
+  error: false
+format:
+  orcid-pdf:
+    number-sections: false
+    fig-pos: 'H'
+---
+
+# Part III - The Populist’s entry decision (part of this will be solved on Thursday 2 February, the rest on Thursday 9 February)
+
+In the previous part, we have computed the electoral decision of a voter from group $C$ as a function of her information. We use our previous answers to compute $P$’s electoral chances and entry decision under different scenarios.
+
+## Q7
+
+In this question, we suppose that mainstream candidates find it optimal to the commoners’ preferred policy.
+
+(a) Using your answers to **Q3**, explain briefly why $P$ never wins the election if he enters in this case.
+
+    \color{blue}
+
+    As we have shown in **Q3**, the probability of $P$ winning the election is $0$ if he enters.
+
+    If $P$ proposes the same platform (commoners' preferred policy) as $A$ and $B$, $P$ will get no vote as both the commoners and elite will vote for the mainstream candidate with a positive valence shock. This corresponds to **Q3** (a).
+
+    If $P$ proposes a different platform, and
+
+    -   the commoners and the elite's preferred policy is the same, $P$ will get no vote as both the commoners and elite will vote for the mainstream candidate with a positive valence shock. This corresponds to **Q3** (b).
+
+    -   the commoners and the elite's preferred policy is different, $P$ will only get the elite's votes. This accounts for $\sigma$ of the vote. Since this is less than 50%, $P$ will not win the election. This corresponds to **Q3** (c).
+
+    \color{black}
+
+(b) Explain why the populist never enters when $\sigma+(1+\sigma)(1−p)<\frac{1}{2}$.
+
+    \color{blue}
+
+    As we have shown in **Q2** (e), $\sigma+(1+\sigma)(1−p)<\frac{1}{2}$ implies that the mainstream candidates converge on the commoners preferred policy. As we discussed in Part (a), $P$ has no chance of winning in this case. As there is a cost to entry, $P$ will not enter:
+
+    $$
+    U_P(\text{enter})=-c<U_P(\text{not enter})=0
+    $$
+
+    \color{black}
+
+## Q8
+
+In question [Q8] and [Q9], we turn to the case when mainstream candidates converge to the elite citizens’ preferred policy ($x_A = x_B = \omega_E$ and this is anticipated by commoners). In this question, we assume that $\alpha > 1/2$ and look at $P$’s entry decision then.
+
+(a) Assume that mainstream candidates propose $x_A=x_B=0$ and the populist offers $x_P =1$. Assume further than the state is $\omega_C = 0$ (i.e., that is the optimal policy happens to be zero for the common voters). Using your answer to **Q5**(i), show that the vote share of candidate $P$ is: $(1 − \sigma)(1 − p)$. Explain why P does not win the election then.
+
+    \color{blue}
+
+    The elite know their preference well. They will vote for one of the maintream candidates and not populist $P$.
+
+    As for the commoners,
+
+    -   some receive signal of 1 ($s_{i,C}=1$). Their posterior belief (from **Q5** (j)) is:
+
+        $$
+        \mu(1,0,0,1)=\frac{(1-\alpha)p^2}{(1-\alpha)p^2+\alpha(1-p)^2}>\frac{1+|\delta|}{2}.
+        $$
+
+        They will vote for $P$.
+
+    -   Some receive signal of 0 ($s_{i,C}=0$). Their posterior belief is:
+
+        $$
+        \mu(0,0,0,1)=1-\alpha
+        $$
+
+        Since we assume $\alpha>1/2$, $\mu(0,0,0,1)=1-\alpha<\frac{1}{2}<\frac{1=|\delta|}{2}$. They will not vote for $P$.
+
+    Therefore, only the commoners who receive signal of 1 will vote for $P$. The probability of receiving this wrong signal $Pr(s_{i,C}=1\mid \omega_C=0)=1-p$. They therefore account for $(1-\sigma)(1-p)$ of total voters. Since $p>0.5$, this is smaller than 50%. Other voters will unite around the mainstream candidate with a positive valence shock, who will receive more than 50% of the vote. Therefore, $P$ will not win the election.
+
+    \color{black}
+
+(b) Assume that mainstream candidates propose $x_A=x_B=0$ and the populist offers $x_P =1$. Assume further than the state is $\omega_C = 1$ (i.e., that is the optimal policy happens to be one for the common voters). Show that the vote share of candidate P is: $(1 − \sigma)p$. Explain why $P$ loses the election then.
+
+    \color{blue}
+
+    The elite know their preference well. They will vote for one of the maintream candidates and not populist $P$.
+
+    As for the commoners,
+
+    -   some receive signal of 1 ($s_{i,C}=1$). Their posterior belief (from **Q5** (j)) is:
+
+        $$
+        \mu(1,0,0,1)=\frac{(1-\alpha)p^2}{(1-\alpha)p^2+\alpha(1-p)^2}>\frac{1+|\delta|}{2}.
+        $$
+
+        They will vote for $P$.
+
+    -   Some receive signal of 0 ($s_{i,C}=0$). Their posterior belief is:
+
+        $$
+        \mu(0,0,0,1)=1-\alpha
+        $$
+
+        Since we assume $\alpha>1/2$, $\mu(0,0,0,1)=1-\alpha<\frac{1}{2}<\frac{1+|\delta|}{2}$. They will not vote for $P$.
+
+    Therefore, only the commoners who receive signal of 1 will vote for $P$. The probability of receiving this right signal $Pr(s_{i,C}=1\mid \omega_C=1)=p$. They therefore account for $(1-\sigma)p$ of total voters. For the mainstream candidates to converge on the elite's preference, it requires:
+
+    ```{=tex}
+    \begin{align*}
+    \sigma+(1-\sigma)(1-p)&\geq\frac{1}{2} \\
+    \sigma+(1-\sigma)-(1-\sigma)p&\geq\frac{1}{2} \\
+    (1-\sigma)p&\leq\frac{1}{2}
+    \end{align*}
+    ```
+    Therefore, $P$ only receives less than half of the votes, whereas the mainstream candidate with a positive valence shock gathers more than half of the votes. $P$ therefore loses.
+
+    \color{black}
+
+(c) Assume that mainstream candidates propose $x_A = x_B = 1$ and the populist offers $x_P = 0$. Explain why P never wins the election.
+
+    \color{blue}
+
+    The elite know their preference well. They will vote for one of the maintream candidates and not populist $P$.
+
+    As for the commoners,
+
+    -   some receive signal of 1 ($s_{i,C}=1$). Their posterior belief (from **Q6** (a)) is:
+
+        $$
+        \mu(1,1,1,0)=\alpha.
+        $$
+
+        As we have shown in **Q6** (d), commoners with signal 1 in this case only vote for $P$ if and only if $\alpha<1/2$. As we assume $\alpha>1/2$ in this question, they will not vote for $P$.
+
+    -   Some receive signal of 0 ($s_{i,C}=0$). Their posterior belief is:
+
+        $$
+        \mu(0,1,1,0)=\frac{(1-p)^2\alpha}{(1-p)^2\alpha+p^2(1-\alpha)}
+        $$
+
+        As we have shown in **Q6** (d), commoners with signal 0 in this case always vote for $P$.
+
+    Therefore, only commoners with signal 0 will vote for $P$. The probability of receiving this signal is either $p$ or $1-p$. They therefore account for $(1-\sigma)p$ or $(1-\sigma)(1-p)$ of total voters. As we explored in Part (c), neither is greater than 50% and one of the mainstream candidates gathers the majority of the vote. Therefore, $P$ will not win the election.
+
+    \color{black}
+
+(d) Explain briefly why P never enters.
+
+    \color{blue}
+
+    We have shown that, when $\alpha>1/2$, the populist candidate $P$ never wins the election. No matter which policy the mainstream candidates converge on and what policy the populist candidate $P$ proposes, she has no chance of winning. Since there is a cost of running for election, $P$ will never enter the election.
+
+    \color{black}
+
+## Q9
+
+We now look at $P$’s electoral chances and entry decision when $\alpha<1/2$.
+
+(a) Assume that mainstream candidates propose $x_A=x_B=0$ and the populist offers $x_P=1$. Using your answer to **Q5**(i), show that the vote share of candidate $P$ is: ($1 − \sigma$). Explain why $P$ wins the election then.
+
+    \color{blue}
+
+    The elite will also vote for the mainstream candidates as their platform aligns with the elite's preference.
+
+    As for the commoners,
+
+    -   some receive signal of 1 ($s_{i,C}=1$). Their posterior belief (from **Q5** (j)) is:
+
+        $$
+        \mu(1,0,0,1)=\frac{(1-\alpha)p^2}{(1-\alpha)p^2+\alpha(1-p)^2}>\frac{1+|\delta|}{2}.
+        $$
+
+        They will vote for $P$.
+
+    -   Some receive signal of 0 ($s_{i,C}=0$). Their posterior belief is:
+
+        $$
+        \mu(0,0,0,1)=1-\alpha
+        $$
+
+        Since we assume $\alpha<1/2$, $\mu(0,0,0,1)=1-\alpha>\frac{1+|\delta|}{2}$. This is shown in **Q5** (j). They will also vote for $P$.
+
+    Therefore, the $P$ will enjoy all the votes, and only the votes of the commoners, who account for ($1-\sigma$) of all voters. Since there are more commoners than elite $1-\sigma>1/2$, $P$ will win the election.
+
+    \color{black}
+
+(b) Assume that mainstream candidates propose $x_A=x_B=1$ and the populist offers $x_P=0$. Explain why $P$ always wins the election then.
+
+    \color{blue}
+
+    The elite will also vote for the mainstream candidates as their platform aligns with the elite's preference.
+
+    As for the commoners,
+
+    -   some receive signal of 1 ($s_{i,C}=1$). Their posterior belief (from **Q6** (a)) is:
+
+        $$
+        \mu(1,1,1,0)=\alpha.
+        $$
+
+        As we have shown in **Q6** (d), $\mu(1,1,1,0)=\alpha<\frac{1-|\delta|}{2}$ when $\alpha<1/2$ and these commoners with signal of 1 will vote for $P$.
+
+    -   some receive signal of 0 ($s_{i,C}=0$). Their posterior belief is:
+
+        $$
+        \mu(0,1,1,0)=\frac{(1-p)^2\alpha}{(1-p)^2\alpha+p^2(1-\alpha)}
+        $$
+
+        We have shown in **Q6** (d) it is true that $\mu(0,1,1,0)<\frac{1-|\delta|}{2}$ for all values of $\alpha$. Therefore these commoners with signal of 1 will also vote for $P$.
+
+    Therefore, the $P$ will enjoy all the votes, and only the votes of the commoners, who account for ($1-\sigma$) of all voters. Since there are more commoners than elite $1-\sigma>1/2$, $P$ will win the election.
+
+We now need to compute $P$’s expected payoff if $P$ enters. We consider the populist’s entry decision so we no longer assume that $x_P = s_{P,C}$ (this has to be a choice of the populist). However, we still assume below that citizens anticipate that $x_P = s_{P,C}$ if the populist enters (we will see that this anticipation is correct below). In turn, both the citizens and the populist anticipate that the mainstream candidates propose $x_A=x_B=\omega_E$ (again, we will see that this anticipation is correct in Part IV).
+
+To calculate $P$’s expected utility when he enters, we make use of $\rho(s_{P,C}, x_A, x_B)$ the populist’s posterior that $\omega_C = 1$ given his signal and the mainstream candidates’ platform choices.
