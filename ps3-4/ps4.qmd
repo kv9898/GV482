@@ -348,9 +348,10 @@ $$ We again take these terms in turn.
 
     \color{blue}
 
+    ```{=tex}
     \begin{align*} &\rho(s_{P,C} = 0, x_A = 0, x_B = 0) \\ =&\frac{Pr(s_{P,C}=0\mid\omega_C=1)(1−\alpha)}{Pr(s_{P,C}=0\mid\omega_C=1)(1−\alpha)+Pr(s_{P,C}=0\mid\omega_C = 0)\alpha} \\ =&\frac{(1-p)(1-\alpha)}{(1-p)(1-\alpha)+p\alpha} 
     \end{align*}
-
+    ```
     \color{black}
 
 (h) Suppose now that $x_A = x_B = 1$. Show that $$
@@ -374,12 +375,13 @@ $$ We again take these terms in turn.
 
     \color{blue}
 
+    ```{=tex}
     \begin{align*} 
     &\rho(s_{P,C} = 0, x_A = 1, x_B = 1) \\ 
     =&\frac{Pr(s_{P,C}=0\mid\omega_C=1)\alpha}{Pr(s_{P,C}=0\mid\omega_C=1)\alpha+Pr(s_{P,C}=0\mid\omega_C = 0)(1-\alpha)} \\ 
     =&\frac{(1-p)\alpha}{(1-p)\alpha+p(1-\alpha)}
     \end{align*}
-
+    ```
     \color{black}
 
 Now that we know $P$'s belief about what the correct policy is, we can think about his entry decision.
@@ -404,6 +406,7 @@ Now that we know $P$'s belief about what the correct policy is, we can think abo
 
     When $s_{P,C}=1$,
 
+    ```{=tex}
     \begin{align*}
     \text{For}~&U_P(x_P=1)>U_P(x_P=0) \\
     \text{We need}~&\frac{p(1-\alpha)}{p(1-\alpha)+(1-p)\alpha}-c>1-\frac{p(1-\alpha)}{p(1-\alpha)+(1-p)\alpha}-c \\
@@ -411,7 +414,8 @@ Now that we know $P$'s belief about what the correct policy is, we can think abo
     \text{This holds as the expression}&>p(1-p)-(1-p)p \\
     &=0
     \end{align*}
-
+    ```
+    ```{=tex}
     \begin{align*}
     \text{For}~&U_P(x_P=1)>U_P(\text{}x_P=\phi)~\text{we need:} \\
     &\frac{p(1-\alpha)}{p(1-\alpha)+(1-p)\alpha}-c-0>0 \\
@@ -422,11 +426,12 @@ Now that we know $P$'s belief about what the correct policy is, we can think abo
     >&c-c^2-c(1-c) \\
     >&c-c^2-c+c^2=0\\
     \end{align*}
-
+    ```
     This must be true. Therefore, when $s_{P,C}=1$ , $P$ enters with platform $x_P=1$.
 
     When $s_{P,C}=0$,
 
+    ```{=tex}
     \begin{align*}
     \text{For}~&U_P(x_P=1)>U_P(x_P=0) \\
     \text{We need}~&\frac{(1-p)(1-\alpha)}{(1-p)(1-\alpha)+p\alpha} -c>1-\frac{(1-p)(1-\alpha)}{(1-p)(1-\alpha)+p\alpha} -c \\
@@ -434,7 +439,8 @@ Now that we know $P$'s belief about what the correct policy is, we can think abo
     \text{This does not hold as the expression}&<(1-p)p-p(1-p) \\
     &=0
     \end{align*}
-
+    ```
+    ```{=tex}
     \begin{align*}
     \text{For}~&U_P(x_P=1)>U_P(\text{}x_P=\phi)~\text{we need:} \\
     &\frac{(1-p)(1-\alpha)}{(1-p)(1-\alpha)+p\alpha} -c-0>0 \\
@@ -444,7 +450,7 @@ Now that we know $P$'s belief about what the correct policy is, we can think abo
     \text{This requires}~&(1-c)(1-p)p>cp(1-p).\\
     \text{This is no met as}~&c>1/2~\text{and}~1-c<c.
     \end{align*}
-
+    ```
     Therefore, when $s_{P,C}=0$, entering with platform $x_P=1$ is dominated by the other two options and not chosen by $P$.
 
     Hence, when $x_A = x_B = 0$, the populist enters with platform $x_P = 1$ if and only if $s_{P,C} = 1$ and does not enter otherwise.
@@ -456,3 +462,362 @@ By a similar reasoning as above, we can also show that when $x_A = x_B = 1$, the
 # Part IV - The mainstream parties' adaptation {#sec-part4}
 
 In this last part, we consider how the mainstream parties react to the populist’s threat of entry. As we have seen in [part III](#sec-part3), this threat materializes only if $\sigma+(1−\sigma)(1−p)>1/2$ and $\alpha < 1/2$ so we will assume this holds in what follows (in all other cases, it is business as normal for the mainstream candidates). Further, we assume that the populist and citizens anticipate that candidates play an elite-driven strategy ($x_A = x_B = \omega_E$). When they observe diverging platform, all citizens follow their signal as we assumed in **Part I**. In the questions that follow, we consider $A$’s incentive to deviate (keeping $B$’s behavior constant, $x_B = \omega_E$). We ask ourselves: what should $A$ do? Should he propose $x_A = \omega_E$ or should he deviate and go on proposing a different policy? We are going to answer these questions under different possible scenarios.
+
+# Q10
+
+We consider the following case: $\omega_E = 0$ so $B$ proposes policy $x_B = 0$, and $\omega_C = 0$ so the optimal policy for the common people is the same as for the elite.
+
+(a) Suppose $A$ proposes $x_A = 1$. Show that the populist does not enter then.
+
+    \color{blue}
+
+    In this case, all of the elites vote for $B$ as they know their state well.
+
+    However, as for the commoners, they no longer learn from the mainstream candidates' platforms as they do not know who is deviating. Here we assume $P$ proposes the same platform as her signal if she enters:
+
+    $$
+    Pr(\omega_C=1\mid s_{i,C}, x_A=1,x_B=0, x_P)=Pr(\omega_C=1\mid s_{i,C},s_{P,C})
+    $$
+
+    If the $P$ gets signal $s_{P,C}=0$ with probability $p$ and proposes $x_P=0$,
+
+    -   For the commoners, their expected utility from voting for different candidates:
+
+        ```{=tex}
+        \begin{align*}
+        U_{i,C}(A\mid s_{i,C}, s_{P,C}=0)&=Pr(\omega_C=1\mid s_{i,C}, s_{P,C}=0)+\delta \\
+        U_{i,C}(B\mid s_{i,C}, s_{P,C}=0)&=1-Pr(\omega_C=1\mid s_{i,C}, s_{P,C}=0)-\delta \\
+        U_{i,C}(P\mid s_{i,C}, s_{P,C}=0)&=Pr(\omega_C=1\mid s_{i,C}, s_{P,C}=0)
+        \end{align*}
+        ```
+        For them to vote for $P$, it requires that $U_{i,C}(P\mid s_{i,C}, s_{P,C}=0)>U_{i,C}(A\mid s_{i,C}, s_{P,C}=0)$.
+
+        This requires $\delta>0$, which is true with probability $1/2$.
+
+        This means $P$ wins with probability $1/2$ *at most*.
+
+        Even if $P$ gets the right signal (which maximises her payoff), her utility from running is *at most*
+
+        $$
+        U_P^{max}(x_P=0)=1/2-c<0=U_P(x_P=\phi)~\text{as c>1/2}
+        $$
+
+        This means the populist $P$ will not enter in this case.
+
+    If the $P$ gets signal $s_{P,C}=1$ with probability $1-p$ and proposes $x_P=1$,
+
+    -   For the commoners, their expected utility from voting for different candidates:
+
+        ```{=tex}
+        \begin{align*}
+        U_{i,C}(A\mid s_{i,C}, s_{P,C}=1)&=Pr(\omega_C=1\mid s_{i,C}, s_{P,C}=1)+\delta \\
+        U_{i,C}(B\mid s_{i,C}, s_{P,C}=1)&=1-Pr(\omega_C=1\mid s_{i,C}, s_{P,C}=1)-\delta \\
+        U_{i,C}(P\mid s_{i,C}, s_{P,C}=1)&=Pr(\omega_C=1\mid s_{i,C}, s_{P,C}=1)
+        \end{align*}
+        ```
+        For them to vote for $P$, it requires that $U_{i,C}(P\mid s_{i,C}, s_{P,C}=1)>U_{i,C}(A\mid s_{i,C}, s_{P,C}=1)$.
+
+        This requires $\delta>0$, which is true with probability $1/2$.
+
+        This means $P$ wins with probability $1/2$ *at most*.
+
+        Even if $P$ gets the right signal (which maximises her payoff), her utility from running is *at most*
+
+        $$
+        U_P^{max}(x_P=1)=1/2-c<0=U_P(x_P=\phi)~\text{as c>1/2}
+        $$
+
+        This means the populist $P$ will not enter in this case.
+
+    Therefore, if $A$ proposes $x_A = 1$. the populist $P$ does not enter then.
+
+    \color{black}
+
+(b) Suppose $A$ proposes $x_A = 1$. Show that $A$’s vote share is $(1 − \sigma)(1 − p)$. Explain briefly why $A$ does not win the election then.
+
+    \color{blue}
+
+    We now know that when $A$ deviates, $P$ does not enter. In this case, all of the elites (accounting for $\sigma$ of total voters) vote for $B$ as $x_P=\omega_E=0$.
+
+    As for the commoners, the only information for them is their own signal as they cannot distinguish $A$ or $B$ deviates and they know that $P$ does not enter if either mainstream candidate deviates:
+
+    $$
+    \mu(s_{i,C},1,0,\phi)=Pr(\omega_C=1\mid s_{i,C})
+    $$
+
+    -   For those with the right signal $s_{i,C}=0$, who account for $p$ of common voters:
+
+        $$
+        \mu(0,1,0,\phi)=Pr(\omega_C=1\mid s_{i,C}=0)=1-p
+        $$
+
+        Their expected payoffs from voting for mainstream candidates:
+
+        ```{=tex}
+        \begin{align*}
+        U_{i,C}(A\mid s_{i,C}=0)&=1-p+\delta \\
+        U_{i,C}(B\mid s_{i,C}=0)&=p-\delta \\
+        \end{align*}
+        ```
+        As shown in **Q2** (c), $\bar{\delta}<\max\{\frac{2\alpha-1}{2},\frac{1-2\alpha}{2}\}<\frac{2p-1}{2}$,
+
+        ```{=tex}
+        \begin{align*}
+        &U_{i,C}(A\mid s_{i,C}=0)-U_{i,C}(B\mid s_{i,C}=0) \\
+        =&(1-p+\delta)-(p-\delta) \\
+        =&1-2p+2\delta \\
+        <&1-2p+2\bar{\delta}\\
+        =&1-2p+2\frac{2p-1}{2} \\
+        =&0
+        \end{align*}
+        ```
+        Therefore thosecommon voters with the right signal $s_{i,c}=0$ vote for $B$.
+
+    -   For those with the wrong signal $s_{i,C}=1$, who account for $(1-p)$ of common voters and $(1-\sigma)(1-p)$ of total voters:
+
+        $$
+        \mu(1,1,0,\phi)=Pr(\omega_C=1\mid s_{i,C}=1)=p
+        $$
+
+        Their expected payoffs from voting for mainstream candidates:
+
+        ```{=tex}
+        \begin{align*} 
+        U_{i,C}(A\mid s_{i,C}=1)&=p+\delta \\ 
+        U_{i,C}(B\mid s_{i,C}=1)&=1-p-\delta \\ 
+        \end{align*}
+        ```
+        As shown in **Q2** (c), $\bar{\delta}<\max\{\frac{2\alpha-1}{2},\frac{1-2\alpha}{2}\}<\frac{2p-1}{2}$,
+
+        ```{=tex}
+        \begin{align*}
+        &U_{i,C}(A\mid s_{i,C}=1)-U_{i,C}(B\mid s_{i,C}=1) \\
+        =&(p+\delta)-(1-p-\delta) \\
+        =&2p-1+2\delta \\
+        >&1+2p-2\bar{\delta}\\
+        =&1+2p-2\frac{2p-1}{2} \\
+        =&0
+        \end{align*}
+        ```
+        Therefore those common voters with the wrong signal $s_{i,c}=1$ vote for $A$.
+
+    Therefore, only those common voters with the wrong signal $s_{i,c}=1$ vote for $A$. They account for $(1-\sigma)(1-p)$ of total voters. Since $1-p<1/2$, $(1-\sigma)(1-p)<1/2$. As there are only two candidates, $A$ loses the election.
+
+    \color{black}
+
+(c) Suppose now that $x_A = 0$. Show that if $P$ enters at $x_P = 1$, then $A$ loses the election for sure.
+
+    \color{blue}
+
+    In this case, the elites will vote for one of the mainstream candidates with a positive valance shock:
+
+    ```{=tex}
+    \begin{align*}
+    U_{i,E}(P)=0<U_{i,E}(A)=1+\delta \\
+    U_{i,E}(P)=0<U_{i,E}(B)=1-\delta
+    \end{align*}
+    ```
+    As for the commoners, they all voter for $P$ as $\alpha<1/2$. This is shown in **Q5** (j). As commoners outnumber the elites $(1-\sigma)>1/2$, the populist $P$ wins for sure and both $A$ and $B$ lose the election for sure.
+
+    \color{black}
+
+(d) Suppose now that $x_A = 0$. Explain carefully why $A$’s chance of winning the election is $\frac{p}{2}$.
+
+    \color{blue}
+
+    As previously shown in **Q9** (i), the populist enters with platform $x_P = 1$ if and only if $s_{P,C} = 1$ and does not enter otherwise and never proposes $x_P=0$ in this case (from **Q9** (c)).
+
+    Therefore, the probability of $P$ proposing $x_P=1$ and winning the election is ($1-p$).
+
+    When $P$ is not running in the election, with probability $p$, the expected payoff for the voters:
+
+    ```{=tex}
+    \begin{align*}
+    U_{i,E}(A)&=1+\delta \\
+    U_{i,E}(B)&=1-\delta \\
+    U_{i,C}(A)&=1-\mu(s_{i,C},0,0,\phi)+\delta \\
+    U_{i,C}(B)&=1-\mu(s_{i,C},0,0,\phi)-\delta
+    \end{align*}
+    ```
+    In this case, the mainstream candidate with positive valence shock receives all of the votes and thus wins the election. Since the valence shock $\delta\in[-\bar{\delta},\bar{\delta}]$ is uniformly distributed, it has equal probabilities of being positive and negative. Hence both $A$ and $B$ have 1/2 chance of winning the election when $P$ is not running.
+
+    Hence the $A$'s chance of winning is $[1-(1-p)]\times\frac{1}{2}=\frac{p}{2}$.
+
+    \color{black}
+
+(e) Explain why $A$ also has no incentive to deviate in this case (i.e., prefers to propose $x_A = 0$ over $x_A = 1$).
+
+    \color{blue}
+
+    As we have previously shown, when $A$ deviates, $P$ does not enter (a) and $A$ loses the election (b). In this case, her expected payoff:
+
+    $$
+    U_A(\text{deviate})=U_A(\text{lose})=0
+    $$
+
+    When $A$ does not deviate, she has $\frac{p}{2}$ chance of winning (from (d)). Her expected payoff:
+
+    ```{=tex}
+    \begin{align*}
+    U_A(\text{not deviate})&=U_A(\text{win})\times\frac{p}{2}+U_A(\text{lose})\times(1-\frac{p}{2}) \\
+    &=1\times\frac{p}{2}+0\times(1-\frac{p}{2}) \\
+    &=\frac{p}{2}>0=U_A(\text{deviate})
+    \end{align*}
+    ```
+    Therefore $A$ has no incentive to deviate.
+
+    \color{black}
+
+# Q11
+
+We now turn to a different case with $\omega_E = 0$, so $B$ proposes policy $x_E = 0$, and $\omega_C = 1$ so the optimal policy for the common people is different than the optimal policy for the elite.
+
+(a) Explain briefly why $A$’s vote share is $(1 − \sigma)p$ if he proposes $x_A = 1$.
+
+    \color{blue}
+
+    In a similar fashion to [Q10] (a), $P$ will not enter in this case:
+
+    -   It is known that $P$ does not enter with $x_P=0$.
+
+    -   the elites will not vote for $P$ if $x_P=1$.
+
+    -   For the commoners, the expected payoffs of voting for different candidates:
+
+        ```{=tex}
+        \begin{align*}
+        U_{i,C}(A\mid s_{i,C}, s_{P,C}=1)&=Pr(\omega_C=1\mid s_{i,C}, s_{P,C}=1)+\delta \\
+        U_{i,C}(B\mid s_{i,C}, s_{P,C}=1)&=1-Pr(\omega_C=1\mid s_{i,C}, s_{P,C}=1)-\delta \\
+        U_{i,C}(P\mid s_{i,C}, s_{P,C}=1)&=Pr(\omega_C=1\mid s_{i,C}, s_{P,C}=1)
+        \end{align*}
+        ```
+
+    -   $P$ beats $A$ with probability $1/2$ *at most*.
+
+    -   $P$ will not enter as there is cost of running $c$, let alone the possibility that she receives the wrong signal.
+
+    Also in a similar fashion to [Q10] (b),
+
+    -   All of the elites ($\sigma$) vote for $B$.
+
+    -   Among the commoners ($1-\sigma$),
+
+        -   Those with the right signal $s_{i,C}=1$ account for $(1-\sigma)p$ of total voters.
+
+            Their belief:
+
+            $$
+            \mu(1,1,0,\phi)=Pr(\omega_C=1\mid s_{i,C}=1)=p
+            $$
+
+            Their expected payoffs from voting for the mainstream candidates:
+
+            ```{=tex}
+            \begin{align*}
+            U_{i,C}(A\mid s_{i,C}=1)&=p+\delta \\
+            U_{i,C}(B\mid s_{i,C}=1)&=1-p-\delta \\
+            \end{align*}
+            ```
+            They will vote for $A$.
+
+        -   Those with the wrong signal $s_{i,C}=0$ account for $(1-\sigma)(1-p)$ of total voters.
+
+            Their belief:
+
+            $$
+            \mu(0,1,0,\phi)=Pr(\omega_C=1\mid s_{i,C}=0)=1-p
+            $$
+
+            Their expected payoffs from voting for the mainstream candidates:
+
+            ```{=tex}
+            \begin{align*}
+            U_{i,C}(A\mid s_{i,C}=0)&=1-p+\delta \\
+            U_{i,C}(B\mid s_{i,C}=0)&=p-\delta \\
+            \end{align*}
+            ```
+            They will vote for $B$.
+
+    -   Therefore only common voters with the correct signal will vote for $A$, Their share is $(1-\sigma)p$.
+
+    \color{black}
+
+(b) Suppose now that $x_A = 0$. Explain carefully why $A$’s chance of winning the election is $\frac{1−p}{2}$.
+
+    \color{blue}
+
+    As previously shown in **Q9** (i), the populist enters with platform $x_P = 1$ if and only if $s_{P,C} = 1$ and does not enter otherwise and never proposes $x_P=0$ in this case (from **Q9** (c)).
+
+    Therefore, the probability of $P$ proposing $x_P=1$ and winning the election is ($p$).
+
+    When $P$ is not running in the election, with probability $1-p$, the expected payoff for the voters:
+
+    ```{=tex}
+    \begin{align*}
+    U_{i,E}(A)&=1+\delta \\
+    U_{i,E}(B)&=1-\delta \\
+    U_{i,C}(A)&=1-\mu(s_{i,C},0,0,\phi)+\delta \\
+    U_{i,C}(B)&=1-\mu(s_{i,C},0,0,\phi)-\delta
+    \end{align*}
+    ```
+    In this case, the mainstream candidate with positive valence shock receives all of the votes and thus wins the election. Since the valence shock $\delta\in[-\bar{\delta},\bar{\delta}]$ is uniformly distributed, it has equal probabilities of being positive and negative. Hence both $A$ and $B$ have 1/2 chance of winning the election when $P$ is not running.
+
+    Hence the $A$'s chance of winning is $(1-p)\times\frac{1}{2}=\frac{1-p}{2}$.
+
+    \color{black}
+
+(c) Explain why $A$ also has no incentive to deviate in this case (i.e., prefers to propose $x_A = 0$ over $x_A = 1$).
+
+    \color{blue}
+
+    As we have previously shown, when $A$ deviates, $P$ does not enter (a) and $A$ receives $(1-\sigma)p$ of the votes. We know $(1-\sigma)p<1/2$ and hence $A$ loses the election to $P$ as under this setting, the mainstream candidates were supposed to converge on the elites' interest. This means, from **Q2** (e):
+
+    ```{=tex}
+    \begin{align*}
+    \sigma+(1-\sigma)(1-p)&>\frac{1}{2} \\
+    \sigma+1-\sigma-p+\sigma p &> \frac{1}{2} \\
+    -p+\sigma p&>-\frac{1}{2} \\
+    p-\sigma p &< \frac{1}{2} \\
+    (1-\sigma)p&<\frac{1}{2}
+    \end{align*}
+    ```
+    In this case, her expected payoff:
+
+    $$
+    U_A(\text{deviate})=U_A(\text{lose})=0
+    $$
+
+    When $A$ does not deviate, she has $\frac{1-p}{2}$ chance of winning (from (b)). Her expected payoff:
+
+    ```{=tex}
+    \begin{align*}
+    U_A(\text{not deviate})&=U_A(\text{win})\times\frac{1-p}{2}+U_A(\text{lose})\times(1-\frac{1-p}{2}) \\
+    &=1\times\frac{1-p}{2}+0\times(1-\frac{1-p}{2}) \\
+    &=\frac{1-p}{2}>0=U_A(\text{deviate})
+    \end{align*}
+    ```
+    Therefore $A$ has no incentive to deviate.
+
+    \color{black}
+
+Obviously, the same logic applies when $\omega_E = 1$. Further, since $A$ and $B$ face similar incentives, if $A$ has no incentive to deviate so does $B$.
+
+# Q12
+
+Given your answers above, can you provide some intuition why the two mainstream candidates do not react to the threat of entry of the populist candidate?
+
+\color{blue}
+
+Intuition: the mainstream candidates do not react to the threat of entry of the populist candidate because accommodating populist demands only drives away the populist candidate, but makes the deviating candidate lose to the elite-based counterpart, as the elites and (mis)informed commoners outnumber the rest.
+
+However, if they did not cater to the populist demands, there is a chance of winning if the populist receives the same signal as their platform and does not enter the election.
+
+\color{black}
+
+Congratulations. We have finally shown that there is an equilibrium in which the mainstream candidates cater to the elite ($x_K = \omega_E$, $K\in\{A, B\}$), the populist enters when $s_{P,C} \neq x_K$ and wins the election then. Notice that the populist’s entry and success is, in this problem set, the result of a representation failure. This representation failure arises when two conditions are met:
+
+1.  Large political inequality ($p$ is sufficiently low so $\sigma + (1 − \sigma)(1 − p) > (1 − \sigma)p$), which leads to an elite-driven equilibrium from mainstream parties.
+
+2.  The interests of the elite and the commoners are misaligned ($\alpha < 1/2$), so that the populist can receive the vote of all commoners and has the electoral incentives to enter.
+
+These are the themes we have been developing in the lectures.
