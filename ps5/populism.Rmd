@@ -17,7 +17,7 @@ knitr::opts_chunk$set(echo = TRUE,
 #dirname(rstudioapi::getSourceEditorContext()$path)
 setwd("D:/OneDrive - London School of Economics/Desktop/lse assignments/GV482/ps5") #change to your own directory
 
-need <- c('tidyverse','haven','modelsummary') # list packages
+need <- c('tidyverse','haven','modelsummary',"TAM") # list packages
 have <- need %in% rownames(installed.packages()) # checks packages you have
 if(any(!have)) install.packages(need[!have]) # install missing packages
 invisible(lapply(need, library, character.only=T))
@@ -75,27 +75,42 @@ The authors use an instrumental variable to deal with this endogeneity issue. Ra
 \Delta IP^{out}_{j\tau}= \sum_k \frac{L_{kjt_0-10}}{L_{jt_0-10}}\Delta IP^{out}_{k\tau} (\#eq:importpenetrationIV)
 \end{equation}
 ```
-with $\Delta IP^{out}_{k\tau}= \frac{M^{out}_{k\tau} - M^{out}_{kt_0}}{Y_{k0-3}+M_{k0-3}- X_{k0-3}}$ and $out$ designating the fact that the importations are to other developed countries. Note that (i) the Labor shares are measured in area $j$ in the US, but with a 10 years lag relative to the direct measure in Equation \@ref(eq:importpenetration) (note the \$t\_{0 - 10}) and (ii) the importations are relative to the net shipment in the US in 1987. There is a lively academic debate regarding whether and why this instrument may actually be valid (always a big question). We will take the validity of the instrument as given for the purpose of this problem set. More generally, you should always be worried about instrumental variable approaches. It is always a hard task to justify the exclusion restriction.
+with $\Delta IP^{out}_{k\tau}= \frac{M^{out}_{k\tau} - M^{out}_{kt_0}}{Y_{k0-3}+M_{k0-3}- X_{k0-3}}$ and $out$ designating the fact that the importations are to other developed countries. Note that (i) the Labor shares are measured in area $j$ in the US, but with a 10 years lag relative to the direct measure in Equation \@ref(eq:importpenetration) (note the $t_{0 - 10}$) and (ii) the importations are relative to the net shipment in the US in 1987. There is a lively academic debate regarding whether and why this instrument may actually be valid (always a big question). We will take the validity of the instrument as given for the purpose of this problem set. More generally, you should always be worried about instrumental variable approaches. It is always a hard task to justify the exclusion restriction.
 
 The area $j$ used to compute the China shock (and its instrument) is not a county, but a commuter zone (CZ). For each county $c$ in a commuter zone $j$, $IP_{c\tau} = IP_{j\tau}$ (each county is given its CZ importation penetration value).
 
 **Q3:** What is the justification for this empirical choice?
 
-***Answer:***
+[ The justification for this empirical choice is that commuter zones are better units for employment than administrative borders. Residents in one county may be employed in a neighbouring county in the same commuter zone. Therefore, any employment shock to one county is likely spread to other counties in the same commuter zone and the use of county-level employment structures would have distorted the results. ]{style="color: blue;"}
 
 With these preliminaries in mind, we can turn to the empirical part of the problem set. For this, you need to use the dataset `populism_ps_data.dta` posted on Moodle. The dataset contains a series of variable some measured at the county level, some at the commuter zone level, and some Census region dummies. Our first step is to get to know the main variables better.
+
+```{r q3}
+data <- read_dta("populism_ps_data.dta")
+```
 
 **Q4:** Produce a table of summary statistics for the variables change (in percent) in the Republican vote shares between 2000 and 2008 and change in the Republican vote shares between 2000 and 2016 (basically the difference between `shnr_pres2008` and `shnr_pres2000` and between `shnr_pres2016` and `shnr_pres2000`, respectively). Your table should include the number of observations, the mean, the standard deviation, the minimum, the maximum, the first quartile, and the last quartile. We want to see this summary statistics in two ways: unweighted and weighted by total vote in the presidential election in 2000 (variable `totvote_2000pres`). Compare the weighted and unweighted statistics and comment on the differences.
 
 ***Answer:***
 
-```{r question_4}
-
+```{r q4a}
 # Hint: the {TAM} package allows you to calculate weighted standard deviations and quantiles.
 
-# You can insert the code to generate your answer here
+# unweighted
+data <- data |>
+  mutate(shnr_pres2008_2000 = shnr_pres2008 - shnr_pres2000,
+         shnr_pres2016_2000 = shnr_pres2016 - shnr_pres2000)
+f <- (`$\\Delta_{RepShare}^{2008-2000}$`=shnr_pres2008_2000)+(`$\\Delta_{RepShare}^{2016-2000}$`=shnr_pres2016_2000)~N+Mean+SD+Min+Max+(Q1=P25)+(Q3=P75)
+datasummary(f, data=data,
+            title="Summary statistics table for changes in the Republican vote shares (unweighted).")
+```
 
-
+```{r q4b}
+q1 <- function(x) weighted_quantile(x, w=data$totvote_2000pres)[['25%']]
+q3 <- function(x) weighted_quantile(x, w=data$totvote_2000pres)[['75%']]
+f_weighted <- (`$\\Delta_{RepShare}^{2008-2000}$`=shnr_pres2008_2000)+(`$\\Delta_{RepShare}^{2016-2000}$`=shnr_pres2016_2000)~N+(Mean=weighted_mean*Arguments(w=totvote_2000pres))+(SD=weighted_sd*Arguments(w=totvote_2000pres))+Min+Max+(Q1=q1)+(Q3=q3)
+datasummary(f_weighted, data=data,
+            title="Summary statistics table for changes in the Republican vote shares (weighted).")
 ```
 
 We also want to know the summary statistics for the main independent variables - Chinese import penetration (`d_imp_usch_pd_0008`) - as well as the instrument - Chinese importations in other Western countries (`d_imp_otch_lag_pd_0008`).
