@@ -599,18 +599,8 @@ display: none;
 <p><strong>Q3:</strong> What is the justification for this empirical choice?</p>
 <p><span style="color: blue;">The justification for this empirical choice is that commuter zones are better units for employment than administrative borders. Residents in one county may be employed in a neighbouring county in the same commuter zone. Therefore, any employment shock to one county is likely spread to other counties in the same commuter zone and the use of county-level employment structures would have distorted the results.</span></p>
 <p>With these preliminaries in mind, we can turn to the empirical part of the problem set. For this, you need to use the dataset <code>populism_ps_data.dta</code> posted on Moodle. The dataset contains a series of variable some measured at the county level, some at the commuter zone level, and some Census region dummies. Our first step is to get to know the main variables better.</p>
-<pre class="r"><code>data &lt;- read_dta(&quot;populism_ps_data.dta&quot;)</code></pre>
 <p><strong>Q4:</strong> Produce a table of summary statistics for the variables change (in percent) in the Republican vote shares between 2000 and 2008 and change in the Republican vote shares between 2000 and 2016 (basically the difference between <code>shnr_pres2008</code> and <code>shnr_pres2000</code> and between <code>shnr_pres2016</code> and <code>shnr_pres2000</code>, respectively). Your table should include the number of observations, the mean, the standard deviation, the minimum, the maximum, the first quartile, and the last quartile. We want to see this summary statistics in two ways: unweighted and weighted by total vote in the presidential election in 2000 (variable <code>totvote_2000pres</code>). Compare the weighted and unweighted statistics and comment on the differences.</p>
 <p><strong><em>Answer:</em></strong></p>
-<pre class="r"><code># Hint: the {TAM} package allows you to calculate weighted standard deviations and quantiles.
-
-# unweighted
-data &lt;- data |&gt;
-  mutate(shnr_pres2008_2000 = shnr_pres2008 - shnr_pres2000,
-         shnr_pres2016_2000 = shnr_pres2016 - shnr_pres2000)
-f &lt;- (`$\\Delta_{RepShare}^{2008-2000}$`=shnr_pres2008_2000)+(`$\\Delta_{RepShare}^{2016-2000}$`=shnr_pres2016_2000)~N+Mean+SD+Min+Max+(Q1=P25)+(Q3=P75)
-datasummary(f, data=data,
-            title=&quot;Summary statistics table for changes in the Republican vote shares (unweighted).&quot;)</code></pre>
 <table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <caption>
 <span id="tab:q4a">Table 1: </span>Summary statistics table for changes in the Republican vote shares (unweighted).
@@ -697,11 +687,6 @@ Q1
 </tr>
 </tbody>
 </table>
-<pre class="r"><code>q1 &lt;- function(x) weighted_quantile(x, w=data$totvote_2000pres)[[&#39;25%&#39;]]
-q3 &lt;- function(x) weighted_quantile(x, w=data$totvote_2000pres)[[&#39;75%&#39;]]
-f_weighted &lt;- (`$\\Delta_{RepShare}^{2008-2000}$`=shnr_pres2008_2000)+(`$\\Delta_{RepShare}^{2016-2000}$`=shnr_pres2016_2000)~N+(Mean=weighted_mean*Arguments(w=totvote_2000pres))+(SD=weighted_sd*Arguments(w=totvote_2000pres))+Min+Max+(Q1=q1)+(Q3=q3)
-datasummary(f_weighted, data=data,
-            title=&quot;Summary statistics table for changes in the Republican vote shares (weighted).&quot;)</code></pre>
 <table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <caption>
 <span id="tab:q4b">Table 2: </span>Summary statistics table for changes in the Republican vote shares (weighted).
@@ -792,7 +777,7 @@ Q1
 <p>We also want to know the summary statistics for the main independent variables - Chinese import penetration (<code>d_imp_usch_pd_0008</code>) - as well as the instrument - Chinese importations in other Western countries (<code>d_imp_otch_lag_pd_0008</code>).</p>
 <p>One issue is that this variable is measured at the commuter zone level (as discussed above), whereas the unit of analysis in the database is a county. To adequately calculate the summary statistics, we need to collapse the database. Since this is not easy and we will need this information below, here is the relevant table.</p>
 <table>
-<caption><span id="tab:given">Table 3: </span> Summary statistics for the Chinese import penetration in the US and the instrument (Chinese importations in other Western countries) at the county level.</caption>
+<caption><span id="tab:given">Table 3: </span> Summary statistics for the Chinese import penetration in the US and the instrument (Chinese importations in other Western countries) at the commuter zone level.</caption>
 <colgroup>
 <col width="12%" />
 <col width="12%" />
@@ -890,10 +875,184 @@ Q1
 </table>
 <p><strong>Q5:</strong> Try to replicate Table <a href="#tab:given">3</a>. The authors use the interquartile range (Q3 - Q1) rather than the standard deviation to interpret the political effect of the China shock. Comment on this substantive choice. To replicate this table, you first need to collapse data at the commuter zone level.</p>
 <p><strong><em>Answer:</em></strong></p>
-<pre class="r"><code># You can insert the code to generate your answer here</code></pre>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:q5">Table 4: </span>Replication of Summary statistics table for the Chinese import penetration in the US and the instrument (Chinese importations in other Western countries) at the commuter zone level.
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+N
+</th>
+<th style="text-align:right;">
+Mean
+</th>
+<th style="text-align:right;">
+SD
+</th>
+<th style="text-align:right;">
+Min
+</th>
+<th style="text-align:right;">
+Max
+</th>
+<th style="text-align:right;">
+Q1
+</th>
+<th style="text-align:right;">
+ Q3
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<b>Unweighted</b>
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Import Penetration US (CZ level)
+</td>
+<td style="text-align:right;">
+722
+</td>
+<td style="text-align:right;">
+0.941
+</td>
+<td style="text-align:right;">
+0.884
+</td>
+<td style="text-align:right;">
+-0.592
+</td>
+<td style="text-align:right;">
+7.242
+</td>
+<td style="text-align:right;">
+0.366
+</td>
+<td style="text-align:right;">
+1.274
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Import Penetration IV (CZ level)
+</td>
+<td style="text-align:right;">
+722
+</td>
+<td style="text-align:right;">
+1.111
+</td>
+<td style="text-align:right;">
+1.024
+</td>
+<td style="text-align:right;">
+-0.426
+</td>
+<td style="text-align:right;">
+6.370
+</td>
+<td style="text-align:right;">
+0.361
+</td>
+<td style="text-align:right;">
+1.567
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<b>Weighted</b>
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Import Penetration US (CZ level)
+</td>
+<td style="text-align:right;">
+722
+</td>
+<td style="text-align:right;">
+0.902
+</td>
+<td style="text-align:right;">
+0.568
+</td>
+<td style="text-align:right;">
+-0.592
+</td>
+<td style="text-align:right;">
+7.242
+</td>
+<td style="text-align:right;">
+0.544
+</td>
+<td style="text-align:right;">
+1.112
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Import Penetration IV (CZ level)
+</td>
+<td style="text-align:right;">
+722
+</td>
+<td style="text-align:right;">
+1.161
+</td>
+<td style="text-align:right;">
+0.669
+</td>
+<td style="text-align:right;">
+-0.426
+</td>
+<td style="text-align:right;">
+6.370
+</td>
+<td style="text-align:right;">
+0.758
+</td>
+<td style="text-align:right;">
+1.370
+</td>
+</tr>
+</tbody>
+</table>
 <p>We now return to the main dataset. We first start by following the authors’ approach. The results of their analysis is displayed in Table 5 in their paper. In their regressions, the authors make two choices. First, they cluster their standard error at the level of commuter zone. Second, they use total votes in 2000 as regression weight. We will first look at the first stage.</p>
 <p><strong>Q6:</strong> Regress the Chinese importation penetration in the US (<code>d_imp_usch_pd_0008</code>) on the instrument (<code>d_imp_otch_lag_pd_0008</code>). First, run the model without control. Then run the model adding controls as the authors do in Table 5. Comment your results. Note that the controls are first industry controls (<code>l_ _shind_manuf_cbp</code>,<code>l_sh_routine33</code>,<code>l_task_outsource</code>), then regional census dummies (the <code>reg_*</code> variables), then demographics (the variables <code>l_sh_pop_f</code>, <code>l_sh_pop_edu_c</code>,..), and finally past electoral results (<code>shnr_pres1992</code>, <code>shnr_pres1996</code>).</p>
-<pre class="r"><code># You can insert the code to generate your answer here</code></pre>
 <p><strong><em>Answer:</em></strong></p>
 <p><strong>Q7:</strong> Replicate now Table 5 (you do not need to report the method and F-stat). The authors substantively interpret their results as such:</p>
 <blockquote>
@@ -901,24 +1060,19 @@ Q1
 </blockquote>
 <p>Based on your answers to questions <strong>Q5</strong> and <strong>Q6</strong> and your knowledge of instrumental variable estimation, discuss whether this way of interpreting the results is reasonable. <em>(Hint: To answer this last part of the question, remember that variations in the independent variable in the second stage are only caused by variation in the instrumental variable. So the question is: How much of a variation in the instrumental variable is needed to produce a change of 0.58 in the Import penetration ratio? Is this level of variation reasonable or not? There is no right or wrong answer to this last question, rather the standard is whether your answer is substantively logical or illogical.)</em></p>
 <p><strong><em>Answer:</em></strong></p>
-<pre class="r"><code># You can insert the code to generate your answer here</code></pre>
 <p>The authors make several choices along the way to produce the results we just commented. Some choices may be perfectly justified, others may be a bit more perplexing. In any case, we may want to check their consequences. This is our goal in the next questions of this problem set.</p>
 <p><strong>Q8:</strong> The first choice the authors made is to use an instrumental variable approach rather than a simple OLS method. Reproduce Table 5 in their paper, but with simple OLS rather than IV. Are the difference between IV and OLS results consistent with the authors’ justification for using an IV approach?</p>
-<pre class="r"><code># You can insert the code to generate your answer here</code></pre>
 <p><strong><em>Answer:</em></strong></p>
 <p>Another important choice is to use weighted regressions. Now, there are reasons for this. Absent weights, small counties would be as important as big counties, which can create some issues. But the choice of total votes in 2000 may not be innocuous. By doing so, everything else equals, the authors may put more weight on the most politically active counties. That is, the authors may focus on the counties that react the most to the shock, generating a possible upward bias.</p>
 <p><strong>Q9:</strong> Rerun the IV regressions (including first stage) and the OLS regressions (questions <em>Q7</em> and <em>Q8</em>), but this time without weights. How do the results change compared to your analysis above?</p>
 <p><strong><em>Answer:</em></strong></p>
-<pre class="r"><code># You can insert the code to generate your answer here</code></pre>
 <p>A third choice to note is that the authors use the change in Chinese importation penetration from 2000 to 2008 for both the 2008 and 2016 elections. This means there is quite a bit of a delay between the shock (measured over 2000-2008) and the consequences measured in 2016. In other parts of the paper, the authors look at penetration change from 2002 to 2010.3 This variable is closer in time from 2016 making it important to check the robustness of the results to this alternative measure of the China shock.</p>
 <p><strong>Q10:</strong> Rerun the IV analysis (keeping the same instrument as the authors and using weights) for the 2016 elections using the Chinese importation penetration increases over the 2002-2010 period. How do the results change compare to the authors’ analysis?</p>
 <p>To find the Chinese importation penetration increases over the 2002-2010 period, use the database <code>populism_ps_data_additional.dta</code> (available on Moodle) and merge it with the main database you have been using. To do so, you need to use the command <code>inner_join()</code> (since the database you use is at the czone level) using <code>cty_fips</code> as merging variable. Drop the three unmatched observations. The new instrument you need to use is <code>d_imp_usch_pd</code>.</p>
-<pre class="r"><code># You can insert the code to generate your answer here</code></pre>
 <p><strong><em>Answer:</em></strong></p>
 <p>One other questionable choice is to perform the analysis at the county level, whereas the treatment (the China shock) is measured at the commuter zone level.</p>
 <p><strong>Q11:</strong> Rerun the IV analysis (keeping the same measure for the China shock and the same instrument as the authors) for the 2008 and 2016 elections at the community zone level. How do the results change compare to the authors’ analysis?</p>
 <p>To answer this question, you will have to use the <code>summarise</code> commands as you did for question 5. When you collapse the data, weight them by the weights the authors use. Run your IV estimations without clustering.</p>
-<pre class="r"><code># You can insert the code to generate your answer here</code></pre>
 <p><strong><em>Answer:</em></strong></p>
 <p><strong>Q12:</strong> The authors describe their paper as finding</p>
 <blockquote>

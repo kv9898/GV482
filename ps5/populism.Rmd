@@ -10,7 +10,7 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE,
+knitr::opts_chunk$set(echo = FALSE,
                       message = FALSE,
 	warning = FALSE,
   root.dir = "D:/OneDrive - London School of Economics/Desktop/lse assignments/GV482/ps5")
@@ -119,8 +119,6 @@ We also want to know the summary statistics for the main independent variables -
 
 One issue is that this variable is measured at the commuter zone level (as discussed above), whereas the unit of analysis in the database is a county. To adequately calculate the summary statistics, we need to collapse the database. Since this is not easy and we will need this information below, here is the relevant table.
 
-Table: (\#tab:given) Summary statistics for the Chinese import penetration in the US and the instrument (Chinese importations in other Western countries) at the county level.
-
 |          **Unweighted**          |      |       |          |        |       |            |            |
 |:-------:|---------|---------|---------|---------|---------|---------|---------|
 |                                  | Obs. | Mean  | St. Dev. | Min.   | Max.  | 1st Quart. | 3rd Quart. |
@@ -131,14 +129,34 @@ Table: (\#tab:given) Summary statistics for the Chinese import penetration in th
 | Import Penetration US (CZ level) | 722  | 0.902 | 0.566    | -0.592 | 7.242 | 0.544      | 1.113      |
 | Import Penetration IV (CZ level) | 722  | 1.161 | 0.666    | -0.426 | 6.370 | 0.758      | 1.370      |
 
+: (#tab:given) Summary statistics for the Chinese import penetration in the US and the instrument (Chinese importations in other Western countries) at the commuter zone level.
+
 **Q5:** Try to replicate Table \@ref(tab:given). The authors use the interquartile range (Q3 - Q1) rather than the standard deviation to interpret the political effect of the China shock. Comment on this substantive choice. To replicate this table, you first need to collapse data at the commuter zone level.
 
 ***Answer:***
 
-```{r question_5}
+```{r q5}
+data_cz <- data |>
+  group_by(czone) |>
+  summarise(d_imp_usch_pd_0008=mean(d_imp_usch_pd_0008),
+            d_imp_otch_lag_pd_0008=mean(d_imp_otch_lag_pd_0008),
+            totvote_2000pres=sum(totvote_2000pres))
+q1 <- function(x) weighted_quantile(x, w=data_cz$totvote_2000pres)[['25%']]
+q3 <- function(x) weighted_quantile(x, w=data_cz$totvote_2000pres)[['75%']]
 
-# You can insert the code to generate your answer here
+f <- (`Import Penetration US (CZ level)`=d_imp_usch_pd_0008)+(`Import Penetration IV (CZ level)`=d_imp_otch_lag_pd_0008)~N+Mean+SD+Min+Max+(Q1=P25)+(Q3=P75)
+f_weighted <- (`Import Penetration US (CZ level)`=d_imp_usch_pd_0008)+(`Import Penetration IV (CZ level)`=d_imp_otch_lag_pd_0008)~N+(Mean=weighted_mean*Arguments(w=totvote_2000pres))+(SD=weighted_sd*Arguments(w=totvote_2000pres))+Min+Max+(Q1=q1)+(Q3=q3)
 
+
+unweighted <- datasummary(f, data=data_cz, fmt=3, output="data.frame")
+
+unweighted <- rbind(c("<b>Unweighted</b>","","","","","","",""),
+                    unweighted,
+                    c("<b>Weighted</b>","","","","","","",""))
+attr(unweighted, 'position') <- 1:4
+                                                                        
+datasummary(f_weighted, data=data_cz, fmt=3, add_rows = unweighted,
+            title="Replication of Summary statistics table for the Chinese import penetration in the US and the instrument (Chinese importations in other Western countries) at the commuter zone level.")
 ```
 
 We now return to the main dataset. We first start by following the authors' approach. The results of their analysis is displayed in Table 5 in their paper. In their regressions, the authors make two choices. First, they cluster their standard error at the level of commuter zone. Second, they use total votes in 2000 as regression weight. We will first look at the first stage.
