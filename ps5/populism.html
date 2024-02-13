@@ -350,29 +350,26 @@ display: none;
 <p>The paper is very rich, and you are strongly encouraged to read it (it is on the Moodle website of the course). In it, the authors look at the effect of the China shock on: the viewership patterns of news channels (right-wing Fox News, left-leaning CNN, left-wing MSNBC), the polarization of legislators (measured in term of whom candidates receive money from as well as in term of the ideology of elected representatives), Congressional elections, and finally on presidential elections.</p>
 <p>We will concentrate on this last part of the paper (you may want to try to replicate some of the other parts as well, it is always a good exercise). There are two reasons for this. First, it allows us to work at the level of counties which is an administrative level for which we have a large set of data. Second, we can learn more about the biggest prize - the Presidency -, which obviously means to investigate the most shocking result of all: Trump’s victory.</p>
 <p>As this is your second empirical problem set, we will still provide quite a bit of guidance (especially in the first questions). Recall that you can submit your problem set (can submit one per study group) to Luis on <strong>Thursday 15 February</strong>. The submission deadline is <strong>Thursday 15 at 12pm</strong>. Submission is via email at <href a="mailto:l.bosshart@lse.ac.uk"><a href="mailto:l.bosshart@lse.ac.uk" class="email">l.bosshart@lse.ac.uk</a></href>.</p>
-<p>Our first goal is to understand how Autor et al. measure Chinese import penetration. They do
-not have the direct effect of Chinese importation. That is, the researchers or us do not have a measure that say that x% of the industrial base went bust because of Chinese importations. We, as scholars, are forced to work with indirect measures. One possible solution is to look at the economic competition from China. But even then, nothing is so easy. We can measure competition at the national level for various industries. It is much harder to know at the county-level (our geographical unit) how disruptive the rise of China has been. To approximate the increase in competitive pressure due to the China shock, Autor et al. use a combination of national-time varying information and local data. They construct the level of China competition in area <span class="math inline">\(j\)</span> at date <span class="math inline">\(\tau\)</span>, where <span class="math inline">\(\tau \in \{2002,...,2010\}\)</span> as</p>
-<p><span class="math display" id="eq:importpenetration">\[\begin{equation}
+<p>Our first goal is to understand how Autor et al. measure Chinese import penetration. They do not have the direct effect of Chinese importation. That is, the researchers or us do not have a measure that say that x% of the industrial base went bust because of Chinese importations. We, as scholars, are forced to work with indirect measures. One possible solution is to look at the economic competition from China. But even then, nothing is so easy. We can measure competition at the national level for various industries. It is much harder to know at the county-level (our geographical unit) how disruptive the rise of China has been. To approximate the increase in competitive pressure due to the China shock, Autor et al. use a combination of national-time varying information and local data. They construct the level of China competition in area <span class="math inline">\(j\)</span> at date <span class="math inline">\(\tau\)</span>, where <span class="math inline">\(\tau \in \{2002,...,2010\}\)</span> as</p>
+<span class="math display" id="eq:importpenetration">\[\begin{equation}
   IP_{j\tau}^{us} = \sum_k \frac{L_{kjt_0}}{L_{jt_0}}IP_{k\tau}^{us} \tag{1}
-\end{equation}\]</span></p>
-<p>We will go over each term in this equation.
-The index <span class="math inline">\(k\)</span> represents different industries. Industries are classified according to the Standard Industrial Classiffcation (SIC) Code at the 4-digit level (the lowest level of aggregation). One example of SIC code is “2844 - Perfumes, Cosmetics, and other Toilet Preparations,” which belongs to “284 - Soap, Detergents, and Cleaning Preparations; Perfumes, Cosmetics, and Other Toilet Preparations,” which itself belongs to “28 - Chemicals and Allied Products,” which itself is a subcategory of “20-39 - Manufacturing.”<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a></p>
+\end{equation}\]</span>
+<p>We will go over each term in this equation. The index <span class="math inline">\(k\)</span> represents different industries. Industries are classified according to the Standard Industrial Classiffcation (SIC) Code at the 4-digit level (the lowest level of aggregation). One example of SIC code is “2844 - Perfumes, Cosmetics, and other Toilet Preparations,” which belongs to “284 - Soap, Detergents, and Cleaning Preparations; Perfumes, Cosmetics, and Other Toilet Preparations,” which itself belongs to “28 - Chemicals and Allied Products,” which itself is a subcategory of “20-39 - Manufacturing.”<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a></p>
 <p><span class="math inline">\(L_{kjt_0}\)</span> represents the number of workers in industry <span class="math inline">\(k\)</span> in area <span class="math inline">\(j\)</span> at a baseline date <span class="math inline">\(t_0\)</span>. <span class="math inline">\(L_{jt_0}\)</span> is the total number of workers in area <span class="math inline">\(j\)</span> at a baseline date <span class="math inline">\(t_0\)</span>. <span class="math inline">\(\frac{L_{kjt_0}}{L_{jt_0}}\)</span> , therefore, captures the share of workers in industry <span class="math inline">\(k\)</span> in area <span class="math inline">\(j\)</span> in the baseline year. Note that only manufacturing industries are used. The authors use the year 2000 as their baseline so prior to the entry of China into the WTO.</p>
 <p><strong>Q1:</strong> Why would measuring the share of employment at date <span class="math inline">\(\tau\)</span> create inference problems?</p>
-<p><strong><em>Answer:</em></strong></p>
-<p>Finally, <span class="math inline">\(IP^{us}_{k\tau}\)</span> is the level of importation from China in industry <span class="math inline">\(k\)</span> at date <span class="math inline">\(\tau\)</span>. This is relative to the national level of production of industry <span class="math inline">\(k\)</span> in the United States prior to the economic opening of China, for which the authors use the date 1991. That is, <span class="math inline">\(IP^{us}_{k\tau} = \frac{M^{us}_{k\tau}}{Y_{k0}+M_{k0}-X_{k0}}\)</span> with <span class="math inline">\(M^{us}_{k\tau}\)</span> the
-importation from China at date <span class="math inline">\(\tau\)</span>, <span class="math inline">\(Y_{k0}+M_{k0}\)</span> the US shipment (domestic production + importations), and <span class="math inline">\(X_{k0}\)</span> the exportations measured in 1991.</p>
+<p><span style="color: blue;">The share of employment at date <span class="math inline">\(\tau\)</span> would create inference problems because it would have been affected by the China shock and becomes an outcome variable rather than an explanatory variable. Assuming that the China shock has a differential impact across sectors, those sectors more exposed to Chinese import competition would have lost more jobs, hence a lower share of employment. This will be mistaken as “lower Chinese importation” and produce a downward bias on the results.</span></p>
+<p>Finally, <span class="math inline">\(IP^{us}_{k\tau}\)</span> is the level of importation from China in industry <span class="math inline">\(k\)</span> at date <span class="math inline">\(\tau\)</span>. This is relative to the national level of production of industry <span class="math inline">\(k\)</span> in the United States prior to the economic opening of China, for which the authors use the date 1991. That is, <span class="math inline">\(IP^{us}_{k\tau} = \frac{M^{us}_{k\tau}}{Y_{k0}+M_{k0}-X_{k0}}\)</span> with <span class="math inline">\(M^{us}_{k\tau}\)</span> the importation from China at date <span class="math inline">\(\tau\)</span>, <span class="math inline">\(Y_{k0}+M_{k0}\)</span> the US shipment (domestic production + importations), and <span class="math inline">\(X_{k0}\)</span> the exportations measured in 1991.</p>
 <p>The authors often use the change in Chinese import penetration. That is, they use (see Equation (1) on page 3152):</p>
-<p><span class="math display" id="eq:importpenetrationchange">\[\begin{equation}
+<span class="math display" id="eq:importpenetrationchange">\[\begin{equation}
   \Delta IP^{us}_{j\tau} = IP^{us}_{j\tau} - IP^{us}_{jt}  \tag{2}
-\end{equation}\]</span></p>
+\end{equation}\]</span>
 <p>Autor et al. are worried that simply looking at the (change in) Chinese penetrations is unlikely to recover the effect of the disruptions caused by globalization (via the China shock). Indeed, they argue that the OLS estimator is likely to induce a downward bias.</p>
 <p><strong>Q2:</strong> What is their justification for this claim?</p>
-<p><strong><em>Answer:</em></strong></p>
+<p><span style="color: blue;">The justification for this claim is that the change in Chinese penetrations is endogenous. If the penetration of Chinese imports led to unemployment in some sectors, there would likely be local boycotts in return would have reduced imports from China in the corresponding sectors. The effect is therefore bidirectional. This is likely to induce a downward bias in the OLS estimate as the signs of the effects are opposite - more Chinese imports likely create more unemployment, but more unemployment likely reduce Chinese imports.</span></p>
 <p>The authors use an instrumental variable to deal with this endogeneity issue. Rather than using importations from China in the US in Equation <a href="#eq:importpenetration">(1)</a> and Equation <a href="#eq:importpenetrationchange">(2)</a>, they use importation in other developed countries: Australia, Denmark, Finland, Germany, Japan, New Zealand, Spain, and Switzerland. That is, they compute the following alternative change in import penetrations:</p>
-<p><span class="math display" id="eq:importpenetrationIV">\[\begin{equation}
+<span class="math display" id="eq:importpenetrationIV">\[\begin{equation}
 \Delta IP^{out}_{j\tau}= \sum_k \frac{L_{kjt_0-10}}{L_{jt_0-10}}\Delta IP^{out}_{k\tau} \tag{3}
-\end{equation}\]</span></p>
+\end{equation}\]</span>
 <p>with <span class="math inline">\(\Delta IP^{out}_{k\tau}= \frac{M^{out}_{k\tau} - M^{out}_{kt_0}}{Y_{k0-3}+M_{k0-3}- X_{k0-3}}\)</span> and <span class="math inline">\(out\)</span> designating the fact that the importations are to other developed countries. Note that (i) the Labor shares are measured in area <span class="math inline">\(j\)</span> in the US, but with a 10 years lag relative to the direct measure in Equation <a href="#eq:importpenetration">(1)</a> (note the $t_{0 - 10}) and (ii) the importations are relative to the net shipment in the US in 1987. There is a lively academic debate regarding whether and why this instrument may actually be valid (always a big question). We will take the validity of the instrument as given for the purpose of this problem set. More generally, you should always be worried about instrumental variable approaches. It is always a hard task to justify the exclusion restriction.</p>
 <p>The area <span class="math inline">\(j\)</span> used to compute the China shock (and its instrument) is not a county, but a commuter zone (CZ). For each county <span class="math inline">\(c\)</span> in a commuter zone <span class="math inline">\(j\)</span>, <span class="math inline">\(IP_{c\tau} = IP_{j\tau}\)</span> (each county is given its CZ importation penetration value).</p>
 <p><strong>Q3:</strong> What is the justification for this empirical choice?</p>
@@ -385,16 +382,16 @@ importation from China at date <span class="math inline">\(\tau\)</span>, <span 
 # You can insert the code to generate your answer here</code></pre>
 <p>We also want to know the summary statistics for the main independent variables - Chinese import penetration (<code>d_imp_usch_pd_0008</code>) - as well as the instrument - Chinese importations in other Western countries (<code>d_imp_otch_lag_pd_0008</code>).</p>
 <p>One issue is that this variable is measured at the commuter zone level (as discussed above), whereas the unit of analysis in the database is a county. To adequately calculate the summary statistics, we need to collapse the database. Since this is not easy and we will need this information below, here is the relevant table.</p>
-<table>
+<table style="width:100%;">
 <colgroup>
-<col width="35%" />
-<col width="6%" />
-<col width="7%" />
-<col width="10%" />
-<col width="8%" />
-<col width="7%" />
-<col width="12%" />
-<col width="12%" />
+<col width="21%" />
+<col width="11%" />
+<col width="11%" />
+<col width="11%" />
+<col width="11%" />
+<col width="11%" />
+<col width="11%" />
+<col width="11%" />
 </colgroup>
 <thead>
 <tr class="header">
@@ -484,8 +481,7 @@ importation from China at date <span class="math inline">\(\tau\)</span>, <span 
 <p><strong>Q5:</strong> Try to replicate Table 1. The authors use the interquartile range (Q3 - Q1) rather than the standard deviation to interpret the political effect of the China shock. Comment on this substantive choice. To replicate this table, you first need to collapse data at the commuter zone level.</p>
 <p><strong><em>Answer:</em></strong></p>
 <pre class="r"><code># You can insert the code to generate your answer here</code></pre>
-<p>We now return to the main dataset. We first start by following the authors’ approach. The
-results of their analysis is displayed in Table 5 in their paper. In their regressions, the authors make two choices. First, they cluster their standard error at the level of commuter zone. Second, they use total votes in 2000 as regression weight. We will first look at the first stage.</p>
+<p>We now return to the main dataset. We first start by following the authors’ approach. The results of their analysis is displayed in Table 5 in their paper. In their regressions, the authors make two choices. First, they cluster their standard error at the level of commuter zone. Second, they use total votes in 2000 as regression weight. We will first look at the first stage.</p>
 <p><strong>Q6:</strong> Regress the Chinese importation penetration in the US (<code>d_imp_usch_pd_0008</code>) on the instrument (<code>d_imp_otch_lag_pd_0008</code>). First, run the model without control. Then run the model adding controls as the authors do in Table 5. Comment your results. Note that the controls are first industry controls (<code>l_ _shind_manuf_cbp</code>,<code>l_sh_routine33</code>,<code>l_task_outsource</code>), then regional census dummies (the <code>reg_*</code> variables), then demographics (the variables <code>l_sh_pop_f</code>, <code>l_sh_pop_edu_c</code>,..), and finally past electoral results (<code>shnr_pres1992</code>, <code>shnr_pres1996</code>).</p>
 <pre class="r"><code># You can insert the code to generate your answer here</code></pre>
 <p><strong><em>Answer:</em></strong></p>
