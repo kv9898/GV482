@@ -26,7 +26,6 @@ rm(list = ls())
 
 ```
 
-
 In the lecture, we have described different possible explanations for the growing division between the elite and the commoners. We have discussed rapidly the effect of cultural shocks (and you will see more of it in your empirical exercise). We have spent quite a bit of time discussing the role of immigration. We went very quickly over the economic factors. This was, as pointed out in the lecture, on purpose since this empirical problem set will dig deeper into one of the most mentioned culprit behind the populist wave: globalization.
 
 To investigate the effect of globalization, we will look at one of the many papers on the subject: "Importing political polarization? The electoral consequences of rising trade exposure." by Autor, Dorn, Hanson, and Majlesi published in the American Economic Review (vol. 110, no. 10: 3139-83). The paper focuses on one recent and prominent change in trade: the rise of China. Since its entry into the World Trade Organization, China has become the manufacture of the world. This has had dramatic impact on manufacturing in the United States as shown by Autor, Dorn, and Hanson in "The China Syndrome: Local Labor Market Effects of Import Competition in the United States." (American Economic Review 103 (6): 2121{68, 2013). The next logical step is to look at the political consequences of this trade shock, and this is exactly what the authors do in the paper we will study.
