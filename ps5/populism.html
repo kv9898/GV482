@@ -904,12 +904,17 @@ Q1
 <th style="text-align:right;">
  Q3
 </th>
+<th style="text-align:right;">
+ IQR
+</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td style="text-align:left;">
 <b>Unweighted</b>
+</td>
+<td style="text-align:right;">
 </td>
 <td style="text-align:right;">
 </td>
@@ -951,6 +956,9 @@ Import Penetration US (CZ level)
 <td style="text-align:right;">
 1.274
 </td>
+<td style="text-align:right;">
+0.907
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
@@ -977,10 +985,15 @@ Import Penetration IV (CZ level)
 <td style="text-align:right;">
 1.567
 </td>
+<td style="text-align:right;">
+1.206
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
 <b>Weighted</b>
+</td>
+<td style="text-align:right;">
 </td>
 <td style="text-align:right;">
 </td>
@@ -1022,6 +1035,9 @@ Import Penetration US (CZ level)
 <td style="text-align:right;">
 1.112
 </td>
+<td style="text-align:right;">
+0.568
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
@@ -1048,9 +1064,13 @@ Import Penetration IV (CZ level)
 <td style="text-align:right;">
 1.370
 </td>
+<td style="text-align:right;">
+0.611
+</td>
 </tr>
 </tbody>
 </table>
+<p><span style="color: blue;">Table <a href="#tab:given">3</a> is replicated in Table <a href="#tab:q5">4</a>, with interquartile ranges added.</span></p>
 <p>We now return to the main dataset. We first start by following the authors’ approach. The results of their analysis is displayed in Table 5 in their paper. In their regressions, the authors make two choices. First, they cluster their standard error at the level of commuter zone. Second, they use total votes in 2000 as regression weight. We will first look at the first stage.</p>
 <p><strong>Q6:</strong> Regress the Chinese importation penetration in the US (<code>d_imp_usch_pd_0008</code>) on the instrument (<code>d_imp_otch_lag_pd_0008</code>). First, run the model without control. Then run the model adding controls as the authors do in Table 5. Comment your results. Note that the controls are first industry controls (<code>l_ _shind_manuf_cbp</code>,<code>l_sh_routine33</code>,<code>l_task_outsource</code>), then regional census dummies (the <code>reg_*</code> variables), then demographics (the variables <code>l_sh_pop_f</code>, <code>l_sh_pop_edu_c</code>,..), and finally past electoral results (<code>shnr_pres1992</code>, <code>shnr_pres1996</code>).</p>
 <p><strong><em>Answer:</em></strong></p>
@@ -1080,6 +1100,77 @@ Import Penetration IV (CZ level)
 </blockquote>
 <p>Based on your re-analysis of the presidential results, do you agree with their conclusion?</p>
 <p><strong><em>Answer:</em></strong></p>
+<div id="appendix-all-code-in-this-assignment" class="section level2" number="0.1">
+<h2><span class="header-section-number">0.1</span> Appendix: All code in this assignment</h2>
+<pre class="r"><code>knitr::opts_chunk$set(echo = FALSE,
+                      message = FALSE,
+    warning = FALSE,
+  root.dir = &quot;D:/OneDrive - London School of Economics/Desktop/lse assignments/GV482/ps5&quot;)
+#dirname(rstudioapi::getSourceEditorContext()$path)
+setwd(&quot;D:/OneDrive - London School of Economics/Desktop/lse assignments/GV482/ps5&quot;) #change to your own directory
+
+need &lt;- c(&#39;tidyverse&#39;,&#39;haven&#39;,&#39;modelsummary&#39;,&quot;TAM&quot;) # list packages
+have &lt;- need %in% rownames(installed.packages()) # checks packages you have
+if(any(!have)) install.packages(need[!have]) # install missing packages
+invisible(lapply(need, library, character.only=T))
+
+rm(list = ls())
+
+data &lt;- read_dta(&quot;populism_ps_data.dta&quot;)
+# Hint: the {TAM} package allows you to calculate weighted standard deviations and quantiles.
+
+# unweighted
+data &lt;- data |&gt;
+  mutate(shnr_pres2008_2000 = shnr_pres2008 - shnr_pres2000,
+         shnr_pres2016_2000 = shnr_pres2016 - shnr_pres2000)
+f &lt;- (`$\\Delta_{RepShare}^{2008-2000}$`=shnr_pres2008_2000)+(`$\\Delta_{RepShare}^{2016-2000}$`=shnr_pres2016_2000)~N+Mean+SD+Min+Max+(Q1=P25)+(Q3=P75)
+datasummary(f, data=data,
+            title=&quot;Summary statistics table for changes in the Republican vote shares (unweighted).&quot;)
+q1 &lt;- function(x) weighted_quantile(x, w=data$totvote_2000pres)[[&#39;25%&#39;]]
+q3 &lt;- function(x) weighted_quantile(x, w=data$totvote_2000pres)[[&#39;75%&#39;]]
+f_weighted &lt;- (`$\\Delta_{RepShare}^{2008-2000}$`=shnr_pres2008_2000)+(`$\\Delta_{RepShare}^{2016-2000}$`=shnr_pres2016_2000)~N+(Mean=weighted_mean*Arguments(w=totvote_2000pres))+(SD=weighted_sd*Arguments(w=totvote_2000pres))+Min+Max+(Q1=q1)+(Q3=q3)
+datasummary(f_weighted, data=data,
+            title=&quot;Summary statistics table for changes in the Republican vote shares (weighted).&quot;)
+data_cz &lt;- data |&gt;
+  group_by(czone) |&gt;
+  summarise(d_imp_usch_pd_0008=mean(d_imp_usch_pd_0008),
+            d_imp_otch_lag_pd_0008=mean(d_imp_otch_lag_pd_0008),
+            totvote_2000pres=sum(totvote_2000pres))
+q1 &lt;- function(x) weighted_quantile(x, w=data_cz$totvote_2000pres)[[&#39;25%&#39;]]
+q3 &lt;- function(x) weighted_quantile(x, w=data_cz$totvote_2000pres)[[&#39;75%&#39;]]
+iqr_weighted &lt;- function(x) q3(x) - q1(x)
+
+f &lt;- (`Import Penetration US (CZ level)`=d_imp_usch_pd_0008)+(`Import Penetration IV (CZ level)`=d_imp_otch_lag_pd_0008)~N+Mean+SD+Min+Max+(Q1=P25)+(Q3=P75)+IQR
+f_weighted &lt;- (`Import Penetration US (CZ level)`=d_imp_usch_pd_0008)+(`Import Penetration IV (CZ level)`=d_imp_otch_lag_pd_0008)~N+(Mean=weighted_mean*Arguments(w=totvote_2000pres))+(SD=weighted_sd*Arguments(w=totvote_2000pres))+Min+Max+(Q1=q1)+(Q3=q3)+(IQR=iqr_weighted)
+
+
+unweighted &lt;- datasummary(f, data=data_cz, fmt=3, output=&quot;data.frame&quot;)
+
+unweighted &lt;- rbind(c(&quot;&lt;b&gt;Unweighted&lt;/b&gt;&quot;,&quot;&quot;,&quot;&quot;,&quot;&quot;,&quot;&quot;,&quot;&quot;,&quot;&quot;,&quot;&quot;,&quot;&quot;),
+                    unweighted,
+                    c(&quot;&lt;b&gt;Weighted&lt;/b&gt;&quot;,&quot;&quot;,&quot;&quot;,&quot;&quot;,&quot;&quot;,&quot;&quot;,&quot;&quot;,&quot;&quot;,&quot;&quot;))
+attr(unweighted, &#39;position&#39;) &lt;- 1:4
+                                                                        
+datasummary(f_weighted, data=data_cz, fmt=3, add_rows = unweighted,
+            title=&quot;Replication of Summary statistics table for the Chinese import penetration in the US and the instrument (Chinese importations in other Western countries) at the commuter zone level.&quot;)
+
+# You can insert the code to generate your answer here
+
+
+# You can insert the code to generate your answer here
+
+
+# You can insert the code to generate your answer here
+
+
+# You can insert the code to generate your answer here
+
+
+# You can insert the code to generate your answer here
+
+
+# You can insert the code to generate your answer here</code></pre>
+</div>
 <div class="footnotes footnotes-end-of-document">
 <hr />
 <ol>

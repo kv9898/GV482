@@ -143,21 +143,24 @@ data_cz <- data |>
             totvote_2000pres=sum(totvote_2000pres))
 q1 <- function(x) weighted_quantile(x, w=data_cz$totvote_2000pres)[['25%']]
 q3 <- function(x) weighted_quantile(x, w=data_cz$totvote_2000pres)[['75%']]
+iqr_weighted <- function(x) q3(x) - q1(x)
 
-f <- (`Import Penetration US (CZ level)`=d_imp_usch_pd_0008)+(`Import Penetration IV (CZ level)`=d_imp_otch_lag_pd_0008)~N+Mean+SD+Min+Max+(Q1=P25)+(Q3=P75)
-f_weighted <- (`Import Penetration US (CZ level)`=d_imp_usch_pd_0008)+(`Import Penetration IV (CZ level)`=d_imp_otch_lag_pd_0008)~N+(Mean=weighted_mean*Arguments(w=totvote_2000pres))+(SD=weighted_sd*Arguments(w=totvote_2000pres))+Min+Max+(Q1=q1)+(Q3=q3)
+f <- (`Import Penetration US (CZ level)`=d_imp_usch_pd_0008)+(`Import Penetration IV (CZ level)`=d_imp_otch_lag_pd_0008)~N+Mean+SD+Min+Max+(Q1=P25)+(Q3=P75)+IQR
+f_weighted <- (`Import Penetration US (CZ level)`=d_imp_usch_pd_0008)+(`Import Penetration IV (CZ level)`=d_imp_otch_lag_pd_0008)~N+(Mean=weighted_mean*Arguments(w=totvote_2000pres))+(SD=weighted_sd*Arguments(w=totvote_2000pres))+Min+Max+(Q1=q1)+(Q3=q3)+(IQR=iqr_weighted)
 
 
 unweighted <- datasummary(f, data=data_cz, fmt=3, output="data.frame")
 
-unweighted <- rbind(c("<b>Unweighted</b>","","","","","","",""),
+unweighted <- rbind(c("<b>Unweighted</b>","","","","","","","",""),
                     unweighted,
-                    c("<b>Weighted</b>","","","","","","",""))
+                    c("<b>Weighted</b>","","","","","","","",""))
 attr(unweighted, 'position') <- 1:4
                                                                         
 datasummary(f_weighted, data=data_cz, fmt=3, add_rows = unweighted,
             title="Replication of Summary statistics table for the Chinese import penetration in the US and the instrument (Chinese importations in other Western countries) at the commuter zone level.")
 ```
+
+[Table \@ref(tab:given) is replicated in Table \@ref(tab:q5), with interquartile ranges added. ]{style="color: blue;"}
 
 We now return to the main dataset. We first start by following the authors' approach. The results of their analysis is displayed in Table 5 in their paper. In their regressions, the authors make two choices. First, they cluster their standard error at the level of commuter zone. Second, they use total votes in 2000 as regression weight. We will first look at the first stage.
 
@@ -244,3 +247,10 @@ To answer this question, you will have to use the `summarise` commands as you di
 Based on your re-analysis of the presidential results, do you agree with their conclusion?
 
 ***Answer:***
+
+## Appendix: All code in this assignment
+
+```{r ref.label=knitr::all_labels(), echo=TRUE, eval=FALSE}
+
+```
+
