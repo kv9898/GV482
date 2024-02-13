@@ -788,18 +788,20 @@ Q1
 </tr>
 </tbody>
 </table>
+<p><span style="color: blue;">As shown in Table <a href="#tab:q4a">1</a> and Table <a href="#tab:q4b">2</a>, the change in Republican vote share has become more negative in terms of mean, Q1 and Q3 after weighting. This implies that the more Republican-leaning counties in 2000 experienced a more drastic fall in support for the Republican party in 2008 and a less prominent rise in 2016. On the other hand, this implies the rise in the Republican support in 2016 is attributed more to the previous Democratic-leaning rather than Republican-leaning counties.</span></p>
 <p>We also want to know the summary statistics for the main independent variables - Chinese import penetration (<code>d_imp_usch_pd_0008</code>) - as well as the instrument - Chinese importations in other Western countries (<code>d_imp_otch_lag_pd_0008</code>).</p>
 <p>One issue is that this variable is measured at the commuter zone level (as discussed above), whereas the unit of analysis in the database is a county. To adequately calculate the summary statistics, we need to collapse the database. Since this is not easy and we will need this information below, here is the relevant table.</p>
-<table style="width:100%;">
+<table>
+<caption><span id="tab:given">Table 3: </span> Summary statistics for the Chinese import penetration in the US and the instrument (Chinese importations in other Western countries) at the county level.</caption>
 <colgroup>
-<col width="21%" />
-<col width="11%" />
-<col width="11%" />
-<col width="11%" />
-<col width="11%" />
-<col width="11%" />
-<col width="11%" />
-<col width="11%" />
+<col width="12%" />
+<col width="12%" />
+<col width="12%" />
+<col width="12%" />
+<col width="12%" />
+<col width="12%" />
+<col width="12%" />
+<col width="12%" />
 </colgroup>
 <thead>
 <tr class="header">
@@ -886,7 +888,7 @@ Q1
 </tr>
 </tbody>
 </table>
-<p><strong>Q5:</strong> Try to replicate Table 1. The authors use the interquartile range (Q3 - Q1) rather than the standard deviation to interpret the political effect of the China shock. Comment on this substantive choice. To replicate this table, you first need to collapse data at the commuter zone level.</p>
+<p><strong>Q5:</strong> Try to replicate Table <a href="#tab:given">3</a>. The authors use the interquartile range (Q3 - Q1) rather than the standard deviation to interpret the political effect of the China shock. Comment on this substantive choice. To replicate this table, you first need to collapse data at the commuter zone level.</p>
 <p><strong><em>Answer:</em></strong></p>
 <pre class="r"><code># You can insert the code to generate your answer here</code></pre>
 <p>We now return to the main dataset. We first start by following the authors’ approach. The results of their analysis is displayed in Table 5 in their paper. In their regressions, the authors make two choices. First, they cluster their standard error at the level of commuter zone. Second, they use total votes in 2000 as regression weight. We will first look at the first stage.</p>

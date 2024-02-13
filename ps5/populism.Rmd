@@ -51,7 +51,7 @@ $L_{kjt_0}$ represents the number of workers in industry $k$ in area $j$ at a ba
 
 **Q1:** Why would measuring the share of employment at date $\tau$ create inference problems?
 
-[ The share of employment at date $\tau$ would create inference problems because it would have been affected by the China shock and becomes an outcome variable rather than an explanatory variable. Assuming that the China shock has a differential impact across sectors, those sectors more exposed to Chinese import competition would have lost more jobs, hence a lower share of employment. This will be mistaken as "lower Chinese importation" and produce a downward bias on the results. ]{style="color: blue;"}
+[The share of employment at date $\tau$ would create inference problems because it would have been affected by the China shock and becomes an outcome variable rather than an explanatory variable. Assuming that the China shock has a differential impact across sectors, those sectors more exposed to Chinese import competition would have lost more jobs, hence a lower share of employment. This will be mistaken as "lower Chinese importation" and produce a downward bias on the results.]{style="color: blue;"}
 
 Finally, $IP^{us}_{k\tau}$ is the level of importation from China in industry $k$ at date $\tau$. This is relative to the national level of production of industry $k$ in the United States prior to the economic opening of China, for which the authors use the date 1991. That is, $IP^{us}_{k\tau} = \frac{M^{us}_{k\tau}}{Y_{k0}+M_{k0}-X_{k0}}$ with $M^{us}_{k\tau}$ the importation from China at date $\tau$, $Y_{k0}+M_{k0}$ the US shipment (domestic production + importations), and $X_{k0}$ the exportations measured in 1991.
 
@@ -66,7 +66,7 @@ Autor et al. are worried that simply looking at the (change in) Chinese penetrat
 
 **Q2:** What is their justification for this claim?
 
-[ The justification for this claim is that the change in Chinese penetrations is endogenous. If the penetration of Chinese imports led to unemployment in some sectors, there would likely be local boycotts in return would have reduced imports from China in the corresponding sectors. The effect is therefore bidirectional. This is likely to induce a downward bias in the OLS estimate as the signs of the effects are opposite - more Chinese imports likely create more unemployment, but more unemployment likely reduce Chinese imports. ]{style="color: blue;"}
+[The justification for this claim is that the change in Chinese penetrations is endogenous. If the penetration of Chinese imports led to unemployment in some sectors, there would likely be local boycotts in return would have reduced imports from China in the corresponding sectors. The effect is therefore bidirectional. This is likely to induce a downward bias in the OLS estimate as the signs of the effects are opposite - more Chinese imports likely create more unemployment, but more unemployment likely reduce Chinese imports.]{style="color: blue;"}
 
 The authors use an instrumental variable to deal with this endogeneity issue. Rather than using importations from China in the US in Equation \@ref(eq:importpenetration) and Equation \@ref(eq:importpenetrationchange), they use importation in other developed countries: Australia, Denmark, Finland, Germany, Japan, New Zealand, Spain, and Switzerland. That is, they compute the following alternative change in import penetrations:
 
@@ -81,7 +81,7 @@ The area $j$ used to compute the China shock (and its instrument) is not a count
 
 **Q3:** What is the justification for this empirical choice?
 
-[ The justification for this empirical choice is that commuter zones are better units for employment than administrative borders. Residents in one county may be employed in a neighbouring county in the same commuter zone. Therefore, any employment shock to one county is likely spread to other counties in the same commuter zone and the use of county-level employment structures would have distorted the results. ]{style="color: blue;"}
+[The justification for this empirical choice is that commuter zones are better units for employment than administrative borders. Residents in one county may be employed in a neighbouring county in the same commuter zone. Therefore, any employment shock to one county is likely spread to other counties in the same commuter zone and the use of county-level employment structures would have distorted the results.]{style="color: blue;"}
 
 With these preliminaries in mind, we can turn to the empirical part of the problem set. For this, you need to use the dataset `populism_ps_data.dta` posted on Moodle. The dataset contains a series of variable some measured at the county level, some at the commuter zone level, and some Census region dummies. Our first step is to get to know the main variables better.
 
@@ -113,12 +113,16 @@ datasummary(f_weighted, data=data,
             title="Summary statistics table for changes in the Republican vote shares (weighted).")
 ```
 
+[As shown in Table \@ref(tab:q4a) and Table \@ref(tab:q4b), the change in Republican vote share has become more negative in terms of mean, Q1 and Q3 after weighting. This implies that the more Republican-leaning counties in 2000 experienced a more drastic fall in support for the Republican party in 2008 and a less prominent rise in 2016. On the other hand, this implies the rise in the Republican support in 2016 is attributed more to the previous Democratic-leaning rather than Republican-leaning counties.]{style="color: blue;"}
+
 We also want to know the summary statistics for the main independent variables - Chinese import penetration (`d_imp_usch_pd_0008`) - as well as the instrument - Chinese importations in other Western countries (`d_imp_otch_lag_pd_0008`).
 
 One issue is that this variable is measured at the commuter zone level (as discussed above), whereas the unit of analysis in the database is a county. To adequately calculate the summary statistics, we need to collapse the database. Since this is not easy and we will need this information below, here is the relevant table.
 
+Table: (\#tab:given) Summary statistics for the Chinese import penetration in the US and the instrument (Chinese importations in other Western countries) at the county level.
+
 |          **Unweighted**          |      |       |          |        |       |            |            |
-|:-------------:|--------|--------|--------|--------|--------|--------|--------|
+|:-------:|---------|---------|---------|---------|---------|---------|---------|
 |                                  | Obs. | Mean  | St. Dev. | Min.   | Max.  | 1st Quart. | 3rd Quart. |
 | Import Penetration US (CZ level) | 722  | 0.941 | 0.884    | -0.592 | 7.242 | 0.366      | 1.277      |
 | Import Penetration IV (CZ level) | 722  | 1.111 | 1.024    | -0.426 | 6.370 | 0.361      | 1.568      |
@@ -127,7 +131,7 @@ One issue is that this variable is measured at the commuter zone level (as discu
 | Import Penetration US (CZ level) | 722  | 0.902 | 0.566    | -0.592 | 7.242 | 0.544      | 1.113      |
 | Import Penetration IV (CZ level) | 722  | 1.161 | 0.666    | -0.426 | 6.370 | 0.758      | 1.370      |
 
-**Q5:** Try to replicate Table 1. The authors use the interquartile range (Q3 - Q1) rather than the standard deviation to interpret the political effect of the China shock. Comment on this substantive choice. To replicate this table, you first need to collapse data at the commuter zone level.
+**Q5:** Try to replicate Table \@ref(tab:given). The authors use the interquartile range (Q3 - Q1) rather than the standard deviation to interpret the political effect of the China shock. Comment on this substantive choice. To replicate this table, you first need to collapse data at the commuter zone level.
 
 ***Answer:***
 
