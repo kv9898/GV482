@@ -6,7 +6,6 @@ date: "`r as.character(Sys.Date())`"
 output:
   bookdown::html_document2:
     fig_caption: yes
-    number_sections: true
 ---
 
 ```{r setup, include=FALSE}
@@ -17,7 +16,7 @@ knitr::opts_chunk$set(echo = FALSE,
 #dirname(rstudioapi::getSourceEditorContext()$path)
 setwd("D:/OneDrive - London School of Economics/Desktop/lse assignments/GV482/ps5") #change to your own directory
 
-need <- c('tidyverse','haven','modelsummary',"TAM") # list packages
+need <- c('tidyverse','haven','modelsummary',"TAM","fixest","estimatr") # list packages
 have <- need %in% rownames(installed.packages()) # checks packages you have
 if(any(!have)) install.packages(need[!have]) # install missing packages
 invisible(lapply(need, library, character.only=T))
@@ -160,19 +159,43 @@ datasummary(f_weighted, data=data_cz, fmt=3, add_rows = unweighted,
             title="Replication of Summary statistics table for the Chinese import penetration in the US and the instrument (Chinese importations in other Western countries) at the commuter zone level.")
 ```
 
-[Table \@ref(tab:given) is replicated in Table \@ref(tab:q5), with interquartile ranges added. ]{style="color: blue;"}
+[Table \@ref(tab:given) is replicated in Table \@ref(tab:q5), with interquartile ranges (IQE) added. The substantive choice of using the IQR rather than the SD does not matter as for the explanatory variable, but may affect the interpretation of the political effect. As shown in Table \@ref(tab:q5), the IQR are numerically very similar to the SD and the ordering is not affected at all for the explanatory variable. However, as for the dependent variable (change in Republican vote share), the IQR also roughly match the SD but the ordering is different if one makes a cross comparison between weighted and unweighted results. Therefore, the interpretation based on IQE is largely valid for intertemporal comparison but not for weighted-unweighted comparison.]{style="color: blue;"}
 
 We now return to the main dataset. We first start by following the authors' approach. The results of their analysis is displayed in Table 5 in their paper. In their regressions, the authors make two choices. First, they cluster their standard error at the level of commuter zone. Second, they use total votes in 2000 as regression weight. We will first look at the first stage.
 
-**Q6:** Regress the Chinese importation penetration in the US (`d_imp_usch_pd_0008`) on the instrument (`d_imp_otch_lag_pd_0008`). First, run the model without control. Then run the model adding controls as the authors do in Table 5. Comment your results. Note that the controls are first industry controls (`l_ _shind_manuf_cbp`,`l_sh_routine33`,`l_task_outsource`), then regional census dummies (the `reg_*` variables), then demographics (the variables `l_sh_pop_f`, `l_sh_pop_edu_c`,..), and finally past electoral results (`shnr_pres1992`, `shnr_pres1996`).
+**Q6:** Regress the Chinese importation penetration in the US (`d_imp_usch_pd_0008`) on the instrument (`d_imp_otch_lag_pd_0008`). First, run the model without control. Then run the model adding controls as the authors do in Table 5. Comment your results. Note that the controls are first industry controls (`l_shind_manuf_cbp`,`l_sh_routine33`,`l_task_outsource`), then regional census dummies (the `reg_*` variables), then demographics (the variables `l_sh_pop_f`, `l_sh_pop_edu_c`,..), and finally past electoral results (`shnr_pres1992`, `shnr_pres1996`).
 
-```{r question_6}
+```{r q6}
+fs1 <- feols(d_imp_usch_pd_0008 ~ d_imp_otch_lag_pd_0008, data, cluster="czone", weight=data$totvote_2000pres)
+fs2 <- feols(d_imp_usch_pd_0008 ~ d_imp_otch_lag_pd_0008+l_shind_manuf_cbp+l_sh_routine33+l_task_outsource, data, cluster="czone", weight=data$totvote_2000pres)
 
-# You can insert the code to generate your answer here
+fml3 <- paste(c("d_imp_usch_pd_0008 ~ d_imp_otch_lag_pd_0008+l_shind_manuf_cbp+l_sh_routine33+l_task_outsource", paste(grep("reg_",names(data),value=T), collapse = " + ")), collapse = " + ")
+fs3 <- feols(as.formula(fml3), data, cluster="czone", weight=data$totvote_2000pres)
 
+fml4 <- paste(c(fml3, paste(grep("l_sh_pop_",names(data),value=T), collapse = " + ")), collapse = " + ")
+fs4 <- feols(as.formula(fml4), data, cluster="czone", weight=data$totvote_2000pres)
+
+fml5 <- paste0(fml4, " + shnr_pres1992 + shnr_pres1996")
+fs5 <- feols(as.formula(fml5), data, cluster="czone", weight=data$totvote_2000pres)
+
+fs <- list(fs1, fs2, fs3, fs4, fs5)
+coef_map <- c('d_imp_otch_lag_pd_0008' = "Instrument")
+
+glance_custom.fixest <- function(x, ...) {
+  data.frame(
+    "F" = round(fitstat(x,"F")$f$stat,1)
+  )}
+
+gof_map <- list(list("raw" = "F", "clean" = "$F$", "fmt" = 1),
+                list("raw" = "nobs", "clean" = "$N$", "fmt" = 0),
+                list("raw" = "r.squared", "clean" = "$R^2$", "fmt" = 3),
+                list("raw" = "adj.r.squared", "clean" = "$R^2$ Adj.", "fmt" = 3))
+
+msummary(fs, stars = TRUE, coef_map = coef_map, gof_map = gof_map,
+         title="First stage regressions of the Chinese import penetration in the US on the instrument (Chinese importations in other Western countries), clustered by commuter zone and weighted by the total votes in 2000.")
 ```
 
-***Answer:***
+[The first stage results are displayed in Table \@ref(tab:q6). ]{style="color: blue;"}
 
 **Q7:** Replicate now Table 5 (you do not need to report the method and F-stat). The authors substantively interpret their results as such:
 

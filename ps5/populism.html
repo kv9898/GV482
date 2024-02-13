@@ -1070,10 +1070,164 @@ Import Penetration IV (CZ level)
 </tr>
 </tbody>
 </table>
-<p><span style="color: blue;">Table <a href="#tab:given">3</a> is replicated in Table <a href="#tab:q5">4</a>, with interquartile ranges added.</span></p>
+<p><span style="color: blue;">Table <a href="#tab:given">3</a> is replicated in Table <a href="#tab:q5">4</a>, with interquartile ranges (IQE) added. The substantive choice of using the IQR rather than the SD does not matter as for the explanatory variable, but may affect the interpretation of the political effect. As shown in Table <a href="#tab:q5">4</a>, the IQR are numerically very similar to the SD and the ordering is not affected at all for the explanatory variable. However, as for the dependent variable (change in Republican vote share), the IQR also roughly match the SD but the ordering is different if one makes a cross comparison between weighted and unweighted results. Therefore, the interpretation based on IQE is largely valid for intertemporal comparison but not for weighted-unweighted comparison.</span></p>
 <p>We now return to the main dataset. We first start by following the authors’ approach. The results of their analysis is displayed in Table 5 in their paper. In their regressions, the authors make two choices. First, they cluster their standard error at the level of commuter zone. Second, they use total votes in 2000 as regression weight. We will first look at the first stage.</p>
-<p><strong>Q6:</strong> Regress the Chinese importation penetration in the US (<code>d_imp_usch_pd_0008</code>) on the instrument (<code>d_imp_otch_lag_pd_0008</code>). First, run the model without control. Then run the model adding controls as the authors do in Table 5. Comment your results. Note that the controls are first industry controls (<code>l_ _shind_manuf_cbp</code>,<code>l_sh_routine33</code>,<code>l_task_outsource</code>), then regional census dummies (the <code>reg_*</code> variables), then demographics (the variables <code>l_sh_pop_f</code>, <code>l_sh_pop_edu_c</code>,..), and finally past electoral results (<code>shnr_pres1992</code>, <code>shnr_pres1996</code>).</p>
-<p><strong><em>Answer:</em></strong></p>
+<p><strong>Q6:</strong> Regress the Chinese importation penetration in the US (<code>d_imp_usch_pd_0008</code>) on the instrument (<code>d_imp_otch_lag_pd_0008</code>). First, run the model without control. Then run the model adding controls as the authors do in Table 5. Comment your results. Note that the controls are first industry controls (<code>l_shind_manuf_cbp</code>,<code>l_sh_routine33</code>,<code>l_task_outsource</code>), then regional census dummies (the <code>reg_*</code> variables), then demographics (the variables <code>l_sh_pop_f</code>, <code>l_sh_pop_edu_c</code>,..), and finally past electoral results (<code>shnr_pres1992</code>, <code>shnr_pres1996</code>).</p>
+<table style="NAborder-bottom: 0; width: auto !important; margin-left: auto; margin-right: auto;" class="table">
+<caption>
+<span id="tab:q6">Table 5: </span>First stage regressions of the Chinese import penetration in the US on the instrument (Chinese importations in other Western countries), clustered by commuter zone and weighted by the total votes in 2000.
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:center;">
+ (1)
+</th>
+<th style="text-align:center;">
+  (2)
+</th>
+<th style="text-align:center;">
+  (3)
+</th>
+<th style="text-align:center;">
+  (4)
+</th>
+<th style="text-align:center;">
+  (5)
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Instrument
+</td>
+<td style="text-align:center;">
+0.647***
+</td>
+<td style="text-align:center;">
+0.387***
+</td>
+<td style="text-align:center;">
+0.387***
+</td>
+<td style="text-align:center;">
+0.381***
+</td>
+<td style="text-align:center;">
+0.383***
+</td>
+</tr>
+<tr>
+<td style="text-align:left;box-shadow: 0px 1.5px">
+</td>
+<td style="text-align:center;box-shadow: 0px 1.5px">
+(0.047)
+</td>
+<td style="text-align:center;box-shadow: 0px 1.5px">
+(0.045)
+</td>
+<td style="text-align:center;box-shadow: 0px 1.5px">
+(0.043)
+</td>
+<td style="text-align:center;box-shadow: 0px 1.5px">
+(0.043)
+</td>
+<td style="text-align:center;box-shadow: 0px 1.5px">
+(0.043)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<span class="math inline">\(F\)</span>
+</td>
+<td style="text-align:center;">
+993.6
+</td>
+<td style="text-align:center;">
+385.6
+</td>
+<td style="text-align:center;">
+134.6
+</td>
+<td style="text-align:center;">
+65.3
+</td>
+<td style="text-align:center;">
+61.1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<span class="math inline">\(N\)</span>
+</td>
+<td style="text-align:center;">
+3107
+</td>
+<td style="text-align:center;">
+3107
+</td>
+<td style="text-align:center;">
+3107
+</td>
+<td style="text-align:center;">
+3107
+</td>
+<td style="text-align:center;">
+3107
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<span class="math inline">\(R^2\)</span>
+</td>
+<td style="text-align:center;">
+0.579
+</td>
+<td style="text-align:center;">
+0.681
+</td>
+<td style="text-align:center;">
+0.691
+</td>
+<td style="text-align:center;">
+0.702
+</td>
+<td style="text-align:center;">
+0.704
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<span class="math inline">\(R^2\)</span> Adj.
+</td>
+<td style="text-align:center;">
+0.579
+</td>
+<td style="text-align:center;">
+0.681
+</td>
+<td style="text-align:center;">
+0.690
+</td>
+<td style="text-align:center;">
+0.699
+</td>
+<td style="text-align:center;">
+0.701
+</td>
+</tr>
+</tbody>
+<tfoot>
+<tr>
+<td style="padding: 0; " colspan="100%">
+<sup></sup> + p &lt; 0.1, * p &lt; 0.05, ** p &lt; 0.01, *** p &lt; 0.001
+</td>
+</tr>
+</tfoot>
+</table>
+<p><span style="color: blue;">The first stage results are displayed in Table <a href="#tab:q6">5</a>.</span></p>
 <p><strong>Q7:</strong> Replicate now Table 5 (you do not need to report the method and F-stat). The authors substantively interpret their results as such:</p>
 <blockquote>
 <p>“The point estimate for the column 5 regression, which includes full controls, implies that the Republican two-party vote share rose by nearly a full percentage point for an interquartile range increase in import penetration (<span class="math inline">\(1.59 \cdot 0.58 = 0.91\)</span>).” (page 3175)</p>
@@ -1109,7 +1263,7 @@ Import Penetration IV (CZ level)
 #dirname(rstudioapi::getSourceEditorContext()$path)
 setwd(&quot;D:/OneDrive - London School of Economics/Desktop/lse assignments/GV482/ps5&quot;) #change to your own directory
 
-need &lt;- c(&#39;tidyverse&#39;,&#39;haven&#39;,&#39;modelsummary&#39;,&quot;TAM&quot;) # list packages
+need &lt;- c(&#39;tidyverse&#39;,&#39;haven&#39;,&#39;modelsummary&#39;,&quot;TAM&quot;,&quot;fixest&quot;,&quot;estimatr&quot;) # list packages
 have &lt;- need %in% rownames(installed.packages()) # checks packages you have
 if(any(!have)) install.packages(need[!have]) # install missing packages
 invisible(lapply(need, library, character.only=T))
@@ -1153,9 +1307,33 @@ attr(unweighted, &#39;position&#39;) &lt;- 1:4
                                                                         
 datasummary(f_weighted, data=data_cz, fmt=3, add_rows = unweighted,
             title=&quot;Replication of Summary statistics table for the Chinese import penetration in the US and the instrument (Chinese importations in other Western countries) at the commuter zone level.&quot;)
+fs1 &lt;- feols(d_imp_usch_pd_0008 ~ d_imp_otch_lag_pd_0008, data, cluster=&quot;czone&quot;, weight=data$totvote_2000pres)
+fs2 &lt;- feols(d_imp_usch_pd_0008 ~ d_imp_otch_lag_pd_0008+l_shind_manuf_cbp+l_sh_routine33+l_task_outsource, data, cluster=&quot;czone&quot;, weight=data$totvote_2000pres)
 
-# You can insert the code to generate your answer here
+fml3 &lt;- paste(c(&quot;d_imp_usch_pd_0008 ~ d_imp_otch_lag_pd_0008+l_shind_manuf_cbp+l_sh_routine33+l_task_outsource&quot;, paste(grep(&quot;reg_&quot;,names(data),value=T), collapse = &quot; + &quot;)), collapse = &quot; + &quot;)
+fs3 &lt;- feols(as.formula(fml3), data, cluster=&quot;czone&quot;, weight=data$totvote_2000pres)
 
+fml4 &lt;- paste(c(fml3, paste(grep(&quot;l_sh_pop_&quot;,names(data),value=T), collapse = &quot; + &quot;)), collapse = &quot; + &quot;)
+fs4 &lt;- feols(as.formula(fml4), data, cluster=&quot;czone&quot;, weight=data$totvote_2000pres)
+
+fml5 &lt;- paste0(fml4, &quot; + shnr_pres1992 + shnr_pres1996&quot;)
+fs5 &lt;- feols(as.formula(fml5), data, cluster=&quot;czone&quot;, weight=data$totvote_2000pres)
+
+fs &lt;- list(fs1, fs2, fs3, fs4, fs5)
+coef_map &lt;- c(&#39;d_imp_otch_lag_pd_0008&#39; = &quot;Instrument&quot;)
+
+glance_custom.fixest &lt;- function(x, ...) {
+  data.frame(
+    &quot;F&quot; = round(fitstat(x,&quot;F&quot;)$f$stat,1)
+  )}
+
+gof_map &lt;- list(list(&quot;raw&quot; = &quot;F&quot;, &quot;clean&quot; = &quot;$F$&quot;, &quot;fmt&quot; = 1),
+                list(&quot;raw&quot; = &quot;nobs&quot;, &quot;clean&quot; = &quot;$N$&quot;, &quot;fmt&quot; = 0),
+                list(&quot;raw&quot; = &quot;r.squared&quot;, &quot;clean&quot; = &quot;$R^2$&quot;, &quot;fmt&quot; = 3),
+                list(&quot;raw&quot; = &quot;adj.r.squared&quot;, &quot;clean&quot; = &quot;$R^2$ Adj.&quot;, &quot;fmt&quot; = 3))
+
+msummary(fs, stars = TRUE, coef_map = coef_map, gof_map = gof_map,
+         title=&quot;First stage regressions of the Chinese import penetration in the US on the instrument (Chinese importations in other Western countries), clustered by commuter zone and weighted by the total votes in 2000.&quot;)
 
 # You can insert the code to generate your answer here
 
