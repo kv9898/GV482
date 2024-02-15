@@ -11,7 +11,7 @@
 
 <meta name="author" content="Dianyi Yang  GV482" />
 
-<meta name="date" content="2024-02-13" />
+<meta name="date" content="2024-02-14" />
 
 <title>Populism</title>
 
@@ -564,7 +564,7 @@ display: none;
 <h1 class="title toc-ignore">Populism</h1>
 <h3 class="subtitle">Problem Set - Empirics</h3>
 <h4 class="author">Dianyi Yang <br>GV482<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></h4>
-<h4 class="date">2024-02-13</h4>
+<h4 class="date">2024-02-14</h4>
 
 </div>
 
@@ -1116,7 +1116,7 @@ Instrument
 0.381***
 </td>
 <td style="text-align:center;">
-0.383***
+0.384***
 </td>
 </tr>
 <tr>
@@ -1135,27 +1135,7 @@ Instrument
 (0.043)
 </td>
 <td style="text-align:center;box-shadow: 0px 1.5px">
-(0.043)
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-<span class="math inline">\(F\)</span>
-</td>
-<td style="text-align:center;">
-993.6
-</td>
-<td style="text-align:center;">
-385.6
-</td>
-<td style="text-align:center;">
-134.6
-</td>
-<td style="text-align:center;">
-65.3
-</td>
-<td style="text-align:center;">
-61.1
+(0.042)
 </td>
 </tr>
 <tr>
@@ -1212,10 +1192,10 @@ Instrument
 0.690
 </td>
 <td style="text-align:center;">
-0.699
+0.700
 </td>
 <td style="text-align:center;">
-0.701
+0.702
 </td>
 </tr>
 </tbody>
@@ -1227,33 +1207,1621 @@ Instrument
 </tr>
 </tfoot>
 </table>
-<p><span style="color: blue;">The first stage results are displayed in Table <a href="#tab:q6">5</a>.</span></p>
+<p><span style="color: blue;">The first stage results are displayed in Table <a href="#tab:q6">5</a>. It can be seen that, once the control variables are added in columns (2) to (6), the coefficient stabilises at 0.38-0.39. Therefore, the results with controls are more reliable. Moreover, the F-stats are all over 60. This suggests it is likely that the first-stage relationship exists.</span></p>
 <p><strong>Q7:</strong> Replicate now Table 5 (you do not need to report the method and F-stat). The authors substantively interpret their results as such:</p>
 <blockquote>
 <p>“The point estimate for the column 5 regression, which includes full controls, implies that the Republican two-party vote share rose by nearly a full percentage point for an interquartile range increase in import penetration (<span class="math inline">\(1.59 \cdot 0.58 = 0.91\)</span>).” (page 3175)</p>
 </blockquote>
 <p>Based on your answers to questions <strong>Q5</strong> and <strong>Q6</strong> and your knowledge of instrumental variable estimation, discuss whether this way of interpreting the results is reasonable. <em>(Hint: To answer this last part of the question, remember that variations in the independent variable in the second stage are only caused by variation in the instrumental variable. So the question is: How much of a variation in the instrumental variable is needed to produce a change of 0.58 in the Import penetration ratio? Is this level of variation reasonable or not? There is no right or wrong answer to this last question, rather the standard is whether your answer is substantively logical or illogical.)</em></p>
 <p><strong><em>Answer:</em></strong></p>
+<table style="NAborder-bottom: 0; width: auto !important; margin-left: auto; margin-right: auto;" class="table">
+<caption>
+<span id="tab:q7">Table 6: </span>Replication of 2SLS results on Exposure to Chinese Import Competition and Presidential Election Vote Shares, 2000–2008
+and 2000–2016.
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:center;">
+ (1)
+</th>
+<th style="text-align:center;">
+ (2)
+</th>
+<th style="text-align:center;">
+ (3)
+</th>
+<th style="text-align:center;">
+ (4)
+</th>
+<th style="text-align:center;">
+ (5)
+</th>
+</tr>
+</thead>
+<tbody>
+<tr grouplength="2">
+<td colspan="6" style="border-bottom: 1px solid;">
+<em>Panel A</em>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+<span class="math inline">\(\Delta\)</span>CZ import penetration, 2000-2008
+</td>
+<td style="text-align:center;">
+1.541*
+</td>
+<td style="text-align:center;">
+5.596***
+</td>
+<td style="text-align:center;">
+2.377+
+</td>
+<td style="text-align:center;">
+1.752*
+</td>
+<td style="text-align:center;">
+1.588+
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+</td>
+<td style="text-align:center;">
+(0.727)
+</td>
+<td style="text-align:center;">
+(1.409)
+</td>
+<td style="text-align:center;">
+(1.247)
+</td>
+<td style="text-align:center;">
+(0.861)
+</td>
+<td style="text-align:center;">
+(0.857)
+</td>
+</tr>
+<tr grouplength="2">
+<td colspan="6" style="border-bottom: 1px solid;">
+<em>Panel B</em>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+<span class="math inline">\(\Delta\)</span>CZ import penetration, 2000-2008
+</td>
+<td style="text-align:center;">
+3.863**
+</td>
+<td style="text-align:center;">
+3.983*
+</td>
+<td style="text-align:center;">
+1.717
+</td>
+<td style="text-align:center;">
+1.988*
+</td>
+<td style="text-align:center;">
+1.708+
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;box-shadow: 0px 1.5px" indentlevel="1">
+</td>
+<td style="text-align:center;box-shadow: 0px 1.5px">
+(1.482)
+</td>
+<td style="text-align:center;box-shadow: 0px 1.5px">
+(1.692)
+</td>
+<td style="text-align:center;box-shadow: 0px 1.5px">
+(1.714)
+</td>
+<td style="text-align:center;box-shadow: 0px 1.5px">
+(0.977)
+</td>
+<td style="text-align:center;box-shadow: 0px 1.5px">
+(0.909)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+2000 ind/occ controls
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+Census division dummies
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+2000 demography controls
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+1992/1996 election controls
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+</tr>
+</tbody>
+<tfoot>
+<tr>
+<td style="padding: 0; " colspan="100%">
+<sup></sup> + p &lt; 0.1, * p &lt; 0.05, ** p &lt; 0.01, *** p &lt; 0.001
+</td>
+</tr>
+</tfoot>
+</table>
+<p><span style="color: blue;">The second stage results are replicated in Table <a href="#tab:q7">6</a>. The authors’ way of interpreting the results is not reasonable. The coefficient of 1.59 merely represents the <em>local</em> average treatment effect (LATE) that is attributable to the instrument and there is no guarantee that other variations in the independent variable (<span class="math inline">\(\Delta\)</span>CZ import penetration) would exert the same size of influence. Moreover, according to the first stage (Table <a href="#tab:q6">5</a>), an interquartile range increase in import penetration (0.568) requires <span class="math inline">\(\frac{0.568}{0.384\times0.699}=2.116\)</span> standard deviations’ increase in the instrument. This is very unrealistic and unreasonable.</span></p>
 <p>The authors make several choices along the way to produce the results we just commented. Some choices may be perfectly justified, others may be a bit more perplexing. In any case, we may want to check their consequences. This is our goal in the next questions of this problem set.</p>
 <p><strong>Q8:</strong> The first choice the authors made is to use an instrumental variable approach rather than a simple OLS method. Reproduce Table 5 in their paper, but with simple OLS rather than IV. Are the difference between IV and OLS results consistent with the authors’ justification for using an IV approach?</p>
 <p><strong><em>Answer:</em></strong></p>
+<table style="NAborder-bottom: 0; width: auto !important; margin-left: auto; margin-right: auto;" class="table">
+<caption>
+<span id="tab:q8">Table 7: </span>2SLS and OLS results on Exposure to Chinese Import Competition and Presidential Election Vote Shares, 2000–2008 and 2000–2016.
+</caption>
+<thead>
+<tr>
+<th style="empty-cells: hide;border-bottom:hidden;" colspan="1">
+</th>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+(1)
+</div>
+</th>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+(2)
+</div>
+</th>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+(3)
+</div>
+</th>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+(4)
+</div>
+</th>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+(5)
+</div>
+</th>
+</tr>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:center;">
+ IV
+</th>
+<th style="text-align:center;">
+OLS
+</th>
+<th style="text-align:center;">
+ IV
+</th>
+<th style="text-align:center;">
+OLS
+</th>
+<th style="text-align:center;">
+ IV
+</th>
+<th style="text-align:center;">
+OLS
+</th>
+<th style="text-align:center;">
+ IV
+</th>
+<th style="text-align:center;">
+OLS
+</th>
+<th style="text-align:center;">
+ IV
+</th>
+<th style="text-align:center;">
+OLS
+</th>
+</tr>
+</thead>
+<tbody>
+<tr grouplength="2">
+<td colspan="27" style="border-bottom: 1px solid;">
+<em>Panel A</em>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+<span class="math inline">\(\Delta\)</span>CZ import penetration, 2000-2008
+</td>
+<td style="text-align:center;">
+1.541*
+</td>
+<td style="text-align:center;">
+0.531
+</td>
+<td style="text-align:center;">
+5.596***
+</td>
+<td style="text-align:center;">
+1.096+
+</td>
+<td style="text-align:center;">
+2.377+
+</td>
+<td style="text-align:center;">
+-0.064
+</td>
+<td style="text-align:center;">
+1.752*
+</td>
+<td style="text-align:center;">
+-0.097
+</td>
+<td style="text-align:center;">
+1.588+
+</td>
+<td style="text-align:center;">
+-0.108
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+</td>
+<td style="text-align:center;">
+(0.727)
+</td>
+<td style="text-align:center;">
+(0.522)
+</td>
+<td style="text-align:center;">
+(1.409)
+</td>
+<td style="text-align:center;">
+(0.578)
+</td>
+<td style="text-align:center;">
+(1.247)
+</td>
+<td style="text-align:center;">
+(0.474)
+</td>
+<td style="text-align:center;">
+(0.861)
+</td>
+<td style="text-align:center;">
+(0.342)
+</td>
+<td style="text-align:center;">
+(0.857)
+</td>
+<td style="text-align:center;">
+(0.337)
+</td>
+</tr>
+<tr grouplength="2">
+<td colspan="27" style="border-bottom: 1px solid;">
+<em>Panel B</em>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+<span class="math inline">\(\Delta\)</span>CZ import penetration, 2000-2008
+</td>
+<td style="text-align:center;">
+3.863**
+</td>
+<td style="text-align:center;">
+2.749**
+</td>
+<td style="text-align:center;">
+3.983*
+</td>
+<td style="text-align:center;">
+-0.017
+</td>
+<td style="text-align:center;">
+1.717
+</td>
+<td style="text-align:center;">
+0.051
+</td>
+<td style="text-align:center;">
+1.988*
+</td>
+<td style="text-align:center;">
+0.312
+</td>
+<td style="text-align:center;">
+1.708+
+</td>
+<td style="text-align:center;">
+0.304
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;box-shadow: 0px 1.5px" indentlevel="1">
+</td>
+<td style="text-align:center;box-shadow: 0px 1.5px">
+(1.482)
+</td>
+<td style="text-align:center;box-shadow: 0px 1.5px">
+(0.982)
+</td>
+<td style="text-align:center;box-shadow: 0px 1.5px">
+(1.692)
+</td>
+<td style="text-align:center;box-shadow: 0px 1.5px">
+(0.758)
+</td>
+<td style="text-align:center;box-shadow: 0px 1.5px">
+(1.714)
+</td>
+<td style="text-align:center;box-shadow: 0px 1.5px">
+(0.644)
+</td>
+<td style="text-align:center;box-shadow: 0px 1.5px">
+(0.977)
+</td>
+<td style="text-align:center;box-shadow: 0px 1.5px">
+(0.383)
+</td>
+<td style="text-align:center;box-shadow: 0px 1.5px">
+(0.909)
+</td>
+<td style="text-align:center;box-shadow: 0px 1.5px">
+(0.386)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+2000 ind/occ controls
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+Census division dummies
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+2000 demography controls
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+1992/1996 election controls
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+</tr>
+</tbody>
+<tfoot>
+<tr>
+<td style="padding: 0; " colspan="100%">
+<sup></sup> + p &lt; 0.1, * p &lt; 0.05, ** p &lt; 0.01, *** p &lt; 0.001
+</td>
+</tr>
+</tfoot>
+</table>
+<p><span style="color: blue;">The IV results are juxtaposed with OLS results in Table <a href="#tab:q8">7</a>. It is obvious that that the OLS results are different from the IV results. In general, the OLS estimates are lower than the IV estimates, which aligns with our expectation of a downward bias. Therefore, the IV and OLS results are consistent with the authors’ justification for using an IV approach.</span></p>
 <p>Another important choice is to use weighted regressions. Now, there are reasons for this. Absent weights, small counties would be as important as big counties, which can create some issues. But the choice of total votes in 2000 may not be innocuous. By doing so, everything else equals, the authors may put more weight on the most politically active counties. That is, the authors may focus on the counties that react the most to the shock, generating a possible upward bias.</p>
 <p><strong>Q9:</strong> Rerun the IV regressions (including first stage) and the OLS regressions (questions <em>Q7</em> and <em>Q8</em>), but this time without weights. How do the results change compared to your analysis above?</p>
 <p><strong><em>Answer:</em></strong></p>
+<table style="NAborder-bottom: 0; width: auto !important; margin-left: auto; margin-right: auto;" class="table">
+<caption>
+<span id="tab:q9">Table 8: </span>2SLS and OLS results on Exposure to Chinese Import Competition and Presidential Election Vote Shares, 2000–2008 and 2000–2016 (unweighted)
+</caption>
+<thead>
+<tr>
+<th style="empty-cells: hide;border-bottom:hidden;" colspan="1">
+</th>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+(1)
+</div>
+</th>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+(2)
+</div>
+</th>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+(3)
+</div>
+</th>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+(4)
+</div>
+</th>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+(5)
+</div>
+</th>
+</tr>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:center;">
+ IV
+</th>
+<th style="text-align:center;">
+OLS
+</th>
+<th style="text-align:center;">
+ IV
+</th>
+<th style="text-align:center;">
+OLS
+</th>
+<th style="text-align:center;">
+ IV
+</th>
+<th style="text-align:center;">
+OLS
+</th>
+<th style="text-align:center;">
+ IV
+</th>
+<th style="text-align:center;">
+OLS
+</th>
+<th style="text-align:center;">
+ IV
+</th>
+<th style="text-align:center;">
+OLS
+</th>
+</tr>
+</thead>
+<tbody>
+<tr grouplength="2">
+<td colspan="27" style="border-bottom: 1px solid;">
+<em>Panel A</em>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+<span class="math inline">\(\Delta\)</span>CZ import penetration, 2000-2008
+</td>
+<td style="text-align:center;">
+2.528***
+</td>
+<td style="text-align:center;">
+1.579***
+</td>
+<td style="text-align:center;">
+3.253***
+</td>
+<td style="text-align:center;">
+0.935*
+</td>
+<td style="text-align:center;">
+1.560*
+</td>
+<td style="text-align:center;">
+0.058
+</td>
+<td style="text-align:center;">
+1.014
+</td>
+<td style="text-align:center;">
+-0.109
+</td>
+<td style="text-align:center;">
+0.967
+</td>
+<td style="text-align:center;">
+-0.053
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+</td>
+<td style="text-align:center;">
+(0.462)
+</td>
+<td style="text-align:center;">
+(0.316)
+</td>
+<td style="text-align:center;">
+(0.896)
+</td>
+<td style="text-align:center;">
+(0.382)
+</td>
+<td style="text-align:center;">
+(0.761)
+</td>
+<td style="text-align:center;">
+(0.324)
+</td>
+<td style="text-align:center;">
+(0.716)
+</td>
+<td style="text-align:center;">
+(0.279)
+</td>
+<td style="text-align:center;">
+(0.679)
+</td>
+<td style="text-align:center;">
+(0.267)
+</td>
+</tr>
+<tr grouplength="2">
+<td colspan="27" style="border-bottom: 1px solid;">
+<em>Panel B</em>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+<span class="math inline">\(\Delta\)</span>CZ import penetration, 2000-2008
+</td>
+<td style="text-align:center;">
+2.966***
+</td>
+<td style="text-align:center;">
+2.380***
+</td>
+<td style="text-align:center;">
+0.872
+</td>
+<td style="text-align:center;">
+0.609
+</td>
+<td style="text-align:center;">
+1.846+
+</td>
+<td style="text-align:center;">
+0.471
+</td>
+<td style="text-align:center;">
+0.951
+</td>
+<td style="text-align:center;">
+-0.076
+</td>
+<td style="text-align:center;">
+1.021
+</td>
+<td style="text-align:center;">
+0.079
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;box-shadow: 0px 1.5px" indentlevel="1">
+</td>
+<td style="text-align:center;box-shadow: 0px 1.5px">
+(0.623)
+</td>
+<td style="text-align:center;box-shadow: 0px 1.5px">
+(0.453)
+</td>
+<td style="text-align:center;box-shadow: 0px 1.5px">
+(0.941)
+</td>
+<td style="text-align:center;box-shadow: 0px 1.5px">
+(0.489)
+</td>
+<td style="text-align:center;box-shadow: 0px 1.5px">
+(0.989)
+</td>
+<td style="text-align:center;box-shadow: 0px 1.5px">
+(0.485)
+</td>
+<td style="text-align:center;box-shadow: 0px 1.5px">
+(0.788)
+</td>
+<td style="text-align:center;box-shadow: 0px 1.5px">
+(0.284)
+</td>
+<td style="text-align:center;box-shadow: 0px 1.5px">
+(0.646)
+</td>
+<td style="text-align:center;box-shadow: 0px 1.5px">
+(0.242)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+2000 ind/occ controls
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+Census division dummies
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+2000 demography controls
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+1992/1996 election controls
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+</tr>
+</tbody>
+<tfoot>
+<tr>
+<td style="padding: 0; " colspan="100%">
+<sup></sup> + p &lt; 0.1, * p &lt; 0.05, ** p &lt; 0.01, *** p &lt; 0.001
+</td>
+</tr>
+</tfoot>
+</table>
+<p><span style="color: blue;">The unweighted IV and OLS results are shown in Table <a href="#tab:q9">8</a>. In general, the coefficients are smaller, with some previously significant coefficients becoming statistically insignificant. This means that our worry about an upward bias is valid. It is likely that the more politically active counties are given more weight and their reactions are amplified.</span></p>
 <p>A third choice to note is that the authors use the change in Chinese importation penetration from 2000 to 2008 for both the 2008 and 2016 elections. This means there is quite a bit of a delay between the shock (measured over 2000-2008) and the consequences measured in 2016. In other parts of the paper, the authors look at penetration change from 2002 to 2010.3 This variable is closer in time from 2016 making it important to check the robustness of the results to this alternative measure of the China shock.</p>
 <p><strong>Q10:</strong> Rerun the IV analysis (keeping the same instrument as the authors and using weights) for the 2016 elections using the Chinese importation penetration increases over the 2002-2010 period. How do the results change compare to the authors’ analysis?</p>
 <p>To find the Chinese importation penetration increases over the 2002-2010 period, use the database <code>populism_ps_data_additional.dta</code> (available on Moodle) and merge it with the main database you have been using. To do so, you need to use the command <code>inner_join()</code> (since the database you use is at the czone level) using <code>cty_fips</code> as merging variable. Drop the three unmatched observations. The new instrument you need to use is <code>d_imp_usch_pd</code>.</p>
 <p><strong><em>Answer:</em></strong></p>
+<table style="NAborder-bottom: 0; width: auto !important; margin-left: auto; margin-right: auto;" class="table">
+<caption>
+<span id="tab:q10">Table 9: </span>2SLS and OLS results on Exposure to Chinese Import Competition and 2016 Presidential Election Vote Shares (weighted)
+</caption>
+<thead>
+<tr>
+<th style="empty-cells: hide;border-bottom:hidden;" colspan="1">
+</th>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+(1)
+</div>
+</th>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+(2)
+</div>
+</th>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+(3)
+</div>
+</th>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+(4)
+</div>
+</th>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+(5)
+</div>
+</th>
+</tr>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:center;">
+ IV
+</th>
+<th style="text-align:center;">
+OLS
+</th>
+<th style="text-align:center;">
+ IV
+</th>
+<th style="text-align:center;">
+OLS
+</th>
+<th style="text-align:center;">
+ IV
+</th>
+<th style="text-align:center;">
+OLS
+</th>
+<th style="text-align:center;">
+ IV
+</th>
+<th style="text-align:center;">
+OLS
+</th>
+<th style="text-align:center;">
+ IV
+</th>
+<th style="text-align:center;">
+OLS
+</th>
+</tr>
+</thead>
+<tbody>
+<tr grouplength="2">
+<td colspan="27" style="border-bottom: 1px solid;">
+<em>Panel A</em>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+<span class="math inline">\(\Delta\)</span>CZ import penetration, 2000-2008
+</td>
+<td style="text-align:center;">
+3.863**
+</td>
+<td style="text-align:center;">
+2.749**
+</td>
+<td style="text-align:center;">
+3.983*
+</td>
+<td style="text-align:center;">
+-0.017
+</td>
+<td style="text-align:center;">
+1.717
+</td>
+<td style="text-align:center;">
+0.051
+</td>
+<td style="text-align:center;">
+1.988*
+</td>
+<td style="text-align:center;">
+0.312
+</td>
+<td style="text-align:center;">
+1.708+
+</td>
+<td style="text-align:center;">
+0.304
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+</td>
+<td style="text-align:center;">
+(1.482)
+</td>
+<td style="text-align:center;">
+(0.982)
+</td>
+<td style="text-align:center;">
+(1.692)
+</td>
+<td style="text-align:center;">
+(0.758)
+</td>
+<td style="text-align:center;">
+(1.714)
+</td>
+<td style="text-align:center;">
+(0.644)
+</td>
+<td style="text-align:center;">
+(0.977)
+</td>
+<td style="text-align:center;">
+(0.383)
+</td>
+<td style="text-align:center;">
+(0.909)
+</td>
+<td style="text-align:center;">
+(0.386)
+</td>
+</tr>
+<tr grouplength="2">
+<td colspan="27" style="border-bottom: 1px solid;">
+<em>Panel B</em>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+<span class="math inline">\(\Delta\)</span>CZ import penetration, 2002-2010
+</td>
+<td style="text-align:center;">
+4.419*
+</td>
+<td style="text-align:center;">
+1.369
+</td>
+<td style="text-align:center;">
+3.049
+</td>
+<td style="text-align:center;">
+-0.299
+</td>
+<td style="text-align:center;">
+0.809
+</td>
+<td style="text-align:center;">
+-0.283
+</td>
+<td style="text-align:center;">
+2.066+
+</td>
+<td style="text-align:center;">
+0.433
+</td>
+<td style="text-align:center;">
+1.862
+</td>
+<td style="text-align:center;">
+0.460
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;box-shadow: 0px 1.5px" indentlevel="1">
+</td>
+<td style="text-align:center;box-shadow: 0px 1.5px">
+(1.958)
+</td>
+<td style="text-align:center;box-shadow: 0px 1.5px">
+(1.345)
+</td>
+<td style="text-align:center;box-shadow: 0px 1.5px">
+(2.260)
+</td>
+<td style="text-align:center;box-shadow: 0px 1.5px">
+(0.827)
+</td>
+<td style="text-align:center;box-shadow: 0px 1.5px">
+(2.447)
+</td>
+<td style="text-align:center;box-shadow: 0px 1.5px">
+(0.713)
+</td>
+<td style="text-align:center;box-shadow: 0px 1.5px">
+(1.189)
+</td>
+<td style="text-align:center;box-shadow: 0px 1.5px">
+(0.431)
+</td>
+<td style="text-align:center;box-shadow: 0px 1.5px">
+(1.141)
+</td>
+<td style="text-align:center;box-shadow: 0px 1.5px">
+(0.452)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+2000 ind/occ controls
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+Census division dummies
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+2000 demography controls
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+1992/1996 election controls
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+</tr>
+</tbody>
+<tfoot>
+<tr>
+<td style="padding: 0; " colspan="100%">
+<sup></sup> + p &lt; 0.1, * p &lt; 0.05, ** p &lt; 0.01, *** p &lt; 0.001
+</td>
+</tr>
+</tfoot>
+</table>
+<p><span style="color: blue;">The IV and OLS results using both 2000-2008 and 2002-2010 data are shown in Table <a href="#tab:q10">9</a>. Coefficients are largely similar, except for (3). However, previously significant results have become insignificant due to inflated standard errors. This suggests that there may be more uncertainty than the authors’ original results, and the results are not very robust.</span></p>
 <p>One other questionable choice is to perform the analysis at the county level, whereas the treatment (the China shock) is measured at the commuter zone level.</p>
 <p><strong>Q11:</strong> Rerun the IV analysis (keeping the same measure for the China shock and the same instrument as the authors) for the 2008 and 2016 elections at the community zone level. How do the results change compare to the authors’ analysis?</p>
 <p>To answer this question, you will have to use the <code>summarise</code> commands as you did for question 5. When you collapse the data, weight them by the weights the authors use. Run your IV estimations without clustering.</p>
 <p><strong><em>Answer:</em></strong></p>
+<table style="NAborder-bottom: 0; width: auto !important; margin-left: auto; margin-right: auto;" class="table">
+<caption>
+<span id="tab:q11">Table 10: </span>2SLS and OLS results on Exposure to Chinese Import Competition and Presidential Election Vote Shares, 2000–2008 and 2000–2016 at county and CZ levels
+</caption>
+<thead>
+<tr>
+<th style="empty-cells: hide;border-bottom:hidden;" colspan="1">
+</th>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+(1)
+</div>
+</th>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+(2)
+</div>
+</th>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+(3)
+</div>
+</th>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+(4)
+</div>
+</th>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+(5)
+</div>
+</th>
+</tr>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:center;">
+County
+</th>
+<th style="text-align:center;">
+CZ
+</th>
+<th style="text-align:center;">
+County
+</th>
+<th style="text-align:center;">
+CZ
+</th>
+<th style="text-align:center;">
+County
+</th>
+<th style="text-align:center;">
+CZ
+</th>
+<th style="text-align:center;">
+County
+</th>
+<th style="text-align:center;">
+CZ
+</th>
+<th style="text-align:center;">
+County
+</th>
+<th style="text-align:center;">
+CZ
+</th>
+</tr>
+</thead>
+<tbody>
+<tr grouplength="2">
+<td colspan="27" style="border-bottom: 1px solid;">
+<em>Panel A</em>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+<span class="math inline">\(\Delta\)</span>CZ import penetration, 2000-2008
+</td>
+<td style="text-align:center;">
+1.541*
+</td>
+<td style="text-align:center;">
+1.072
+</td>
+<td style="text-align:center;">
+5.596***
+</td>
+<td style="text-align:center;">
+5.319***
+</td>
+<td style="text-align:center;">
+2.377+
+</td>
+<td style="text-align:center;">
+2.788*
+</td>
+<td style="text-align:center;">
+1.752*
+</td>
+<td style="text-align:center;">
+1.083
+</td>
+<td style="text-align:center;">
+1.588+
+</td>
+<td style="text-align:center;">
+0.781
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+</td>
+<td style="text-align:center;">
+(0.727)
+</td>
+<td style="text-align:center;">
+(0.703)
+</td>
+<td style="text-align:center;">
+(1.409)
+</td>
+<td style="text-align:center;">
+(1.332)
+</td>
+<td style="text-align:center;">
+(1.247)
+</td>
+<td style="text-align:center;">
+(1.267)
+</td>
+<td style="text-align:center;">
+(0.861)
+</td>
+<td style="text-align:center;">
+(0.849)
+</td>
+<td style="text-align:center;">
+(0.857)
+</td>
+<td style="text-align:center;">
+(0.795)
+</td>
+</tr>
+<tr grouplength="2">
+<td colspan="27" style="border-bottom: 1px solid;">
+<em>Panel B</em>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+<span class="math inline">\(\Delta\)</span>CZ import penetration, 2000-2008
+</td>
+<td style="text-align:center;">
+3.863**
+</td>
+<td style="text-align:center;">
+2.273
+</td>
+<td style="text-align:center;">
+3.983*
+</td>
+<td style="text-align:center;">
+4.902**
+</td>
+<td style="text-align:center;">
+1.717
+</td>
+<td style="text-align:center;">
+3.025+
+</td>
+<td style="text-align:center;">
+1.988*
+</td>
+<td style="text-align:center;">
+1.888*
+</td>
+<td style="text-align:center;">
+1.708+
+</td>
+<td style="text-align:center;">
+1.464+
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;box-shadow: 0px 1.5px" indentlevel="1">
+</td>
+<td style="text-align:center;box-shadow: 0px 1.5px">
+(1.482)
+</td>
+<td style="text-align:center;box-shadow: 0px 1.5px">
+(1.628)
+</td>
+<td style="text-align:center;box-shadow: 0px 1.5px">
+(1.692)
+</td>
+<td style="text-align:center;box-shadow: 0px 1.5px">
+(1.736)
+</td>
+<td style="text-align:center;box-shadow: 0px 1.5px">
+(1.714)
+</td>
+<td style="text-align:center;box-shadow: 0px 1.5px">
+(1.736)
+</td>
+<td style="text-align:center;box-shadow: 0px 1.5px">
+(0.977)
+</td>
+<td style="text-align:center;box-shadow: 0px 1.5px">
+(0.914)
+</td>
+<td style="text-align:center;box-shadow: 0px 1.5px">
+(0.909)
+</td>
+<td style="text-align:center;box-shadow: 0px 1.5px">
+(0.837)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+2000 ind/occ controls
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+Census division dummies
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+2000 demography controls
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+1992/1996 election controls
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+<td style="text-align:center;">
+Yes
+</td>
+</tr>
+</tbody>
+<tfoot>
+<tr>
+<td style="padding: 0; " colspan="100%">
+<sup></sup> + p &lt; 0.1, * p &lt; 0.05, ** p &lt; 0.01, *** p &lt; 0.001
+</td>
+</tr>
+</tfoot>
+</table>
+<p><span style="color: blue;">The county-level and CZ-level results are juxtaposed in Table <a href="#tab:q11">10</a>. It can be seen that the coefficients for 2008 election results have been lower, but those for 2016 election results remain largely the same after collapsing. This suggests that the latter results do not depend on the level of data (county or CZ), while the former do. The authors’ choice of county-level data is appropriate since it uses more information.</span></p>
 <p><strong>Q12:</strong> The authors describe their paper as finding</p>
 <blockquote>
 <p>“strong though not definitive evidence of an ideological realignment in trade-exposed local labor markets that commences prior to the divisive 2016 US presidential election.”</p>
 </blockquote>
 <p>Based on your re-analysis of the presidential results, do you agree with their conclusion?</p>
 <p><strong><em>Answer:</em></strong></p>
+<p><span style="color: blue;">I do not agree with their conclusion. Their 2008 results are not robust to unweighted data or CZ-level reanalysis. The authors therefore only provide weak evidence for their claim. Even the realignment at the time of 2016 election is questionable as the results become uncertain when one uses later import penetration data (2002-2010).</span></p>
 <div id="appendix-all-code-in-this-assignment" class="section level2" number="0.1">
 <h2><span class="header-section-number">0.1</span> Appendix: All code in this assignment</h2>
 <pre class="r"><code>knitr::opts_chunk$set(echo = FALSE,
@@ -1263,7 +2831,7 @@ Instrument
 #dirname(rstudioapi::getSourceEditorContext()$path)
 setwd(&quot;D:/OneDrive - London School of Economics/Desktop/lse assignments/GV482/ps5&quot;) #change to your own directory
 
-need &lt;- c(&#39;tidyverse&#39;,&#39;haven&#39;,&#39;modelsummary&#39;,&quot;TAM&quot;,&quot;fixest&quot;,&quot;estimatr&quot;) # list packages
+need &lt;- c(&#39;tidyverse&#39;,&#39;haven&#39;,&#39;modelsummary&#39;,&quot;TAM&quot;,&quot;fixest&quot;,&quot;estimatr&quot;,&quot;kableExtra&quot;) # list packages
 have &lt;- need %in% rownames(installed.packages()) # checks packages you have
 if(any(!have)) install.packages(need[!have]) # install missing packages
 invisible(lapply(need, library, character.only=T))
@@ -1313,7 +2881,7 @@ fs2 &lt;- feols(d_imp_usch_pd_0008 ~ d_imp_otch_lag_pd_0008+l_shind_manuf_cbp+l_
 fml3 &lt;- paste(c(&quot;d_imp_usch_pd_0008 ~ d_imp_otch_lag_pd_0008+l_shind_manuf_cbp+l_sh_routine33+l_task_outsource&quot;, paste(grep(&quot;reg_&quot;,names(data),value=T), collapse = &quot; + &quot;)), collapse = &quot; + &quot;)
 fs3 &lt;- feols(as.formula(fml3), data, cluster=&quot;czone&quot;, weight=data$totvote_2000pres)
 
-fml4 &lt;- paste(c(fml3, paste(grep(&quot;l_sh_pop_&quot;,names(data),value=T), collapse = &quot; + &quot;)), collapse = &quot; + &quot;)
+fml4 &lt;- paste(c(fml3, paste(grep(&quot;l_sh_&quot;,names(data),value=T), collapse = &quot; + &quot;)), collapse = &quot; + &quot;)
 fs4 &lt;- feols(as.formula(fml4), data, cluster=&quot;czone&quot;, weight=data$totvote_2000pres)
 
 fml5 &lt;- paste0(fml4, &quot; + shnr_pres1992 + shnr_pres1996&quot;)
@@ -1322,32 +2890,197 @@ fs5 &lt;- feols(as.formula(fml5), data, cluster=&quot;czone&quot;, weight=data$t
 fs &lt;- list(fs1, fs2, fs3, fs4, fs5)
 coef_map &lt;- c(&#39;d_imp_otch_lag_pd_0008&#39; = &quot;Instrument&quot;)
 
-glance_custom.fixest &lt;- function(x, ...) {
-  data.frame(
-    &quot;F&quot; = round(fitstat(x,&quot;F&quot;)$f$stat,1)
-  )}
-
-gof_map &lt;- list(list(&quot;raw&quot; = &quot;F&quot;, &quot;clean&quot; = &quot;$F$&quot;, &quot;fmt&quot; = 1),
-                list(&quot;raw&quot; = &quot;nobs&quot;, &quot;clean&quot; = &quot;$N$&quot;, &quot;fmt&quot; = 0),
+gof_map &lt;- list(list(&quot;raw&quot; = &quot;nobs&quot;, &quot;clean&quot; = &quot;$N$&quot;, &quot;fmt&quot; = 0),
                 list(&quot;raw&quot; = &quot;r.squared&quot;, &quot;clean&quot; = &quot;$R^2$&quot;, &quot;fmt&quot; = 3),
                 list(&quot;raw&quot; = &quot;adj.r.squared&quot;, &quot;clean&quot; = &quot;$R^2$ Adj.&quot;, &quot;fmt&quot; = 3))
 
 msummary(fs, stars = TRUE, coef_map = coef_map, gof_map = gof_map,
          title=&quot;First stage regressions of the Chinese import penetration in the US on the instrument (Chinese importations in other Western countries), clustered by commuter zone and weighted by the total votes in 2000.&quot;)
+iva1 &lt;- feols(shnr_pres2008_2000 ~ 1|d_imp_usch_pd_0008~d_imp_otch_lag_pd_0008, data, cluster=&quot;czone&quot;, weight=data$totvote_2000pres)
+ivb1 &lt;- feols(shnr_pres2016_2000 ~ 1|d_imp_usch_pd_0008~d_imp_otch_lag_pd_0008, data, cluster=&quot;czone&quot;, weight=data$totvote_2000pres)
 
-# You can insert the code to generate your answer here
+h &lt;- &quot;shnr_pres2008_2000 ~ &quot;
+hb &lt;- &quot;shnr_pres2016_2000 ~ &quot;
+t &lt;- &quot;|d_imp_usch_pd_0008~d_imp_otch_lag_pd_0008&quot;
 
+fml2 &lt;- &quot;l_shind_manuf_cbp+l_sh_routine33+l_task_outsource&quot;
+iva2 &lt;- feols(as.formula(paste(h,fml2,t)), data, cluster=&quot;czone&quot;, weight=data$totvote_2000pres)
+ivb2 &lt;- feols(as.formula(paste(hb,fml2,t)), data, cluster=&quot;czone&quot;, weight=data$totvote_2000pres)
 
-# You can insert the code to generate your answer here
+fml3 &lt;- paste(c(fml2, paste(grep(&quot;reg_&quot;,names(data),value=T), collapse = &quot; + &quot;)), collapse = &quot; + &quot;)
+iva3 &lt;- feols(as.formula(paste(h,fml3,t)), data, cluster=&quot;czone&quot;, weight=data$totvote_2000pres)
+ivb3 &lt;- feols(as.formula(paste(hb,fml3,t)), data, cluster=&quot;czone&quot;, weight=data$totvote_2000pres)
+  
+fml4 &lt;- paste(c(fml3, paste(grep(&quot;l_sh_&quot;,names(data),value=T), collapse = &quot; + &quot;)), collapse = &quot; + &quot;)
+iva4 &lt;- feols(as.formula(paste(h,fml4,t)), data, cluster=&quot;czone&quot;, weight=data$totvote_2000pres)
+ivb4 &lt;- feols(as.formula(paste(hb,fml4,t)), data, cluster=&quot;czone&quot;, weight=data$totvote_2000pres)
 
+fml5 &lt;- paste0(fml4, &quot; + shnr_pres1992 + shnr_pres1996&quot;)
+iva5 &lt;- feols(as.formula(paste(h,fml5,t)), data, cluster=&quot;czone&quot;, weight=data$totvote_2000pres)
+ivb5 &lt;- feols(as.formula(paste(hb,fml5,t)), data, cluster=&quot;czone&quot;, weight=data$totvote_2000pres)
 
-# You can insert the code to generate your answer here
+iv_models &lt;- list(list(iva1, iva2, iva3, iva4, iva5),list(ivb1, ivb2, ivb3, ivb4, ivb5))
+coef_map &lt;- c(&#39;fit_d_imp_usch_pd_0008&#39; = &quot;$\\Delta$CZ import penetration, 2000-2008&quot;)
 
+glance_custom.fixest &lt;- function(x, ...) {
+  data.frame(
+    industry = ifelse(any(grepl(&quot;l_shind_manuf_cbp&quot;, x$fml[[3]])), &quot;Yes&quot;, &quot; &quot;),
+    census = ifelse(any(grepl(&quot;reg_&quot;, x$fml[[3]])), &quot;Yes&quot;, &quot; &quot;),
+    demographic = ifelse(any(grepl(&quot;l_sh_pop_&quot;, x$fml[[3]])), &quot;Yes&quot;, &quot; &quot;),
+    electoral = ifelse(any(grepl(&quot;shnr_pres1992&quot;, x$fml[[3]])), &quot;Yes&quot;, &quot; &quot;)
+  )}
+gof_map &lt;- list(list(&quot;raw&quot; = &quot;industry&quot;, &quot;clean&quot; = &quot;2000 ind/occ controls&quot;, &quot;fmt&quot; = NULL),
+                list(&quot;raw&quot; = &quot;census&quot;, &quot;clean&quot; = &quot;Census division dummies&quot;, &quot;fmt&quot; = NULL),
+                list(&quot;raw&quot; = &quot;demographic&quot;, &quot;clean&quot; = &quot;2000 demography controls&quot;, &quot;fmt&quot; = NULL),
+                list(&quot;raw&quot; = &quot;electoral&quot;, &quot;clean&quot; = &quot;1992/1996 election controls&quot;, &quot;fmt&quot; = NULL))
+msummary(iv_models, stars = TRUE, coef_map = coef_map, gof_map = gof_map, shape=&quot;rcollapse&quot;,
+         title=&quot;Replication of 2SLS results on Exposure to Chinese Import Competition and Presidential Election Vote Shares, 2000–2008
+and 2000–2016.&quot;)
+OLSa1 &lt;- feols(shnr_pres2008_2000 ~ d_imp_usch_pd_0008, data, cluster=&quot;czone&quot;, weight=data$totvote_2000pres)
+OLSb1 &lt;- feols(shnr_pres2016_2000 ~ d_imp_usch_pd_0008, data, cluster=&quot;czone&quot;, weight=data$totvote_2000pres)
 
-# You can insert the code to generate your answer here
+h_ols &lt;- &#39;shnr_pres2008_2000 ~ d_imp_usch_pd_0008 +&#39;
+hb_ols &lt;- &#39;shnr_pres2016_2000 ~ d_imp_usch_pd_0008 +&#39;
+OLSa2 &lt;- feols(as.formula(paste(h_ols,fml2)), data, cluster=&quot;czone&quot;, weight=data$totvote_2000pres)
+OLSb2 &lt;- feols(as.formula(paste(hb_ols,fml2)), data, cluster=&quot;czone&quot;, weight=data$totvote_2000pres)
 
+OLSa3 &lt;- feols(as.formula(paste(h_ols,fml3)), data, cluster=&quot;czone&quot;, weight=data$totvote_2000pres)
+OLSb3 &lt;- feols(as.formula(paste(hb_ols,fml3)), data, cluster=&quot;czone&quot;, weight=data$totvote_2000pres)
 
-# You can insert the code to generate your answer here</code></pre>
+OLSa4 &lt;- feols(as.formula(paste(h_ols,fml4)), data, cluster=&quot;czone&quot;, weight=data$totvote_2000pres)
+OLSb4 &lt;- feols(as.formula(paste(hb_ols,fml4)), data, cluster=&quot;czone&quot;, weight=data$totvote_2000pres)
+
+OLSa5 &lt;- feols(as.formula(paste(h_ols,fml5)), data, cluster=&quot;czone&quot;, weight=data$totvote_2000pres)
+OLSb5 &lt;- feols(as.formula(paste(hb_ols,fml5)), data, cluster=&quot;czone&quot;, weight=data$totvote_2000pres)
+
+all_models &lt;- list(list(&quot;IV&quot;=iva1, &quot;OLS&quot;=OLSa1, &quot;IV&quot;=iva2, &quot;OLS&quot;=OLSa2, &quot;IV&quot;=iva3, &quot;OLS&quot;=OLSa3, &quot;IV&quot;=iva4, &quot;OLS&quot;=OLSa4, &quot;IV&quot;=iva5, &quot;OLS&quot;=OLSa5),
+                   list(&quot;IV&quot;=ivb1, &quot;OLS&quot;=OLSb1, &quot;IV&quot;=ivb2, &quot;OLS&quot;=OLSb2, &quot;IV&quot;=ivb3, &quot;OLS&quot;=OLSb3, &quot;IV&quot;=ivb4, &quot;OLS&quot;=OLSb4, &quot;IV&quot;=ivb5, &quot;OLS&quot;=OLSb5))
+
+all_models1 &lt;- list(list(&quot;IV1&quot;=iva1, &quot;OLS1&quot;=OLSa1, &quot;IV2&quot;=iva2, &quot;OLS2&quot;=OLSa2, &quot;IV3&quot;=iva3, &quot;OLS3&quot;=OLSa3, &quot;IV4&quot;=iva4, &quot;OLS4&quot;=OLSa4, &quot;IV5&quot;=iva5, &quot;OLS5&quot;=OLSa5),
+                   list(&quot;IV1&quot;=ivb1, &quot;OLS1&quot;=OLSb1, &quot;IV2&quot;=ivb2, &quot;OLS2&quot;=OLSb2, &quot;IV3&quot;=ivb3, &quot;OLS3&quot;=OLSb3, &quot;IV4&quot;=ivb4, &quot;OLS4&quot;=OLSb4, &quot;IV5&quot;=ivb5, &quot;OLS5&quot;=OLSb5))
+
+coef_map &lt;- c(&#39;fit_d_imp_usch_pd_0008&#39; = &quot;$\\Delta$CZ import penetration, 2000-2008&quot;,
+              &#39;d_imp_usch_pd_0008&#39; = &quot;$\\Delta$CZ import penetration, 2000-2008&quot;)
+
+msummary(all_models, stars = TRUE, coef_map = coef_map, gof_map = gof_map, shape=&quot;rcollapse&quot;,title=&quot;2SLS and OLS results on Exposure to Chinese Import Competition and Presidential Election Vote Shares, 2000–2008 and 2000–2016.&quot;) |&gt;
+  remove_column(12:27) |&gt;
+  add_header_above(c(&quot; &quot;=1, &quot;(1)&quot; = 2, &quot;(2)&quot; = 2 , &quot;(3)&quot; = 2, &quot;(4)&quot; = 2, &quot;(5)&quot; = 2))
+iva1_u &lt;- feols(formula(iva1),data, cluster=&quot;czone&quot;)
+ivb1_u &lt;- feols(formula(ivb1),data, cluster=&quot;czone&quot;)
+OLSa1_u &lt;- feols(formula(OLSa1),data, cluster=&quot;czone&quot;)
+OLSb1_u &lt;- feols(formula(OLSb1),data, cluster=&quot;czone&quot;)
+
+iva2_u &lt;- feols(formula(iva2),data, cluster=&quot;czone&quot;)
+ivb2_u &lt;- feols(formula(ivb2),data, cluster=&quot;czone&quot;)
+OLSa2_u &lt;- feols(formula(OLSa2),data, cluster=&quot;czone&quot;)
+OLSb2_u &lt;- feols(formula(OLSb2),data, cluster=&quot;czone&quot;)
+
+iva3_u &lt;- feols(formula(iva3),data, cluster=&quot;czone&quot;)
+ivb3_u &lt;- feols(formula(ivb3),data, cluster=&quot;czone&quot;)
+OLSa3_u &lt;- feols(formula(OLSa3),data, cluster=&quot;czone&quot;)
+OLSb3_u &lt;- feols(formula(OLSb3),data, cluster=&quot;czone&quot;)
+
+iva4_u &lt;- feols(formula(iva4),data, cluster=&quot;czone&quot;)
+ivb4_u &lt;- feols(formula(ivb4),data, cluster=&quot;czone&quot;)
+OLSa4_u &lt;- feols(formula(OLSa4),data, cluster=&quot;czone&quot;)
+OLSb4_u &lt;- feols(formula(OLSb4),data, cluster=&quot;czone&quot;)
+
+iva5_u &lt;- feols(formula(iva5),data, cluster=&quot;czone&quot;)
+ivb5_u &lt;- feols(formula(ivb5),data, cluster=&quot;czone&quot;)
+OLSa5_u &lt;- feols(formula(OLSa5),data, cluster=&quot;czone&quot;)
+OLSb5_u &lt;- feols(formula(OLSb5),data, cluster=&quot;czone&quot;)
+
+all_models_u &lt;- list(list(&quot;IV&quot;=iva1_u, &quot;OLS&quot;=OLSa1_u, &quot;IV&quot;=iva2_u, &quot;OLS&quot;=OLSa2_u, &quot;IV&quot;=iva3_u, &quot;OLS&quot;=OLSa3_u, &quot;IV&quot;=iva4_u, &quot;OLS&quot;=OLSa4_u, &quot;IV&quot;=iva5_u, &quot;OLS&quot;=OLSa5_u),
+                   list(&quot;IV&quot;=ivb1_u, &quot;OLS&quot;=OLSb1_u, &quot;IV&quot;=ivb2_u, &quot;OLS&quot;=OLSb2_u, &quot;IV&quot;=ivb3_u, &quot;OLS&quot;=OLSb3_u, &quot;IV&quot;=ivb4_u, &quot;OLS&quot;=OLSb4_u, &quot;IV&quot;=ivb5_u, &quot;OLS&quot;=OLSb5_u))
+
+msummary(all_models_u, stars = TRUE, coef_map = coef_map, gof_map = gof_map, shape=&quot;rcollapse&quot;,title=&quot;2SLS and OLS results on Exposure to Chinese Import Competition and Presidential Election Vote Shares, 2000–2008 and 2000–2016 (unweighted)&quot;) |&gt;
+  remove_column(12:27) |&gt;
+  add_header_above(c(&quot; &quot;=1, &quot;(1)&quot; = 2, &quot;(2)&quot; = 2 , &quot;(3)&quot; = 2, &quot;(4)&quot; = 2, &quot;(5)&quot; = 2))
+
+data_new &lt;- read_dta(&quot;populism_ps_data_additional_nodup.dta&quot;)
+data_new &lt;- inner_join(data, data_new, by=c(&quot;cty_fips&quot;, &quot;czone&quot;), keep=F)
+
+iva1_new &lt;- capture.output(formula(iva1)) |&gt; str_replace(&quot;d_imp_usch_pd_0008&quot;,&quot;d_imp_usch_pd&quot;) |&gt;
+  str_replace(&quot;d_imp_otch_lag_pd_0008&quot;,&quot;d_imp_otch_lag_pd_2010&quot;) |&gt; as.formula() |&gt;
+  feols(data=data_new, cluster=&quot;czone&quot;, weights = data_new$totvote_2000pres)
+ivb1_new &lt;- capture.output(formula(ivb1)) |&gt; str_replace(&quot;d_imp_usch_pd_0008&quot;,&quot;d_imp_usch_pd&quot;) |&gt;
+  str_replace(&quot;d_imp_otch_lag_pd_0008&quot;,&quot;d_imp_otch_lag_pd_2010&quot;) |&gt; as.formula() |&gt;
+  feols(data=data_new, cluster=&quot;czone&quot;, weights = data_new$totvote_2000pres)
+OLSa1_new &lt;- capture.output(formula(OLSa1))[1] |&gt; str_replace(&quot;d_imp_usch_pd_0008&quot;,&quot;d_imp_usch_pd&quot;) |&gt; as.formula() |&gt; feols(data=data_new, cluster=&quot;czone&quot;, weights = data_new$totvote_2000pres)
+OLSb1_new &lt;- capture.output(formula(OLSb1))[1] |&gt; str_replace(&quot;d_imp_usch_pd_0008&quot;,&quot;d_imp_usch_pd&quot;) |&gt; as.formula() |&gt; feols(data=data_new, cluster=&quot;czone&quot;, weights = data_new$totvote_2000pres)
+
+iva2_new &lt;- capture.output(formula(iva2)) |&gt; str_replace(&quot;d_imp_usch_pd_0008&quot;,&quot;d_imp_usch_pd&quot;) |&gt;
+  str_replace(&quot;d_imp_otch_lag_pd_0008&quot;,&quot;d_imp_otch_lag_pd_2010&quot;) |&gt; as.formula() |&gt;
+  feols(data=data_new, cluster=&quot;czone&quot;, weights = data_new$totvote_2000pres)
+ivb2_new &lt;- capture.output(formula(ivb2)) |&gt; str_replace(&quot;d_imp_usch_pd_0008&quot;,&quot;d_imp_usch_pd&quot;) |&gt;
+  str_replace(&quot;d_imp_otch_lag_pd_0008&quot;,&quot;d_imp_otch_lag_pd_2010&quot;) |&gt; as.formula() |&gt;
+  feols(data=data_new, cluster=&quot;czone&quot;, weights = data_new$totvote_2000pres)
+OLSa2_new &lt;- paste0(capture.output(formula(OLSa2))[1:2]) |&gt; str_replace(&quot;d_imp_usch_pd_0008&quot;,&quot;d_imp_usch_pd&quot;) |&gt; as.formula() |&gt; feols(data=data_new, cluster=&quot;czone&quot;, weights = data_new$totvote_2000pres)
+OLSb2_new &lt;- paste0(capture.output(formula(OLSb2))[1:2]) |&gt; str_replace(&quot;d_imp_usch_pd_0008&quot;,&quot;d_imp_usch_pd&quot;) |&gt; as.formula() |&gt; feols(data=data_new, cluster=&quot;czone&quot;, weights = data_new$totvote_2000pres)
+
+iva3_new &lt;- capture.output(formula(iva3)) |&gt; str_replace(&quot;d_imp_usch_pd_0008&quot;,&quot;d_imp_usch_pd&quot;) |&gt;
+  str_replace(&quot;d_imp_otch_lag_pd_0008&quot;,&quot;d_imp_otch_lag_pd_2010&quot;) |&gt; as.formula() |&gt;
+  feols(data=data_new, cluster=&quot;czone&quot;, weights = data_new$totvote_2000pres)
+ivb3_new &lt;- capture.output(formula(ivb3)) |&gt; str_replace(&quot;d_imp_usch_pd_0008&quot;,&quot;d_imp_usch_pd&quot;) |&gt;
+  str_replace(&quot;d_imp_otch_lag_pd_0008&quot;,&quot;d_imp_otch_lag_pd_2010&quot;) |&gt; as.formula() |&gt;
+  feols(data=data_new, cluster=&quot;czone&quot;, weights = data_new$totvote_2000pres)
+OLSa3_new &lt;- paste0(capture.output(formula(OLSa3))[1:4]) |&gt; str_replace(&quot;d_imp_usch_pd_0008&quot;,&quot;d_imp_usch_pd&quot;) |&gt; as.formula() |&gt; feols(data=data_new, cluster=&quot;czone&quot;, weights = data_new$totvote_2000pres)
+OLSb3_new &lt;- paste0(capture.output(formula(OLSb3))[1:4]) |&gt; str_replace(&quot;d_imp_usch_pd_0008&quot;,&quot;d_imp_usch_pd&quot;) |&gt; as.formula() |&gt; feols(data=data_new, cluster=&quot;czone&quot;, weights = data_new$totvote_2000pres)
+
+iva4_new &lt;- capture.output(formula(iva4)) |&gt; str_replace(&quot;d_imp_usch_pd_0008&quot;,&quot;d_imp_usch_pd&quot;) |&gt;
+  str_replace(&quot;d_imp_otch_lag_pd_0008&quot;,&quot;d_imp_otch_lag_pd_2010&quot;) |&gt; as.formula() |&gt;
+  feols(data=data_new, cluster=&quot;czone&quot;, weights = data_new$totvote_2000pres)
+ivb4_new &lt;- capture.output(formula(ivb4)) |&gt; str_replace(&quot;d_imp_usch_pd_0008&quot;,&quot;d_imp_usch_pd&quot;) |&gt;
+  str_replace(&quot;d_imp_otch_lag_pd_0008&quot;,&quot;d_imp_otch_lag_pd_2010&quot;) |&gt; as.formula() |&gt;
+  feols(data=data_new, cluster=&quot;czone&quot;, weights = data_new$totvote_2000pres)
+OLSa4_new &lt;- capture.output(formula(OLSa4))[1:8] |&gt; str_replace(&quot;d_imp_usch_pd_0008&quot;,&quot;d_imp_usch_pd&quot;) |&gt; as.formula() |&gt; feols(data=data_new, cluster=&quot;czone&quot;, weights = data_new$totvote_2000pres)
+OLSb4_new &lt;- capture.output(formula(OLSb4))[1:8] |&gt; str_replace(&quot;d_imp_usch_pd_0008&quot;,&quot;d_imp_usch_pd&quot;) |&gt; as.formula() |&gt; feols(data=data_new, cluster=&quot;czone&quot;, weights = data_new$totvote_2000pres)
+
+iva5_new &lt;- capture.output(formula(iva5)) |&gt; str_replace(&quot;d_imp_usch_pd_0008&quot;,&quot;d_imp_usch_pd&quot;) |&gt;
+  str_replace(&quot;d_imp_otch_lag_pd_0008&quot;,&quot;d_imp_otch_lag_pd_2010&quot;) |&gt; as.formula() |&gt;
+  feols(data=data_new, cluster=&quot;czone&quot;, weights = data_new$totvote_2000pres)
+ivb5_new &lt;- capture.output(formula(ivb5)) |&gt; str_replace(&quot;d_imp_usch_pd_0008&quot;,&quot;d_imp_usch_pd&quot;) |&gt;
+  str_replace(&quot;d_imp_otch_lag_pd_0008&quot;,&quot;d_imp_otch_lag_pd_2010&quot;) |&gt; as.formula() |&gt;
+  feols(data=data_new, cluster=&quot;czone&quot;, weights = data_new$totvote_2000pres)
+OLSa5_new &lt;- capture.output(formula(OLSa5))[1:9] |&gt; str_replace(&quot;d_imp_usch_pd_0008&quot;,&quot;d_imp_usch_pd&quot;) |&gt; as.formula() |&gt; feols(data=data_new, cluster=&quot;czone&quot;, weights = data_new$totvote_2000pres)
+OLSb5_new &lt;- capture.output(formula(OLSb5))[1:9] |&gt; str_replace(&quot;d_imp_usch_pd_0008&quot;,&quot;d_imp_usch_pd&quot;) |&gt; as.formula() |&gt; feols(data=data_new, cluster=&quot;czone&quot;, weights = data_new$totvote_2000pres)
+
+all_models_new &lt;- list(list(&quot;IV&quot;=ivb1, &quot;OLS&quot;=OLSb1, &quot;IV&quot;=ivb2, &quot;OLS&quot;=OLSb2, &quot;IV&quot;=ivb3, &quot;OLS&quot;=OLSb3, &quot;IV&quot;=ivb4, &quot;OLS&quot;=OLSb4, &quot;IV&quot;=ivb5, &quot;OLS&quot;=OLSb5),
+  list(&quot;IV&quot;=ivb1_new, &quot;OLS&quot;=OLSb1_new, &quot;IV&quot;=ivb2_new, &quot;OLS&quot;=OLSb2_new, &quot;IV&quot;=ivb3_new, &quot;OLS&quot;=OLSb3_new, &quot;IV&quot;=ivb4_new, &quot;OLS&quot;=OLSb4_new, &quot;IV&quot;=ivb5_new, &quot;OLS&quot;=OLSb5_new))
+
+coef_map &lt;- c(&#39;fit_d_imp_usch_pd_0008&#39; = &quot;$\\Delta$CZ import penetration, 2000-2008&quot;,
+              &#39;d_imp_usch_pd_0008&#39; = &quot;$\\Delta$CZ import penetration, 2000-2008&quot;,
+  &#39;fit_d_imp_usch_pd&#39; = &quot;$\\Delta$CZ import penetration, 2002-2010&quot;,
+              &#39;d_imp_usch_pd&#39; = &quot;$\\Delta$CZ import penetration, 2002-2010&quot;)
+
+msummary(all_models_new, stars = TRUE, coef_map = coef_map, gof_map = gof_map, shape=&quot;rcollapse&quot;, title=&quot;2SLS and OLS results on Exposure to Chinese Import Competition and 2016 Presidential Election Vote Shares (weighted)&quot;) |&gt;
+  remove_column(12:27) |&gt;
+  add_header_above(c(&quot; &quot;=1, &quot;(1)&quot; = 2, &quot;(2)&quot; = 2 , &quot;(3)&quot; = 2, &quot;(4)&quot; = 2, &quot;(5)&quot; = 2))
+data_cz &lt;- data |&gt;
+  group_by(czone) |&gt;
+  summarise(across(shnr_pres2000:shnr_pres2016_2000, ~ weighted.mean(.x, w=totvote_2000pres)))
+
+iva1_cz &lt;- feols(formula(iva1), data=data_cz, weights=data_cz$totvote_2000pres, vcov=&quot;HC1&quot;)
+ivb1_cz &lt;- feols(formula(ivb1), data=data_cz, weights=data_cz$totvote_2000pres, vcov=&quot;HC1&quot;)
+
+iva2_cz &lt;- feols(formula(iva2), data=data_cz, weights=data_cz$totvote_2000pres, vcov=&quot;HC1&quot;)
+ivb2_cz &lt;- feols(formula(ivb2), data=data_cz, weights=data_cz$totvote_2000pres, vcov=&quot;HC1&quot;)
+
+iva3_cz &lt;- feols(formula(iva3), data=data_cz, weights=data_cz$totvote_2000pres, vcov=&quot;HC1&quot;)
+ivb3_cz &lt;- feols(formula(ivb3), data=data_cz, weights=data_cz$totvote_2000pres, vcov=&quot;HC1&quot;)
+
+iva4_cz &lt;- feols(formula(iva4), data=data_cz, weights=data_cz$totvote_2000pres, vcov=&quot;HC1&quot;)
+ivb4_cz &lt;- feols(formula(ivb4), data=data_cz, weights=data_cz$totvote_2000pres, vcov=&quot;HC1&quot;)
+
+iva5_cz &lt;- feols(formula(iva5), data=data_cz, weights=data_cz$totvote_2000pres, vcov=&quot;HC1&quot;)
+ivb5_cz &lt;- feols(formula(ivb5), data=data_cz, weights=data_cz$totvote_2000pres, vcov=&quot;HC1&quot;)
+
+all_models_cz &lt;- list(list(&quot;County&quot;=iva1,&quot;CZ&quot;=iva1_cz, &quot;County&quot;=iva2,&quot;CZ&quot;=iva2_cz, &quot;County&quot;=iva3,&quot;CZ&quot;=iva3_cz, &quot;County&quot;=iva4,&quot;CZ&quot;=iva4_cz, &quot;County&quot;=iva5,&quot;CZ&quot;=iva5_cz),
+  list(&quot;County&quot;=ivb1,&quot;CZ&quot;=ivb1_cz, &quot;County&quot;=ivb2,&quot;CZ&quot;=ivb2_cz, &quot;County&quot;=ivb3,&quot;CZ&quot;=ivb3_cz, &quot;County&quot;=ivb4,&quot;CZ&quot;=ivb4_cz, &quot;County&quot;=ivb5,&quot;CZ&quot;=ivb5_cz))
+
+msummary(all_models_cz, stars = TRUE, coef_map = coef_map, gof_map = gof_map, shape=&quot;rcollapse&quot;, title=&quot;2SLS and OLS results on Exposure to Chinese Import Competition and Presidential Election Vote Shares, 2000–2008 and 2000–2016 at county and CZ levels&quot;) |&gt;
+  remove_column(12:27) |&gt;
+  add_header_above(c(&quot; &quot;=1, &quot;(1)&quot; = 2, &quot;(2)&quot; = 2 , &quot;(3)&quot; = 2, &quot;(4)&quot; = 2, &quot;(5)&quot; = 2))</code></pre>
 </div>
 <div class="footnotes footnotes-end-of-document">
 <hr />

@@ -16,7 +16,7 @@ knitr::opts_chunk$set(echo = FALSE,
 #dirname(rstudioapi::getSourceEditorContext()$path)
 setwd("D:/OneDrive - London School of Economics/Desktop/lse assignments/GV482/ps5") #change to your own directory
 
-need <- c('tidyverse','haven','modelsummary',"TAM","fixest","estimatr") # list packages
+need <- c('tidyverse','haven','modelsummary',"TAM","fixest","estimatr","kableExtra") # list packages
 have <- need %in% rownames(installed.packages()) # checks packages you have
 if(any(!have)) install.packages(need[!have]) # install missing packages
 invisible(lapply(need, library, character.only=T))
@@ -172,7 +172,7 @@ fs2 <- feols(d_imp_usch_pd_0008 ~ d_imp_otch_lag_pd_0008+l_shind_manuf_cbp+l_sh_
 fml3 <- paste(c("d_imp_usch_pd_0008 ~ d_imp_otch_lag_pd_0008+l_shind_manuf_cbp+l_sh_routine33+l_task_outsource", paste(grep("reg_",names(data),value=T), collapse = " + ")), collapse = " + ")
 fs3 <- feols(as.formula(fml3), data, cluster="czone", weight=data$totvote_2000pres)
 
-fml4 <- paste(c(fml3, paste(grep("l_sh_pop_",names(data),value=T), collapse = " + ")), collapse = " + ")
+fml4 <- paste(c(fml3, paste(grep("l_sh_",names(data),value=T), collapse = " + ")), collapse = " + ")
 fs4 <- feols(as.formula(fml4), data, cluster="czone", weight=data$totvote_2000pres)
 
 fml5 <- paste0(fml4, " + shnr_pres1992 + shnr_pres1996")
@@ -181,13 +181,7 @@ fs5 <- feols(as.formula(fml5), data, cluster="czone", weight=data$totvote_2000pr
 fs <- list(fs1, fs2, fs3, fs4, fs5)
 coef_map <- c('d_imp_otch_lag_pd_0008' = "Instrument")
 
-glance_custom.fixest <- function(x, ...) {
-  data.frame(
-    "F" = round(fitstat(x,"F")$f$stat,1)
-  )}
-
-gof_map <- list(list("raw" = "F", "clean" = "$F$", "fmt" = 1),
-                list("raw" = "nobs", "clean" = "$N$", "fmt" = 0),
+gof_map <- list(list("raw" = "nobs", "clean" = "$N$", "fmt" = 0),
                 list("raw" = "r.squared", "clean" = "$R^2$", "fmt" = 3),
                 list("raw" = "adj.r.squared", "clean" = "$R^2$ Adj.", "fmt" = 3))
 
@@ -195,7 +189,7 @@ msummary(fs, stars = TRUE, coef_map = coef_map, gof_map = gof_map,
          title="First stage regressions of the Chinese import penetration in the US on the instrument (Chinese importations in other Western countries), clustered by commuter zone and weighted by the total votes in 2000.")
 ```
 
-[The first stage results are displayed in Table \@ref(tab:q6). ]{style="color: blue;"}
+[The first stage results are displayed in Table \@ref(tab:q6). It can be seen that, once the control variables are added in columns (2) to (6), the coefficient stabilises at 0.38-0.39. Therefore, the results with controls are more reliable. Moreover, the F-stats are all over 60. This suggests it is likely that the first-stage relationship exists.]{style="color: blue;"}
 
 **Q7:** Replicate now Table 5 (you do not need to report the method and F-stat). The authors substantively interpret their results as such:
 
@@ -205,23 +199,90 @@ Based on your answers to questions **Q5** and **Q6** and your knowledge of instr
 
 ***Answer:***
 
-```{r question_7}
+```{r q7}
+iva1 <- feols(shnr_pres2008_2000 ~ 1|d_imp_usch_pd_0008~d_imp_otch_lag_pd_0008, data, cluster="czone", weight=data$totvote_2000pres)
+ivb1 <- feols(shnr_pres2016_2000 ~ 1|d_imp_usch_pd_0008~d_imp_otch_lag_pd_0008, data, cluster="czone", weight=data$totvote_2000pres)
 
-# You can insert the code to generate your answer here
+h <- "shnr_pres2008_2000 ~ "
+hb <- "shnr_pres2016_2000 ~ "
+t <- "|d_imp_usch_pd_0008~d_imp_otch_lag_pd_0008"
 
+fml2 <- "l_shind_manuf_cbp+l_sh_routine33+l_task_outsource"
+iva2 <- feols(as.formula(paste(h,fml2,t)), data, cluster="czone", weight=data$totvote_2000pres)
+ivb2 <- feols(as.formula(paste(hb,fml2,t)), data, cluster="czone", weight=data$totvote_2000pres)
+
+fml3 <- paste(c(fml2, paste(grep("reg_",names(data),value=T), collapse = " + ")), collapse = " + ")
+iva3 <- feols(as.formula(paste(h,fml3,t)), data, cluster="czone", weight=data$totvote_2000pres)
+ivb3 <- feols(as.formula(paste(hb,fml3,t)), data, cluster="czone", weight=data$totvote_2000pres)
+  
+fml4 <- paste(c(fml3, paste(grep("l_sh_",names(data),value=T), collapse = " + ")), collapse = " + ")
+iva4 <- feols(as.formula(paste(h,fml4,t)), data, cluster="czone", weight=data$totvote_2000pres)
+ivb4 <- feols(as.formula(paste(hb,fml4,t)), data, cluster="czone", weight=data$totvote_2000pres)
+
+fml5 <- paste0(fml4, " + shnr_pres1992 + shnr_pres1996")
+iva5 <- feols(as.formula(paste(h,fml5,t)), data, cluster="czone", weight=data$totvote_2000pres)
+ivb5 <- feols(as.formula(paste(hb,fml5,t)), data, cluster="czone", weight=data$totvote_2000pres)
+
+iv_models <- list(list(iva1, iva2, iva3, iva4, iva5),list(ivb1, ivb2, ivb3, ivb4, ivb5))
+coef_map <- c('fit_d_imp_usch_pd_0008' = "$\\Delta$CZ import penetration, 2000-2008")
+
+glance_custom.fixest <- function(x, ...) {
+  data.frame(
+    industry = ifelse(any(grepl("l_shind_manuf_cbp", x$fml[[3]])), "Yes", " "),
+    census = ifelse(any(grepl("reg_", x$fml[[3]])), "Yes", " "),
+    demographic = ifelse(any(grepl("l_sh_pop_", x$fml[[3]])), "Yes", " "),
+    electoral = ifelse(any(grepl("shnr_pres1992", x$fml[[3]])), "Yes", " ")
+  )}
+gof_map <- list(list("raw" = "industry", "clean" = "2000 ind/occ controls", "fmt" = NULL),
+                list("raw" = "census", "clean" = "Census division dummies", "fmt" = NULL),
+                list("raw" = "demographic", "clean" = "2000 demography controls", "fmt" = NULL),
+                list("raw" = "electoral", "clean" = "1992/1996 election controls", "fmt" = NULL))
+msummary(iv_models, stars = TRUE, coef_map = coef_map, gof_map = gof_map, shape="rcollapse",
+         title="Replication of 2SLS results on Exposure to Chinese Import Competition and Presidential Election Vote Shares, 2000–2008
+and 2000–2016.")
 ```
+
+[The second stage results are replicated in Table \@ref(tab:q7). The authors' way of interpreting the results is not reasonable. The coefficient of 1.59 merely represents the *local* average treatment effect (LATE) that is attributable to the instrument and there is no guarantee that other variations in the independent variable ($\Delta$CZ import penetration) would exert the same size of influence. Moreover, according to the first stage (Table \@ref(tab:q6)), an interquartile range increase in import penetration (0.568) requires $\frac{0.568}{0.384\times0.699}=2.116$ standard deviations' increase in the instrument. This is very unrealistic and unreasonable.]{style="color: blue;"}
 
 The authors make several choices along the way to produce the results we just commented. Some choices may be perfectly justified, others may be a bit more perplexing. In any case, we may want to check their consequences. This is our goal in the next questions of this problem set.
 
 **Q8:** The first choice the authors made is to use an instrumental variable approach rather than a simple OLS method. Reproduce Table 5 in their paper, but with simple OLS rather than IV. Are the difference between IV and OLS results consistent with the authors' justification for using an IV approach?
 
-```{r question_8}
+***Answer:***
 
-# You can insert the code to generate your answer here
+```{r q8}
+OLSa1 <- feols(shnr_pres2008_2000 ~ d_imp_usch_pd_0008, data, cluster="czone", weight=data$totvote_2000pres)
+OLSb1 <- feols(shnr_pres2016_2000 ~ d_imp_usch_pd_0008, data, cluster="czone", weight=data$totvote_2000pres)
 
+h_ols <- 'shnr_pres2008_2000 ~ d_imp_usch_pd_0008 +'
+hb_ols <- 'shnr_pres2016_2000 ~ d_imp_usch_pd_0008 +'
+OLSa2 <- feols(as.formula(paste(h_ols,fml2)), data, cluster="czone", weight=data$totvote_2000pres)
+OLSb2 <- feols(as.formula(paste(hb_ols,fml2)), data, cluster="czone", weight=data$totvote_2000pres)
+
+OLSa3 <- feols(as.formula(paste(h_ols,fml3)), data, cluster="czone", weight=data$totvote_2000pres)
+OLSb3 <- feols(as.formula(paste(hb_ols,fml3)), data, cluster="czone", weight=data$totvote_2000pres)
+
+OLSa4 <- feols(as.formula(paste(h_ols,fml4)), data, cluster="czone", weight=data$totvote_2000pres)
+OLSb4 <- feols(as.formula(paste(hb_ols,fml4)), data, cluster="czone", weight=data$totvote_2000pres)
+
+OLSa5 <- feols(as.formula(paste(h_ols,fml5)), data, cluster="czone", weight=data$totvote_2000pres)
+OLSb5 <- feols(as.formula(paste(hb_ols,fml5)), data, cluster="czone", weight=data$totvote_2000pres)
+
+all_models <- list(list("IV"=iva1, "OLS"=OLSa1, "IV"=iva2, "OLS"=OLSa2, "IV"=iva3, "OLS"=OLSa3, "IV"=iva4, "OLS"=OLSa4, "IV"=iva5, "OLS"=OLSa5),
+                   list("IV"=ivb1, "OLS"=OLSb1, "IV"=ivb2, "OLS"=OLSb2, "IV"=ivb3, "OLS"=OLSb3, "IV"=ivb4, "OLS"=OLSb4, "IV"=ivb5, "OLS"=OLSb5))
+
+all_models1 <- list(list("IV1"=iva1, "OLS1"=OLSa1, "IV2"=iva2, "OLS2"=OLSa2, "IV3"=iva3, "OLS3"=OLSa3, "IV4"=iva4, "OLS4"=OLSa4, "IV5"=iva5, "OLS5"=OLSa5),
+                   list("IV1"=ivb1, "OLS1"=OLSb1, "IV2"=ivb2, "OLS2"=OLSb2, "IV3"=ivb3, "OLS3"=OLSb3, "IV4"=ivb4, "OLS4"=OLSb4, "IV5"=ivb5, "OLS5"=OLSb5))
+
+coef_map <- c('fit_d_imp_usch_pd_0008' = "$\\Delta$CZ import penetration, 2000-2008",
+              'd_imp_usch_pd_0008' = "$\\Delta$CZ import penetration, 2000-2008")
+
+msummary(all_models, stars = TRUE, coef_map = coef_map, gof_map = gof_map, shape="rcollapse",title="2SLS and OLS results on Exposure to Chinese Import Competition and Presidential Election Vote Shares, 2000–2008 and 2000–2016.") |>
+  remove_column(12:27) |>
+  add_header_above(c(" "=1, "(1)" = 2, "(2)" = 2 , "(3)" = 2, "(4)" = 2, "(5)" = 2))
 ```
 
-***Answer:***
+[The IV results are juxtaposed with OLS results in Table \@ref(tab:q8). It is obvious that that the OLS results are different from the IV results. In general, the OLS estimates are lower than the IV estimates, which aligns with our expectation of a downward bias. Therefore, the IV and OLS results are consistent with the authors' justification for using an IV approach.]{style="color: blue;"}
 
 Another important choice is to use weighted regressions. Now, there are reasons for this. Absent weights, small counties would be as important as big counties, which can create some issues. But the choice of total votes in 2000 may not be innocuous. By doing so, everything else equals, the authors may put more weight on the most politically active counties. That is, the authors may focus on the counties that react the most to the shock, generating a possible upward bias.
 
@@ -229,11 +290,42 @@ Another important choice is to use weighted regressions. Now, there are reasons 
 
 ***Answer:***
 
-```{r question_9}
+```{r q9}
+iva1_u <- feols(formula(iva1),data, cluster="czone")
+ivb1_u <- feols(formula(ivb1),data, cluster="czone")
+OLSa1_u <- feols(formula(OLSa1),data, cluster="czone")
+OLSb1_u <- feols(formula(OLSb1),data, cluster="czone")
 
-# You can insert the code to generate your answer here
+iva2_u <- feols(formula(iva2),data, cluster="czone")
+ivb2_u <- feols(formula(ivb2),data, cluster="czone")
+OLSa2_u <- feols(formula(OLSa2),data, cluster="czone")
+OLSb2_u <- feols(formula(OLSb2),data, cluster="czone")
+
+iva3_u <- feols(formula(iva3),data, cluster="czone")
+ivb3_u <- feols(formula(ivb3),data, cluster="czone")
+OLSa3_u <- feols(formula(OLSa3),data, cluster="czone")
+OLSb3_u <- feols(formula(OLSb3),data, cluster="czone")
+
+iva4_u <- feols(formula(iva4),data, cluster="czone")
+ivb4_u <- feols(formula(ivb4),data, cluster="czone")
+OLSa4_u <- feols(formula(OLSa4),data, cluster="czone")
+OLSb4_u <- feols(formula(OLSb4),data, cluster="czone")
+
+iva5_u <- feols(formula(iva5),data, cluster="czone")
+ivb5_u <- feols(formula(ivb5),data, cluster="czone")
+OLSa5_u <- feols(formula(OLSa5),data, cluster="czone")
+OLSb5_u <- feols(formula(OLSb5),data, cluster="czone")
+
+all_models_u <- list(list("IV"=iva1_u, "OLS"=OLSa1_u, "IV"=iva2_u, "OLS"=OLSa2_u, "IV"=iva3_u, "OLS"=OLSa3_u, "IV"=iva4_u, "OLS"=OLSa4_u, "IV"=iva5_u, "OLS"=OLSa5_u),
+                   list("IV"=ivb1_u, "OLS"=OLSb1_u, "IV"=ivb2_u, "OLS"=OLSb2_u, "IV"=ivb3_u, "OLS"=OLSb3_u, "IV"=ivb4_u, "OLS"=OLSb4_u, "IV"=ivb5_u, "OLS"=OLSb5_u))
+
+msummary(all_models_u, stars = TRUE, coef_map = coef_map, gof_map = gof_map, shape="rcollapse",title="2SLS and OLS results on Exposure to Chinese Import Competition and Presidential Election Vote Shares, 2000–2008 and 2000–2016 (unweighted)") |>
+  remove_column(12:27) |>
+  add_header_above(c(" "=1, "(1)" = 2, "(2)" = 2 , "(3)" = 2, "(4)" = 2, "(5)" = 2))
 
 ```
+
+[The unweighted IV and OLS results are shown in Table \@ref(tab:q9). In general, the coefficients are smaller, with some previously significant coefficients becoming statistically insignificant. This means that our worry about an upward bias is valid. It is likely that the more politically active counties are given more weight and their reactions are amplified.]{style="color: blue;"}
 
 A third choice to note is that the authors use the change in Chinese importation penetration from 2000 to 2008 for both the 2008 and 2016 elections. This means there is quite a bit of a delay between the shock (measured over 2000-2008) and the consequences measured in 2016. In other parts of the paper, the authors look at penetration change from 2002 to 2010.3 This variable is closer in time from 2016 making it important to check the robustness of the results to this alternative measure of the China shock.
 
@@ -241,13 +333,71 @@ A third choice to note is that the authors use the change in Chinese importation
 
 To find the Chinese importation penetration increases over the 2002-2010 period, use the database `populism_ps_data_additional.dta` (available on Moodle) and merge it with the main database you have been using. To do so, you need to use the command `inner_join()` (since the database you use is at the czone level) using `cty_fips` as merging variable. Drop the three unmatched observations. The new instrument you need to use is `d_imp_usch_pd`.
 
-```{r question_10}
+***Answer:***
 
-# You can insert the code to generate your answer here
+```{r q10}
+data_new <- read_dta("populism_ps_data_additional_nodup.dta")
+data_new <- inner_join(data, data_new, by=c("cty_fips", "czone"), keep=F)
 
+iva1_new <- capture.output(formula(iva1)) |> str_replace("d_imp_usch_pd_0008","d_imp_usch_pd") |>
+  str_replace("d_imp_otch_lag_pd_0008","d_imp_otch_lag_pd_2010") |> as.formula() |>
+  feols(data=data_new, cluster="czone", weights = data_new$totvote_2000pres)
+ivb1_new <- capture.output(formula(ivb1)) |> str_replace("d_imp_usch_pd_0008","d_imp_usch_pd") |>
+  str_replace("d_imp_otch_lag_pd_0008","d_imp_otch_lag_pd_2010") |> as.formula() |>
+  feols(data=data_new, cluster="czone", weights = data_new$totvote_2000pres)
+OLSa1_new <- capture.output(formula(OLSa1))[1] |> str_replace("d_imp_usch_pd_0008","d_imp_usch_pd") |> as.formula() |> feols(data=data_new, cluster="czone", weights = data_new$totvote_2000pres)
+OLSb1_new <- capture.output(formula(OLSb1))[1] |> str_replace("d_imp_usch_pd_0008","d_imp_usch_pd") |> as.formula() |> feols(data=data_new, cluster="czone", weights = data_new$totvote_2000pres)
+
+iva2_new <- capture.output(formula(iva2)) |> str_replace("d_imp_usch_pd_0008","d_imp_usch_pd") |>
+  str_replace("d_imp_otch_lag_pd_0008","d_imp_otch_lag_pd_2010") |> as.formula() |>
+  feols(data=data_new, cluster="czone", weights = data_new$totvote_2000pres)
+ivb2_new <- capture.output(formula(ivb2)) |> str_replace("d_imp_usch_pd_0008","d_imp_usch_pd") |>
+  str_replace("d_imp_otch_lag_pd_0008","d_imp_otch_lag_pd_2010") |> as.formula() |>
+  feols(data=data_new, cluster="czone", weights = data_new$totvote_2000pres)
+OLSa2_new <- paste0(capture.output(formula(OLSa2))[1:2]) |> str_replace("d_imp_usch_pd_0008","d_imp_usch_pd") |> as.formula() |> feols(data=data_new, cluster="czone", weights = data_new$totvote_2000pres)
+OLSb2_new <- paste0(capture.output(formula(OLSb2))[1:2]) |> str_replace("d_imp_usch_pd_0008","d_imp_usch_pd") |> as.formula() |> feols(data=data_new, cluster="czone", weights = data_new$totvote_2000pres)
+
+iva3_new <- capture.output(formula(iva3)) |> str_replace("d_imp_usch_pd_0008","d_imp_usch_pd") |>
+  str_replace("d_imp_otch_lag_pd_0008","d_imp_otch_lag_pd_2010") |> as.formula() |>
+  feols(data=data_new, cluster="czone", weights = data_new$totvote_2000pres)
+ivb3_new <- capture.output(formula(ivb3)) |> str_replace("d_imp_usch_pd_0008","d_imp_usch_pd") |>
+  str_replace("d_imp_otch_lag_pd_0008","d_imp_otch_lag_pd_2010") |> as.formula() |>
+  feols(data=data_new, cluster="czone", weights = data_new$totvote_2000pres)
+OLSa3_new <- paste0(capture.output(formula(OLSa3))[1:4]) |> str_replace("d_imp_usch_pd_0008","d_imp_usch_pd") |> as.formula() |> feols(data=data_new, cluster="czone", weights = data_new$totvote_2000pres)
+OLSb3_new <- paste0(capture.output(formula(OLSb3))[1:4]) |> str_replace("d_imp_usch_pd_0008","d_imp_usch_pd") |> as.formula() |> feols(data=data_new, cluster="czone", weights = data_new$totvote_2000pres)
+
+iva4_new <- capture.output(formula(iva4)) |> str_replace("d_imp_usch_pd_0008","d_imp_usch_pd") |>
+  str_replace("d_imp_otch_lag_pd_0008","d_imp_otch_lag_pd_2010") |> as.formula() |>
+  feols(data=data_new, cluster="czone", weights = data_new$totvote_2000pres)
+ivb4_new <- capture.output(formula(ivb4)) |> str_replace("d_imp_usch_pd_0008","d_imp_usch_pd") |>
+  str_replace("d_imp_otch_lag_pd_0008","d_imp_otch_lag_pd_2010") |> as.formula() |>
+  feols(data=data_new, cluster="czone", weights = data_new$totvote_2000pres)
+OLSa4_new <- capture.output(formula(OLSa4))[1:8] |> str_replace("d_imp_usch_pd_0008","d_imp_usch_pd") |> as.formula() |> feols(data=data_new, cluster="czone", weights = data_new$totvote_2000pres)
+OLSb4_new <- capture.output(formula(OLSb4))[1:8] |> str_replace("d_imp_usch_pd_0008","d_imp_usch_pd") |> as.formula() |> feols(data=data_new, cluster="czone", weights = data_new$totvote_2000pres)
+
+iva5_new <- capture.output(formula(iva5)) |> str_replace("d_imp_usch_pd_0008","d_imp_usch_pd") |>
+  str_replace("d_imp_otch_lag_pd_0008","d_imp_otch_lag_pd_2010") |> as.formula() |>
+  feols(data=data_new, cluster="czone", weights = data_new$totvote_2000pres)
+ivb5_new <- capture.output(formula(ivb5)) |> str_replace("d_imp_usch_pd_0008","d_imp_usch_pd") |>
+  str_replace("d_imp_otch_lag_pd_0008","d_imp_otch_lag_pd_2010") |> as.formula() |>
+  feols(data=data_new, cluster="czone", weights = data_new$totvote_2000pres)
+OLSa5_new <- capture.output(formula(OLSa5))[1:9] |> str_replace("d_imp_usch_pd_0008","d_imp_usch_pd") |> as.formula() |> feols(data=data_new, cluster="czone", weights = data_new$totvote_2000pres)
+OLSb5_new <- capture.output(formula(OLSb5))[1:9] |> str_replace("d_imp_usch_pd_0008","d_imp_usch_pd") |> as.formula() |> feols(data=data_new, cluster="czone", weights = data_new$totvote_2000pres)
+
+all_models_new <- list(list("IV"=ivb1, "OLS"=OLSb1, "IV"=ivb2, "OLS"=OLSb2, "IV"=ivb3, "OLS"=OLSb3, "IV"=ivb4, "OLS"=OLSb4, "IV"=ivb5, "OLS"=OLSb5),
+  list("IV"=ivb1_new, "OLS"=OLSb1_new, "IV"=ivb2_new, "OLS"=OLSb2_new, "IV"=ivb3_new, "OLS"=OLSb3_new, "IV"=ivb4_new, "OLS"=OLSb4_new, "IV"=ivb5_new, "OLS"=OLSb5_new))
+
+coef_map <- c('fit_d_imp_usch_pd_0008' = "$\\Delta$CZ import penetration, 2000-2008",
+              'd_imp_usch_pd_0008' = "$\\Delta$CZ import penetration, 2000-2008",
+  'fit_d_imp_usch_pd' = "$\\Delta$CZ import penetration, 2002-2010",
+              'd_imp_usch_pd' = "$\\Delta$CZ import penetration, 2002-2010")
+
+msummary(all_models_new, stars = TRUE, coef_map = coef_map, gof_map = gof_map, shape="rcollapse", title="2SLS and OLS results on Exposure to Chinese Import Competition and 2016 Presidential Election Vote Shares (weighted)") |>
+  remove_column(12:27) |>
+  add_header_above(c(" "=1, "(1)" = 2, "(2)" = 2 , "(3)" = 2, "(4)" = 2, "(5)" = 2))
 ```
 
-***Answer:***
+[The IV and OLS results using both 2000-2008 and 2002-2010 data are shown in Table \@ref(tab:q10). Coefficients are largely similar, except for (3). However, previously significant results have become insignificant due to inflated standard errors. This suggests that there may be more uncertainty than the authors' original results, and the results are not very robust.]{style="color: blue;"}
 
 One other questionable choice is to perform the analysis at the county level, whereas the treatment (the China shock) is measured at the commuter zone level.
 
@@ -255,13 +405,37 @@ One other questionable choice is to perform the analysis at the county level, wh
 
 To answer this question, you will have to use the `summarise` commands as you did for question 5. When you collapse the data, weight them by the weights the authors use. Run your IV estimations without clustering.
 
-```{r question_11}
+***Answer:***
 
-# You can insert the code to generate your answer here
+```{r q11}
+data_cz <- data |>
+  group_by(czone) |>
+  summarise(across(shnr_pres2000:shnr_pres2016_2000, ~ weighted.mean(.x, w=totvote_2000pres)))
 
+iva1_cz <- feols(formula(iva1), data=data_cz, weights=data_cz$totvote_2000pres, vcov="HC1")
+ivb1_cz <- feols(formula(ivb1), data=data_cz, weights=data_cz$totvote_2000pres, vcov="HC1")
+
+iva2_cz <- feols(formula(iva2), data=data_cz, weights=data_cz$totvote_2000pres, vcov="HC1")
+ivb2_cz <- feols(formula(ivb2), data=data_cz, weights=data_cz$totvote_2000pres, vcov="HC1")
+
+iva3_cz <- feols(formula(iva3), data=data_cz, weights=data_cz$totvote_2000pres, vcov="HC1")
+ivb3_cz <- feols(formula(ivb3), data=data_cz, weights=data_cz$totvote_2000pres, vcov="HC1")
+
+iva4_cz <- feols(formula(iva4), data=data_cz, weights=data_cz$totvote_2000pres, vcov="HC1")
+ivb4_cz <- feols(formula(ivb4), data=data_cz, weights=data_cz$totvote_2000pres, vcov="HC1")
+
+iva5_cz <- feols(formula(iva5), data=data_cz, weights=data_cz$totvote_2000pres, vcov="HC1")
+ivb5_cz <- feols(formula(ivb5), data=data_cz, weights=data_cz$totvote_2000pres, vcov="HC1")
+
+all_models_cz <- list(list("County"=iva1,"CZ"=iva1_cz, "County"=iva2,"CZ"=iva2_cz, "County"=iva3,"CZ"=iva3_cz, "County"=iva4,"CZ"=iva4_cz, "County"=iva5,"CZ"=iva5_cz),
+  list("County"=ivb1,"CZ"=ivb1_cz, "County"=ivb2,"CZ"=ivb2_cz, "County"=ivb3,"CZ"=ivb3_cz, "County"=ivb4,"CZ"=ivb4_cz, "County"=ivb5,"CZ"=ivb5_cz))
+
+msummary(all_models_cz, stars = TRUE, coef_map = coef_map, gof_map = gof_map, shape="rcollapse", title="2SLS and OLS results on Exposure to Chinese Import Competition and Presidential Election Vote Shares, 2000–2008 and 2000–2016 at county and CZ levels") |>
+  remove_column(12:27) |>
+  add_header_above(c(" "=1, "(1)" = 2, "(2)" = 2 , "(3)" = 2, "(4)" = 2, "(5)" = 2))
 ```
 
-***Answer:***
+[The county-level and CZ-level results are juxtaposed in Table \@ref(tab:q11). It can be seen that the coefficients for 2008 election results have been lower, but those for 2016 election results remain largely the same after collapsing. This suggests that the latter results do not depend on the level of data (county or CZ), while the former do. The authors' choice of county-level data is appropriate since it uses more information.]{style="color: blue;"}
 
 **Q12:** The authors describe their paper as finding
 
@@ -270,6 +444,8 @@ To answer this question, you will have to use the `summarise` commands as you di
 Based on your re-analysis of the presidential results, do you agree with their conclusion?
 
 ***Answer:***
+
+[I do not agree with their conclusion. Their 2008 results are not robust to unweighted data or CZ-level reanalysis. The authors therefore only provide weak evidence for their claim. Even the realignment at the time of 2016 election is questionable as the results become uncertain when one uses later import penetration data (2002-2010).]{style="color: blue;"}
 
 ## Appendix: All code in this assignment
 
