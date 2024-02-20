@@ -447,7 +447,7 @@ Based on your re-analysis of the presidential results, do you agree with their c
 
 [I do not agree with their conclusion. Their 2008 results are not robust to unweighted data or CZ-level reanalysis. The authors therefore only provide weak evidence for their claim. Even the realignment at the time of 2016 election is questionable as the results become uncertain when one uses later import penetration data (2002-2010).]{style="color: blue;"}
 
-## Appendix: All code in this assignment
+# Appendix: All code in this assignment
 
 ```{r ref.label=knitr::all_labels(), echo=TRUE, eval=FALSE}
 

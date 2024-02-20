@@ -1,0 +1,686 @@
+---
+title: 'Populism'
+subtitle: "Problem Set - Empirics"
+author: "GV482^[Questions? Email [l.bosshart@lse.ac.uk](mailto:l.bosshart@lse.ac.uk).<br>R adaption of Stephane Wolton's STATA problem set implemented by [Felix Wortmann Callejón](https://www.wortmanncallejon.de).]"
+date: ""
+output:
+  bookdown::html_document2: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+
+rm(list = ls())
+
+```
+
+
+In the lecture, we have described different possible explanations for the growing division between the elite and the commoners. We have discussed rapidly the effect of cultural shocks (and you will see more of it in your empirical exercise). We have spent quite a bit of time discussing the role of immigration. We went very quickly over the economic factors. This was, as pointed out in the lecture, on purpose since this empirical problem set will dig deeper into one of the most mentioned culprit behind the populist wave: globalization.
+
+To investigate the effect of globalization, we will look at one of the many papers on the subject: "Importing political polarization? The electoral consequences of rising trade exposure." by Autor, Dorn, Hanson, and Majlesi just published in the American Economic Review (vol. 110, no. 10: 3139-83). The paper focuses on one recent and prominent change in trade: the rise of China. Since its entry into the World Trade Organization, China has become the manufacture of the world. This has had dramatic impact on manufacturing in the United States as shown by Autor, Dorn, and Hanson in "The China Syndrome: Local Labor Market Effects of Import Competition in the United States." (American Economic Review 103 (6): 2121{68, 2013). The next logical step is to look at the political consequences of this trade shock, and this is exactly what the authors do in the paper we will study.
+
+The paper is very rich, and you are strongly encouraged to read it (it is on the Moodle website of the course). In it, the authors look at the effect of the China shock on: the viewership patterns of news channels (right-wing Fox News, left-leaning CNN, left-wing MSNBC), the polarization of legislators (measured in term of whom candidates receive money from as well as in term of the ideology of elected representatives), Congressional elections, and finally on presidential elections.
+
+We will concentrate on this last part of the paper (you may want to try to replicate some of the other parts as well, it is always a good exercise). There are two reasons for this. First, it allows us to work at the level of counties which is an administrative level for which we have a large set of data. Second, we can learn more about the biggest prize - the Presidency -, which obviously means to investigate the most shocking result of all: Trump's victory.
+
+As this is your second empirical problem set, we will still provide quite a bit of guidance (especially in the first questions). Recall that you can submit your problem set (can submit one per study group) to Luis on **Thursday 15 February**. The submission deadline is **Thursday 15 at 12pm**. Submission is via email at <href a = mailto:l.bosshart@lse.ac.uk>l.bosshart@lse.ac.uk</href>.
+
+Our first goal is to understand how Autor et al. measure Chinese import penetration. They do
+not have the direct effect of Chinese importation. That is, the researchers or us do not have a measure that say that x% of the industrial base went bust because of Chinese importations. We, as scholars, are forced to work with indirect measures. One possible solution is to look at the economic competition from China. But even then, nothing is so easy. We can measure competition at the national level for various industries. It is much harder to know at the county-level (our geographical unit) how disruptive the rise of China has been. To approximate the increase in competitive pressure due to the China shock, Autor et al. use a combination of national-time varying information and local data. They construct the level of China competition in area $j$ at date $\tau$, where $\tau \in \{2002,...,2010\}$ as
+
+\begin{equation}
+  IP_{j\tau}^{us} = \sum_k \frac{L_{kjt_0}}{L_{jt_0}}IP_{k\tau}^{us} (\#eq:importpenetration)
+\end{equation}
+
+We will go over each term in this equation.
+The index $k$ represents different industries. Industries are classified according to the Standard Industrial Classiffcation (SIC) Code at the 4-digit level (the lowest level of aggregation). One example of SIC code is "2844 - Perfumes, Cosmetics, and other Toilet Preparations," which belongs to "284 - Soap, Detergents, and Cleaning Preparations; Perfumes, Cosmetics, and Other Toilet Preparations," which itself belongs to "28 - Chemicals and Allied Products," which itself is a subcategory of "20-39 - Manufacturing."^[For more information on SIC code, please check (the official website)[https://siccode.com/sic-code-lookup-directory].]
+
+$L_{kjt_0}$ represents the number of workers in industry $k$ in area $j$ at a baseline date $t_0$. $L_{jt_0}$ is the total number of workers in area $j$ at a baseline date $t_0$. $\frac{L_{kjt_0}}{L_{jt_0}}$ , therefore, captures the share of workers in industry $k$ in area $j$ in the baseline year. Note that only manufacturing industries are used. The authors use the year 2000 as their baseline so prior to the entry of China into the WTO.
+
+**Q1:** Why would measuring the share of employment at date $\tau$ create inference problems?
+
+***Answer:***
+*There is a risk of inducing post-treatment bias. As import rises, the manufacture base changes in response. If we measure the labor share at date *$\tau$*, we would effectively double count the effect of Chinese importations. Further, we would also incorporate other changes to employment unrelated to the China shock and so we would not be able to make clean inference.* 
+
+Finally, $IP^{us}_{k\tau}$ is the level of importation from China in industry $k$ at date $\tau$. This is relative to the national level of production of industry $k$ in the United States prior to the economic opening of China, for which the authors use the date 1991. That is, $IP^{us}_{k\tau} = \frac{M^{us}_{k\tau}}{Y_{k0}+M_{k0}-X_{k0}}$ with $M^{us}_{k\tau}$ the
+importation from China at date $\tau$, $Y_{k0}+M_{k0}$ the US shipment (domestic production + importations), and $X_{k0}$ the exportations measured in 1991.
+
+The authors often use the change in Chinese import penetration. That is, they use (see Equation (1) on page 3152):
+
+\begin{equation}
+  \Delta IP^{us}_{j\tau} = IP^{us}_{j\tau} - IP^{us}_{jt}  (\#eq:importpenetrationchange)
+\end{equation}
+
+Autor et al. are worried that simply looking at the (change in) Chinese penetrations is unlikely to recover the effect of the disruptions caused by globalization (via the China shock). Indeed, they argue that the OLS estimator is likely to induce a downward bias.
+
+**Q2:** What is their justification for this claim?
+
+***Answer:***
+*Their justification can be found on page 3153.*
+
+> An issue for the estimation is that realized US imports from China in (1) may be correlated with industry import-demand shocks. In this case, OLS estimates of the relationship between changes in imports from China and changes in US manufacturing employment may understate the impact of the pure supply shock component of rising Chinese import competition, as both US employment and imports may rise simultaneously in the face of unobserved positive shocks to US product demand.
+
+The authors use an instrumental variable to deal with this endogeneity issue. Rather than using importations from China in the US in Equation \@ref(eq:importpenetration) and Equation \@ref(eq:importpenetrationchange), they use importation in other developed countries: Australia, Denmark, Finland, Germany, Japan, New Zealand, Spain, and Switzerland. That is, they compute the following alternative change in import penetrations:
+
+\begin{equation}
+\Delta IP^{out}_{j\tau}= \sum_k \frac{L_{kjt_0-10}}{L_{jt_0-10}}\Delta IP^{out}_{k\tau} (\#eq:importpenetrationIV)
+\end{equation}
+
+
+with $\Delta IP^{out}_{k\tau}= \frac{M^{out}_{k\tau} - M^{out}_{kt_0}}{Y_{k0-3}+M_{k0-3}- X_{k0-3}}$ and $out$ designating the fact that the importations are to other developed countries. Note that (i) the Labor shares are measured in area $j$ in the US, but with a 10 years lag relative to the direct measure in Equation \@ref(eq:importpenetration) (note the $t_{0 - 10}) and (ii) the importations are relative to the net shipment in the US in 1987. There is a lively academic debate regarding whether and why this instrument may actually be valid (always a big question). We will take the validity of the instrument as given for the purpose of this problem set. More generally, you should always be worried about instrumental variable approaches. It is always a hard task to justify the exclusion restriction.
+
+The area $j$ used to compute the China shock (and its instrument) is not a county, but a commuter zone (CZ). For each county $c$ in a commuter zone $j$, $IP_{c\tau} = IP_{j\tau}$ (each county is given its CZ importation penetration value).
+
+**Q3:** What is the justification for this empirical choice?
+
+***Answer:*** *Voters may live in a county, but they may work in other parts. As such, when we think about economic consequences on electoral decisions, we need to think about their employment prospects. We do not know where voters work. But we know, given where they live, where they are the most likely to work. And this defines commuter zones. A county *$c$ *belongs to commuter zone *$j$ *if most of the inhabitants of that county work in this commuter zone.*
+
+With these preliminaries in mind, we can turn to the empirical part of the problem set. For this, you need to use the dataset `populism_ps_data.dta` posted on Moodle. The dataset contains a series of variable some measured at the county level, some at the commuter zone level, and some Census region dummies. Our first step is to get to know the main variables better.
+
+**Q4:** Produce a table of summary statistics for the variables change (in percent) in the Republican vote shares between 2000 and 2008 and change in the Republican vote shares between 2000 and 2016 (basically the difference between `shnr_pres2008` and `shnr_pres2000` and between `shnr_pres2016` and `shnr_pres2000`, respectively). Your table should include the number of observations, the mean, the standard deviation, the minimum, the maximum, the first quartile, and the last quartile. We want to see this summary statistics in two ways: unweighted and weighted by total vote in the presidential election in 2000 (variable `totvote_2000pres`). Compare the weighted and unweighted statistics and comment on the differences. 
+
+***Answer:*** *The summary statistics can be found in the following Table \@ref(tab:summarystatsDV).*
+
+```{r summarystatsDV}
+
+# Like last time, we first need to install some packages to read, manipulate, and analyse the data. Uncomment the following lines if you have yet to install them. If you have already installed them, you may still want to update the packages by uncommenting the following lines. If you wish to do neither, you still need to use the library function to call the packages into memory.
+
+
+#install.packages("tidyverse)
+#install.packages("here)
+#install.packages("haven")
+#install.packages("TAM")
+#install.packages("fixest", repos = "http://cran.us.r-project.org")
+
+
+library(here)
+library(dplyr)
+library(haven)
+library(readr)
+library(ggplot2)
+
+# Today we will use a tidy workflow. The purpose of this notation is that it is easier to understand and as such, you might find it easier to read. tidyverse operators such as mutate, select, summarise and group_by are connected by "pipes"
+# These can be produced by the keyboard shortcut Ctrl + Shift + M in Windows and Cmd + Shift + M on a Mac. Depending on the settings of your RStudio session, you might get the "old school" pipe: %>% or the "new school" pipe |>. The former used to come from a package which needed to be loaded in order for it to work. The new pipe is native to R. Since it requires less dependencies, we will use the native R pipe. Although keep in mind that it lacks some of the functionalities of the old school pipe.
+
+
+# Pipes can be translated into a "then" statement when reading the code. For example, in the first line, I read in the data using the haven package just like last time, THEN (|>) I do the next step with the read in data.
+
+read_dta(here("Data_and_paper", "populism_ps_data.dta")) |> 
+  mutate(`Difference 2000 - 2008` = shnr_pres2008 - shnr_pres2000, # We "piped" the data into the mutate call and now create two now columns of data, that represent the difference between the 2000 and the 2008 and the 2016 vote share respectively. If we want to include spaces or symbols such as hyphens in our variable names, we need to put them in backticks `.` like this. Mutate is analogous to gen in Stata.
+         `Difference 2000 - 2016` = shnr_pres2016 - shnr_pres2000) |> 
+  select(totvote_2000pres, `Difference 2000 - 2008`,`Difference 2000 - 2016`) |> # Next we will select only a subset of the columns. Specifically, the two that we just created, as well as the total number of voters, which we need to weigh th variables. Mutate is analogous to keep in Stata, but can also be used as an analogue to drop if one puts a minus before a column that one wants to drop, like so: select(-.). 
+  tidyr::pivot_longer(-totvote_2000pres) |> # Next we use the pivot_longer function to reshape the data. This will make our life a little easier and allow us to get us from raw data to table in one smooth call. Take the time and run the code until just after the pivot_longer() function to see what the data looks like now. 
+  group_by(name) |> # Since the data now has a new shape, we want to do summary statistics on the two different variables we created earlier. We achieve this by grouping by the name column, which stores from which column each value is from.
+  summarise(N = sum(!is.na(value)), # Next we summarise the dataset. In Stata, this would be collapse. Since we have grouped the data by name, we will do the summaries within each group of the name variable, which in our case is two groups. The resulting dataset will thus have two rows. We now define what we want each column to represent. First we count the number of non-NA values by summing over the negation of the is.na() function.  
+            `Mean` = mean(value), # Next we calculate the mean
+            `W. Mean` = weighted.mean(value, totvote_2000pres), # and weighted mean of the value column using the total number of votes as a weight.
+            `Std.-Dev.` = sd(value), # Same procedure for the SD
+            `W. Std.-Dev.` = TAM::weighted_sd(value, totvote_2000pres), 
+             Minimum = min(value, na.rm = T), # the minimum
+            `1st Quart.`= quantile(value, prob = c(0.25)), # the 1st quartile
+            `W. 1st Quart.`= TAM::weighted_quantile(value, totvote_2000pres, prob = c(0.25)), 
+            `3rd Quart.`= quantile(value, prob = c(0.75)), # the 3rd quartile
+            `W. 3rd Quart.`= TAM::weighted_quantile(value, totvote_2000pres, prob = c(0.75)),
+            Maximum = max(value, na.rm = T)) |> # and finally the maximum. Again, take the time to run the code until the end of the summary call. Look at the data. Is this what you expected? Doing this regularly is important to gain inutition for what the code does. This code also was not written in one go, but built iteratively.
+  rename("Variable" = name) |> # To use the dataset for presentation, we rename the name column to Variable. 
+  mutate(across(N:Maximum, \(x) round(x, 3))) |> # Now we round all values to the third digit. 
+  knitr::kable(align = "c", caption = "Summary Statistics of the Main Dependent Variable") # Finally, we use the kable function to produce pretty markdown tables.
+  
+```
+
+*We can see that there are major differences between the two tables. When unweighted, the Republican appears to be gaining on average in 2016 compared to 2000. This advantage disappear when we include weights. This is not surprising as (as we have seen) Republicans have gained in rural counties, which tend to dominate in term of sheer number urban districts, but are less populated. This also affects the value of the 1st and 3rd quartile as well as the standard deviation, which increases (it does not have to).*
+
+We also want to know the summary statistics for the main independent variables - Chinese import penetration (`d_imp_usch_pd_0008`) - as well as the instrument - Chinese importations in other Western countries (`d_imp_otch_lag_pd_0008`). 
+
+One issue is that this variable is measured at the commuter zone level (as discussed above), whereas the unit of analysis in the database is a county. To adequately calculate the summary statistics, we need to collapse the database. Since this is not easy and we will need this information below, here is the relevant table.
+
+|          **Unweighted**          |      |       |          |        |       |            |            |
+|:--------------------------------:|------|-------|----------|--------|-------|------------|------------|
+|                                  | Obs. |  Mean | St. Dev. |  Min.  |  Max. | 1st Quart. | 3rd Quart. |
+| Import Penetration US (CZ level) | 722  | 0.941 | 0.884    | -0.592 | 7.242 | 0.366      | 1.277      |
+| Import Penetration IV (CZ level) | 722  | 1.111 | 1.024    | -0.426 | 6.370 | 0.361      | 1.568      |
+|           **Weighted**           |      |       |          |        |       |            |            |
+|                                  | Obs. |  Mean | St. Dev. |  Min.  |  Max. | 1st Quart. | 3rd Quart. |
+| Import Penetration US (CZ level) | 722  | 0.902 | 0.566    | -0.592 | 7.242 | 0.544      | 1.113      |
+| Import Penetration IV (CZ level) | 722  | 1.161 | 0.666    | -0.426 | 6.370 | 0.758      | 1.370      |
+
+**Q5:** Try to replicate Table 1. The authors use the interquartile range (Q3 - Q1) rather than the standard deviation to interpret the political effect of the China shock. Comment on this substantive choice. To replicate this table, you first need to collapse data at the commuter zone level.
+
+***Answer:*** *The replicated table can be found in Table \@ref(tab:summarystatsIV).*
+
+```{r summarystatsIV}
+# We first collapse the data onto the commuter zone level
+
+cz_data <- read_dta(here("Data_and_paper", "populism_ps_data.dta")) |> # First we read in the data
+  select(czone, totvote_2000pres, d_imp_usch_pd_0008, d_imp_otch_lag_pd_0008) |> # and select the relevant variables and identifiers
+  group_by(czone) |> # then we group by th commuter zone
+  summarise(d_imp_usch_pd_0008 = mean(d_imp_usch_pd_0008), # then we calculate the value of the instrument in a commuter zone by calculating the mean from the sub units
+            d_imp_otch_lag_pd_0008 = mean(d_imp_otch_lag_pd_0008),
+            totvote_2000pres = sum(totvote_2000pres)) |> # Crucially, we sum over the total votes to retain the weights on the CZ level
+  select(-czone) |> # For later presentation purposes, we drop the CZ identifier
+  rename("Import Penetration US (CZ level)" = d_imp_usch_pd_0008, # And rename the variables to be more legible later
+         "Import Penetration IV (CZ level)" = d_imp_otch_lag_pd_0008)
+
+
+# With this data, we can now go on to replicate the Table 1
+cz_data |> # We start with the CZ-level data frame
+  tidyr::pivot_longer(-totvote_2000pres) |> # Reshape to make summarising easier
+  group_by(name) |> # group by the two different variables
+  summarise(N = sum(!is.na(value)), # And calculate the summary stats just as above
+            Mean = mean(value, na.rm = T),
+            `W. Mean` = weighted.mean(value, totvote_2000pres),
+            `Std.-Dev.` = sd(value, na.rm = T),
+            `W. Std.-Dev.` = TAM::weighted_sd(value, totvote_2000pres),
+            Minimum = min(value, na.rm = T),
+            `1st Quart.`= quantile(value, prob = c(0.25), na.rm = T),
+            `W. 1st Quart.`= TAM::weighted_quantile(value, totvote_2000pres, prob = c(0.25)),
+            `3rd Quart.`= quantile(value, prob = c(0.75), na.rm = T),
+            `W. 3rd Quart.`= TAM::weighted_quantile(value, totvote_2000pres, prob = c(0.75)),
+            Maximum = max(value, na.rm = T)) |> 
+  rename("Variable" = name) |> 
+  mutate(across(N:Maximum, \(x) round(x, 3))) |>
+  arrange(desc(Variable)) |>
+  knitr::kable(align = "c", caption = "**Summary Statistics of the Main Independent Variable**")
+
+```
+
+*The two measures (Q3-Q1) and the standard deviations are basically the same. Hence, it does not matter at all.*
+
+We now return to the main dataset. We first start by following the authors' approach. The
+results of their analysis is displayed in Table 5 in their paper. In their regressions, the authors make two choices. First, they cluster their standard error at the level of commuter zone. Second, they use total votes in 2000 as regression weight. We will first look at the first stage.
+
+**Q6:** Regress the Chinese importation penetration in the US (`d_imp_usch_pd_0008`) on the instrument (`d_imp_otch_lag_pd_0008`). First, run the model without control. Then run the model adding controls as the authors do in Table 5. Comment your results. Note that the controls are first industry controls (`l_ _shind_manuf_cbp`,`l_sh_routine33`,`l_task_outsource`), then regional census dummies (the `reg_*` variables), then demographics (the variables `l_sh_pop_f`, `l_sh_pop_edu_c`,..), and finally past electoral results (`shnr_pres1992`, `shnr_pres1996`).
+
+```{r firststageregressions, results='asis'}
+
+# The first step will be to read the data in again and making the dependent variables, now with more tractable names.
+
+ps <- read_dta(here("Data_and_paper", "populism_ps_data.dta")) |>
+  mutate(delta_0008 = shnr_pres2008 - shnr_pres2000,
+         delta_0016 = shnr_pres2016 - shnr_pres2000)
+
+# We will use the fixest package to run regressions today. It has lots of neat features and runs quicker overall, especially for large models.
+
+library(fixest)
+
+# The feols(.) command works just like the lm(.) command we used last time, but we can specify a variable to cluster standard errors by using `cluster = "czone` and weight by using `weights = ps$totvote_2000pres`
+
+# We can again use text objects to make our live a little easier. By saving the different parts of our regression equation and then pasting then together, we don't have to write so much code. 
+
+base_fml <- "d_imp_usch_pd_0008 ~ d_imp_otch_lag_pd_0008 " # Here we save the basis of our regression equation
+
+base_reg <- feols(as.formula(base_fml), data = ps, cluster = "czone", weights = ps$totvote_2000pres) # And run the regression by calling feols()
+
+
+industry_fml <- "+ l_shind_manuf_cbp + l_sh_routine33 + l_task_outsource " # Add the industry controls
+
+industry_reg <- feols(as.formula(paste0(base_fml, industry_fml)), data = ps, cluster = "czone", weights = ps$totvote_2000pres) # Save the industry regression
+
+regional_fml <- "+ reg_midatl + reg_encen + reg_wncen + reg_satl + reg_escen + reg_wscen + reg_mount + reg_pacif " # Add the regional controls
+
+regional_reg <- feols(as.formula(paste0(base_fml, industry_fml, regional_fml)), data = ps, cluster = "czone", weights = ps$totvote_2000pres) # Save the regional regression
+
+demo_fml <- "+ l_sh_pop_f + l_sh_pop_edu_c + l_sh_fborn + l_sh_pop_age_1019 + l_sh_pop_age_2029 + l_sh_pop_age_3039 + l_sh_pop_age_4049 + l_sh_pop_age_5059 + l_sh_pop_age_6069 + l_sh_pop_age_7079 + l_sh_pop_age_8000 + l_sh_pop_white + l_sh_pop_black + l_sh_pop_asian + l_sh_pop_hispanic " # Add the demographic controls
+
+demographic_reg <- feols(as.formula(paste0(base_fml, industry_fml, regional_fml, demo_fml)), data = ps, cluster = "czone", weights = ps$totvote_2000pres) # Save the demographic regression
+
+elec_fml <- "+ shnr_pres1992 + shnr_pres1996 " # And finally add the past electoral results
+       
+elec_reg <- feols(as.formula(paste0(base_fml, industry_fml, regional_fml, demo_fml, elec_fml)), data = ps, cluster = "czone", weights = ps$totvote_2000pres) # Save the final regression
+
+# If you want this to work, it is crucial that you set the results option of the chunk to 'asis'
+
+# We can first save a couple of things we'll need to make the table for later use. This is the dictionary that will help etable(.) print nice variable names.
+dictionary <- c(d_imp_usch_pd_0008 ="Import Penetration US (CZ level)",
+                d_imp_usch_pd="Import Penetration US (CZ level; 2002-2010)",
+                d_imp_otch_lag_pd_0008 ="Import Penetration IV (CZ level)",
+                czone="Commuter zone ID",
+                delta_0008="Difference 2000 - 2008",
+                delta_0016="Difference 2000 - 2016")
+
+# Here we save the significance levels
+signif.stars <- c("***"=0.001, "**"=0.01, "*"=0.05, "."=0.10)
+
+# Next we save groups of control variables. To do this, we write a quick helper. The helper will take the control formulas that we saved earlier as inputs and then create vectors with the individual variable names as elements from the one complete string.
+
+group.controls <- function(fml) {
+  
+  cls <- unlist(stringr::str_split(fml, "\\+ ")) # This is done by first splitting the string using a known structure of the string. As the str_split(.) function returns lists, we have to unlist this element
+  cls <- stringr::str_replace_all(cls, " ", "") # Then we get rid of remaining spaces.
+  
+  return(cls[2:length(cls)]) # Finally, we drop the first element and return the vector of control variables.
+}
+
+control.groups <- list("2000 ind/occ controls"       = group.controls(industry_fml),
+                       "Census division dummies"     = group.controls(regional_fml),
+                       "2000 demography controls"    = group.controls(demo_fml),
+                       "1992/1996 election controls" = group.controls(elec_fml))
+
+etable(base_reg, industry_reg, regional_reg, demographic_reg, elec_reg, # We can feed it the regression objects we saved earlier
+       signif.code = signif.stars, # Alter the significance thresholds
+       dict = dictionary, # Make nice variable names
+       keep = c("%d_imp_otch_lxag_pd_0008"), # Drop all other independent variables
+       group = control.groups, # Indicate where we used which controls
+       fitstat =~n+f, # Specify the goodness of fit statistics we want (here only the number of observations and the F-Stat)
+       markdown = T, # Specify that we are using markdown for pretty printing
+       digits = 3) # Specify the digits to round to
+
+
+```
+
+***Answer:*** *The first stage results are pictured above. We can see that the coefficients on the IV variable is very stable after we introduce 2000 industry and occupation controls. The instrument is also quite powerful. Overall, if you believe the instrument substantially (see the discussion above), this is a strong IV statistically.*^[Note that the F-stat we obtain is different from the F-stat in Table 5. This is because the F-stat is calculated according to two different methods.]
+
+**Q7:** Replicate now Table 5 (you do not need to report the method and F-stat).  <span style='color: red;'>To do so, you need to use the command `ivreg2`, which requires you to install the packages `ivreg2` and `ranktest` if you have not done so in a previous course (`ssc install ivreg2` and `ssc install ranktest`).</span> The authors substantively interpret their results as such:
+
+> "The point estimate for the column 5 regression, which includes full controls, implies that the Republican two-party vote share rose by nearly a full percentage point for an interquartile range increase in import penetration ($1.59 \cdot 0.58 = 0.91$)." (page 3175)
+
+Based on your answers to questions **Q5** and **Q6** and your knowledge of instrumental variable estimation, discuss whether this way of interpreting the results is reasonable. *(Hint: To answer this last part of the question, remember that variations in the independent variable in the second stage are only caused by variation in the instrumental variable. So the question is: How much of a variation in the instrumental variable is needed to produce a change of 0.58 in the Import penetration ratio? Is this level of variation reasonable or not? There is no right or wrong answer to this last question, rather the standard is whether your answer is substantively logical or illogical.)*
+
+***Answer:*** *The second stage results are:*
+
+```{r ivregs, results = 'asis'}
+
+# We're again going to build a helper function that us going to save us from writing repetitive code. We want to alter two things to build Table 5: The dependent variable ('08 and '16 votes) and the sets of control variables. These are the inputs we need into our function. Later, we will also want to toggle whether we use weights. Thus, I include an input for this.
+
+iv_regs <- function(dv = "08", weights = TRUE, ...) {
+  
+  # The function then uses the information on the dependent variable, as well as all other elements we pass to it to construct the formula for our IV regression. As before, we pass the stub for the dependent variable and also combine the information for the year of the DV. We then regress the dependent variable on a constant. This is needed to ensure that we can run the regression without controls. 
+  
+  if (weights) {
+    w <- ps$totvote_2000pres
+    
+    model <- fixest::feols(as.formula(paste0("delta_00",dv," ~ 1",
+                                           ..., # Here the controls all the controls that we might want to add are added to the model.
+                                           "| d_imp_usch_pd_0008 ~ d_imp_otch_lag_pd_0008")), # Finally, we specify an endogenous regressor (our treatment) as well as the instrument. fixest automatically does 2SLS estimation for us if we specify the first stage relationship after the "|" sign in the formula.
+                         data = ps, cluster = "czone", weights = w) # Then we just specify the variable to cluster SEs by, the dataset and the weighting variable.
+  } else {
+    # We repeat the same thing, just without the weights
+    model <- fixest::feols(as.formula(paste0("delta_00",dv," ~ 1", ..., "| d_imp_usch_pd_0008 ~ d_imp_otch_lag_pd_0008")),
+                         data = ps, cluster = "czone") 
+  }
+  
+  return(model)
+}
+
+# Then we just run through the dependent variables and iteratively add the controls that we saved earlier.
+
+base_08 <- iv_regs(dv = "08", weights = T, "")
+
+industry_08 <- iv_regs(dv = "08", weights = T, industry_fml)
+
+regional_08 <- iv_regs(dv = "08", weights = T, industry_fml, regional_fml)
+
+demo_08 <- iv_regs(dv = "08", weights = T, industry_fml, regional_fml, demo_fml)
+
+elec_08 <- iv_regs(dv = "08", weights = T, industry_fml, regional_fml, demo_fml, elec_fml)
+
+base_16 <- iv_regs(dv = "16", weights = T, "")
+
+industry_16 <- iv_regs(dv = "16", weights = T, industry_fml)
+
+regional_16 <- iv_regs(dv = "16", weights = T, industry_fml, regional_fml)
+
+demo_16 <- iv_regs(dv = "16", weights = T, industry_fml, regional_fml, demo_fml)
+
+elec_16 <- iv_regs(dv = "16", weights = T, industry_fml, regional_fml, demo_fml, elec_fml)
+
+# Then we fill in etable(.) as before
+
+etable(base_08, industry_08, regional_08, demo_08, elec_08,
+       base_16, industry_16, regional_16, demo_16, elec_16,
+       se.below = T,
+       signif.code = signif.stars,
+       dict = dictionary,
+       keep = c("%d_imp_usch_pd_0008"),
+       headers = list("Estimation method:" = list("Weighted 2SLS" = 10)),
+       group = control.groups,
+       fitstat =~n, markdown = T, digits = 3)
+
+```
+
+*Regarding the authors' interpretation, there is no absolutely correct answer, the important part is how you justify it. Here is one possible answer.*
+
+*The authors consider only a change in the* second-stage *independent variable. But any variation in "Import Penetration US" is due to the first-stage independent variable. So we may want to wonder how much the IV variable needs to change for "Import Penetration US" to cover the full interquartile range. Using column (5) in the first stage results, we know that the IV needs to vary by* $\frac{0.58}{0.384}\approx 1.51$ *to produce a change in the interquartile range for "Import Penetration US." From Table \@ref(tab:summarystatsIV), a variation of *$1.51$ *corresponds to *$2.5$ *the interquartile range of the instrument (*$\frac{1.51}{1.37-0.758}=2.47$*). This is quite a bit of variation, but it is not incredible either. Hence, this way of interpreting the result may slightly exaggerate the findings, but is still reasonable.*
+
+The authors make several choices along the way to produce the results we just commented. Some choices may be perfectly justified, others may be a bit more perplexing. In any case, we may want to check their consequences. This is our goal in the next questions of this problem set.
+
+**Q8:** The first choice the authors made is to use an instrumental variable approach rather than a simple OLS method. Reproduce Table 5 in their paper, but with simple OLS rather than IV. Are the difference between IV and OLS results consistent with the authors' justification for using an IV approach?
+
+```{r ols_estimation, results = 'asis'}
+
+# We can write a new helper that allows us to carry out the desired analysis
+
+ols_regs <- function(dv = "08", weights = TRUE, ...) {
+  
+  if (weights) {
+    w <- ps$totvote_2000pres
+    
+    model <- fixest::feols(as.formula(paste0("delta_00",dv," ~ d_imp_usch_pd_0008 ", ...)),
+                         data = ps, cluster = "czone", weights = w) 
+  } else {
+    model <- fixest::feols(as.formula(paste0("delta_00",dv," ~ d_imp_usch_pd_0008 ", ...)),
+                         data = ps, cluster = "czone") 
+  }
+    
+  return(model)
+}
+
+# Then we just run through the dependent variables and iteratively add the controls that we saved earlier.
+
+base_08 <- ols_regs(dv = "08", weights = T, "")
+
+industry_08 <- ols_regs(dv = "08", weights = T, industry_fml)
+
+regional_08 <- ols_regs(dv = "08", weights = T, industry_fml, regional_fml)
+
+demo_08 <- ols_regs(dv = "08", weights = T, industry_fml, regional_fml, demo_fml)
+
+elec_08 <- ols_regs(dv = "08", weights = T, industry_fml, regional_fml, demo_fml, elec_fml)
+
+base_16 <- ols_regs(dv = "16", weights = T, "")
+
+industry_16 <- ols_regs(dv = "16", weights = T, industry_fml)
+
+regional_16 <- ols_regs(dv = "16", weights = T, industry_fml, regional_fml)
+
+demo_16 <- ols_regs(dv = "16", weights = T, industry_fml, regional_fml, demo_fml)
+
+elec_16 <- ols_regs(dv = "16", weights = T, industry_fml, regional_fml, demo_fml, elec_fml)
+
+etable(base_08, industry_08, regional_08, demo_08, elec_08,
+       base_16, industry_16, regional_16, demo_16, elec_16,
+       se.below = T,
+       signif.code = signif.stars,
+       dict = dictionary,
+       keep = c("%d_imp_usch_pd_0008"),
+       headers = list("Estimation method:" = list("Weighted OLS" = 10)),
+       group = control.groups,
+       fitstat =~n, markdown = T, digits = 3)
+
+```
+
+***Answer:*** *We can see that the results are much weaker, not statistically significant and the point estimates for columns (3)-(5) and (8)-(10) are very close to zero. Note that this is consistent with the authors' argument for using an IV as noted in* ***Q2***.
+
+Another important choice is to use weighted regressions. Now, there are reasons for this. Absent weights, small counties would be as important as big counties, which can create some issues. But the choice of total votes in 2000 may not be innocuous. By doing so, everything else equals, the authors may put more weight on the most politically active counties. That is, the authors may focus on the counties that react the most to the shock, generating a possible upward bias. 
+
+**Q9:** Rerun the IV regressions (including first stage) and the OLS regressions (questions *Q7* and *Q8*), but this time without weights. How do the results change compared to your analysis above?
+
+***Answer:*** *For the IV analysis, the first stage results are displayed below. The first stage results are basically the same.*
+
+```{r fs_unweighted, results = 'asis'}
+
+# We'll write another helper function
+first_stage_reg <- function(weights = T, ...) {
+  
+  if (weights) {
+    w <- ps$totvote_2000pres
+    
+    model <- fixest::feols(as.formula(paste0(base_fml, ...)),
+                         data = ps, cluster = "czone", weights = w) 
+  } else {
+    model <- fixest::feols(as.formula(paste0(base_fml, ...)),
+                         data = ps, cluster = "czone") 
+  }
+  return(model)
+  
+}
+
+# First run the unweighted first stage OLS regressions
+base_fs <- first_stage_reg(weights = F) 
+
+industry_fs <- first_stage_reg(weights = F, industry_fml)
+
+regional_fs <- first_stage_reg(weights = F, industry_fml, regional_fml)
+
+demo_fs <- first_stage_reg(weights = F, industry_fml, regional_fml, demo_fml)
+       
+elec_fs <- first_stage_reg(weights = F, industry_fml, regional_fml, demo_fml, elec_fml)
+
+etable(base_fs, industry_fs, regional_fs, demo_fs, elec_fs,
+       se.below = T,
+       signif.code = signif.stars,
+       dict = dictionary,
+       keep = c("%d_imp_otch_lag_pd_0008"),
+       headers = list("Estimation method:" = list("Unweighted First Stage OLS Regression" = 5)),
+       group = control.groups,
+       fitstat =~n+f, markdown = T, digits = 3)
+
+```
+
+*The second stage results can be found in below. The second stage results are very different. The point estimates are basically 50% smaller. And, most importantly, the coefficients in columns 4,5,9, and 10 (those the authors refer to) are not statistically significant. This suggests that the authors should justify carefully this methodological choice. I let you check what their justification is (do a search for "weight" in the paper)...*
+
+```{r ss_unweighted, results = 'asis'}
+
+# Then the second stage IV regressions
+base_08_ss <- iv_regs(dv = "08", weights = F, "")
+
+industry_08_ss <- iv_regs(dv = "08", weights = F, industry_fml)
+
+regional_08_ss <- iv_regs(dv = "08", weights = F, industry_fml, regional_fml)
+
+demo_08_ss <- iv_regs(dv = "08", weights = F, industry_fml, regional_fml, demo_fml)
+
+elec_08_ss <- iv_regs(dv = "08", weights = F, industry_fml, regional_fml, demo_fml, elec_fml)
+
+base_16_ss <- iv_regs(dv = "16", weights = F, "")
+
+industry_16_ss <- iv_regs(dv = "16", weights = F, industry_fml)
+
+regional_16_ss <- iv_regs(dv = "16", weights = F, industry_fml, regional_fml)
+
+demo_16_ss <- iv_regs(dv = "16", weights = F, industry_fml, regional_fml, demo_fml)
+
+elec_16_ss <- iv_regs(dv = "16", weights = F, industry_fml, regional_fml, demo_fml, elec_fml)
+
+etable(base_08_ss, industry_08_ss, regional_08_ss, demo_08_ss, elec_08_ss,
+       base_16_ss, industry_16_ss, regional_16_ss, demo_16_ss, elec_16_ss,
+       se.below = T,
+       signif.code = signif.stars,
+       dict = dictionary,
+       keep = c("%d_imp_usch_pd_0008"),
+       headers = list("Estimation method:" = list("Unweighted 2SLS" = 10)),
+       group = control.groups,
+       fitstat =~n, markdown = T, digits = 3)
+
+```
+
+*For completeness, the OLS results are to be found below. We recover a non-statistically significant result after controlling for census regional dummies. But since it was also the case with weights, this is less concerning.*
+
+
+```{r ols_unweighted, results = 'asis'}
+
+# And finally the OLS regression
+base_08 <- ols_regs(dv = "08", weights = F, "")
+
+industry_08 <- ols_regs(dv = "08", weights = F, industry_fml)
+
+regional_08 <- ols_regs(dv = "08", weights = F, industry_fml, regional_fml)
+
+demo_08 <- ols_regs(dv = "08", weights = F, industry_fml, regional_fml, demo_fml)
+
+elec_08 <- ols_regs(dv = "08", weights = F, industry_fml, regional_fml, demo_fml, elec_fml)
+
+base_16 <- ols_regs(dv = "16", weights = F, "")
+
+industry_16 <- ols_regs(dv = "16", weights = F, industry_fml)
+
+regional_16 <- ols_regs(dv = "16", weights = F, industry_fml, regional_fml)
+
+demo_16 <- ols_regs(dv = "16", weights = F, industry_fml, regional_fml, demo_fml)
+
+elec_16 <- ols_regs(dv = "16", weights = F, industry_fml, regional_fml, demo_fml, elec_fml)
+
+etable(base_08, industry_08, regional_08, demo_08, elec_08,
+       base_16, industry_16, regional_16, demo_16, elec_16,
+       se.below = T,
+       signif.code = signif.stars,
+       dict = dictionary,
+       keep = c("%d_imp_usch_pd_0008"),
+       headers = list("Estimation method:" = list("Unweighted OLS" = 10)),
+       group = control.groups,
+       fitstat =~n, markdown = T, digits = 3)
+
+```
+
+
+A third choice to note is that the authors use the change in Chinese importation penetration from 2000 to 2008 for both the 2008 and 2016 elections. This means there is quite a bit of a delay between the shock (measured over 2000-2008) and the consequences measured in 2016. In other parts of the paper, the authors look at penetration change from 2002 to 2010.3 This variable is closer in time from 2016 making it important to check the robustness of the results to this alternative measure of the China shock.
+
+**Q10:** Rerun the IV analysis (keeping the same instrument as the authors and using weights) for the 2016 elections using the Chinese importation penetration increases over the 2002-2010 period. How do the results change compare to the authors' analysis?
+
+To find the Chinese importation penetration increases over the 2002-2010 period, use the database `populism_ps_data_additional.dta` (available on Moodle) and merge it with the main database you have been using. <span style='color: red;'>To do so, you need to use the command `inner_join()` (since the database you use is at the czone level) using `cty_fips` as merging variable. Drop the three unmatched observations. The new instrument you need to use is `d_imp_usch_pd`.</span>
+
+```{r alt_iv_regs, results = 'asis'}
+
+instrument_df <- read_dta(here("Data_and_paper", "populism_ps_data_additional.dta")) |>
+  select(cty_fips, d_imp_usch_pd)
+
+ps <- ps |> 
+  inner_join(instrument_df, by = "cty_fips")
+
+
+iv_regs_a_inst <- function(...) {
+  
+  model <- fixest::feols(as.formula(paste0("delta_0016 ~ 1",
+                                           ...,
+                                           "| d_imp_usch_pd ~ d_imp_otch_lag_pd_0008")),
+                         data = ps, cluster = "czone", weights = ps$totvote_2000pres) 
+    
+  return(model)
+}
+
+base_16 <- iv_regs_a_inst("")
+
+industry_16 <- iv_regs_a_inst(industry_fml)
+
+regional_16 <- iv_regs_a_inst(industry_fml, regional_fml)
+
+demo_16 <- iv_regs_a_inst(industry_fml, regional_fml, demo_fml)
+
+elec_16 <- iv_regs_a_inst(industry_fml, regional_fml, demo_fml, elec_fml)
+
+etable(base_16, industry_16, regional_16, demo_16, elec_16,
+       se.below = T,
+       signif.code = signif.stars,
+       dict = dictionary,
+       keep = c("%d_imp_usch_pd"),
+       group = control.groups,
+       fitstat =~n, markdown = T, digits = 3)
+
+```
+
+***Answer:*** *Reassuringly, the results are statistically significant. They are also slightly stronger. The point estimate is bigger in column (5) and the effect of an interquartile change in the China shock (*$0.49$ *according to Table S2 in the supplemental appendix) is *$0.49 \cdot 2.57 \approx 1.26$ *so also slightly larger. Hence, the results are definitely robust to changing the measure of the China shock.*
+
+One other questionable choice is to perform the analysis at the county level, whereas the treatment (the China shock) is measured at the commuter zone level.
+
+**Q11:** Rerun the IV analysis (keeping the same measure for the China shock and the same instrument as the authors) for the 2008 and 2016 elections at the community zone level. How do the results change compare to the authors' analysis?
+
+<span style='color: red;'>To answer this question, you will have to use the `summarise` commands as you did for question 5. When you collapse the data, weight them by the weights the authors use. Run your IV estimations without the option aweight and without clustering.</span>
+
+```{r czlevels, results = 'asis'}
+
+# First we collapse the data to the czone level
+ps_czlevel <- ps |>
+  select(-cty_fips) |>
+  group_by(czone) |>
+  summarise(across(shnr_pres2000:shnr_pres2016, \(x) weighted.mean(x, w = totvote_2000pres)),
+            across(d_imp_usch_pd_0008:delta_0016, \(x) weighted.mean(x, w = totvote_2000pres)),
+            totvote_2000pres = sum(totvote_2000pres))
+
+# We'll write a final helper function
+
+iv_regs_cz <- function(dv = "08", weights = TRUE, ...) {
+  
+  if (weights) {
+    w <- ps_czlevel$totvote_2000pres
+    
+    model <- fixest::feols(as.formula(paste0("delta_00",dv," ~ 1",
+                                           ...,
+                                           "| d_imp_usch_pd_0008 ~ d_imp_otch_lag_pd_0008")),
+                         data = ps_czlevel, weights = w)
+  } else {
+    
+    model <- fixest::feols(as.formula(paste0("delta_00",dv," ~ 1",
+                                           ...,
+                                           "| d_imp_usch_pd_0008 ~ d_imp_otch_lag_pd_0008")),
+                         data = ps_czlevel)
+  }
+  
+    
+  return(model)
+}
+
+base_08 <- iv_regs_cz(dv = "08", weights = F, "")
+
+industry_08 <- iv_regs_cz(dv = "08", weights = F, industry_fml)
+
+regional_08 <- iv_regs_cz(dv = "08", weights = F, industry_fml, regional_fml)
+
+demo_08 <- iv_regs_cz(dv = "08", weights = F, industry_fml, regional_fml, demo_fml)
+
+elec_08 <- iv_regs_cz(dv = "08", weights = F, industry_fml, regional_fml, demo_fml, elec_fml)
+
+base_16 <- iv_regs_cz(dv = "16", weights = F, "")
+
+industry_16 <- iv_regs_cz(dv = "16", weights = F, industry_fml)
+
+regional_16 <- iv_regs_cz(dv = "16", weights = F, industry_fml, regional_fml)
+
+demo_16 <- iv_regs_cz(dv = "16", weights = F, industry_fml, regional_fml, demo_fml)
+
+elec_16 <- iv_regs_cz(dv = "16", weights = F, industry_fml, regional_fml, demo_fml, elec_fml)
+
+etable(base_08, industry_08, regional_08, demo_08, elec_08,
+       base_16, industry_16, regional_16, demo_16, elec_16,
+       se.below = T,
+       signif.code = signif.stars,
+       dict = dictionary,
+       keep = c("%d_imp_usch_pd_0008"),
+       group = control.groups,
+       fitstat =~n, markdown = T, digits = 3)
+
+```
+
+***Answer:*** *The coefficients again are smaller and lose statistical significance. This question also shows you that clustering is not equivalent to analyzing the data at the level of the treatment. Again, we have little justifications for the choice of the level of analysis. You can also run the models weighting the observations by the total votes in the commuter zone. When you do so, still the coefficients are not statistically significant in column (5). However, in fairness, the coefficients are much closer to what you can find in the paper. See the below for such an analysis.*
+
+```{r czlevels_weighted, results = 'asis'}
+
+base_08 <- iv_regs_cz(dv = "08", weights = T, "")
+
+industry_08 <- iv_regs_cz(dv = "08", weights = T, industry_fml)
+
+regional_08 <- iv_regs_cz(dv = "08", weights = T, industry_fml, regional_fml)
+
+demo_08 <- iv_regs_cz(dv = "08", weights = T, industry_fml, regional_fml, demo_fml)
+
+elec_08 <- iv_regs_cz(dv = "08", weights = T, industry_fml, regional_fml, demo_fml, elec_fml)
+
+base_16 <- iv_regs_cz(dv = "16", weights = T, "")
+
+industry_16 <- iv_regs_cz(dv = "16", weights = T, industry_fml)
+
+regional_16 <- iv_regs_cz(dv = "16", weights = T, industry_fml, regional_fml)
+
+demo_16 <- iv_regs_cz(dv = "16", weights = T, industry_fml, regional_fml, demo_fml)
+
+elec_16 <- iv_regs_cz(dv = "16", weights = T, industry_fml, regional_fml, demo_fml, elec_fml)
+
+etable(base_08, industry_08, regional_08, demo_08, elec_08,
+       base_16, industry_16, regional_16, demo_16, elec_16,
+       se.below = T,
+       signif.code = signif.stars,
+       dict = dictionary,
+       keep = c("%d_imp_usch_pd_0008"),
+       group = control.groups,
+       fitstat =~n, markdown = T, digits = 3)
+
+```
+
+
+**Q12:** The authors describe their paper as finding
+
+> "strong though not definitive evidence of an ideological realignment in trade-exposed local labor markets that commences prior to the divisive 2016 US presidential election."
+
+Based on your re-analysis of the presidential results, do you agree with their conclusion?
+
+
+***Answer:*** *Again, this is not a question with* one *right answer. Rather, the quality of your answer depends on how you justify it. On the one hand, you can see the results in a positive light. For example, using the most up-to-date measure of Chinese import penetration, the results are stronger than those presented by the authors (****Q9****). This suggests that there are reasons to believe the results are not completely a fluke arising because of the empirical choices made by the author. The fact that the OLS coefficients are very weak and the authors have a good reason for it is also reassuring. On the other hand, two important choices are poorly justified. The use of regression weights is slightly dubious. Employing weights can make sense, but why those particular weights? Convenience or because they gave the right results? The choice of looking at the county level when the treatment is at the commuter zone level could also have been better justified. Hence, a skeptical person, a cynic you might even say, can find reasons to believe that the authors chose a convenient specification to get the results they wanted.*
