@@ -1,0 +1,355 @@
+---
+title: 'Discrimination'
+subtitle: "Problem Set - Empirics"
+author: "Dianyi Yang <br>GV482^[Questions? Email [l.s.bosshart@lse.ac.uk](mailto:l.s.bosshart@lse.ac.uk).<br>R adaption of Stephane Wolton's STATA problem set implemented by [Felix Wortmann Callejón](https://www.wortmanncallejon.de).]"
+date: "`r as.character(Sys.Date())`"
+output:
+  bookdown::html_document2:
+    fig_caption: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE,
+                      message = FALSE,
+	warning = FALSE,
+  root.dir = "D:/OneDrive - London School of Economics/Desktop/lse assignments/GV482/ps8")
+#dirname(rstudioapi::getSourceEditorContext()$path)
+setwd("D:/OneDrive - London School of Economics/Desktop/lse assignments/GV482/ps8") #change to your own directory
+
+need <- c('tidyverse','haven','modelsummary',"TAM","fixest","estimatr","kableExtra") # list packages
+have <- need %in% rownames(installed.packages()) # checks packages you have
+if(any(!have)) install.packages(need[!have]) # install missing packages
+invisible(lapply(need, library, character.only=T))
+
+rm(list = ls())
+
+```
+
+In this problem set, we continue our investigation of discrimination against minorities in the use of force by police officers. We will focus onviolence during stop and frisk in New York City. Implemented in 2003, the Stop, Question & Frisk policy of NYC was meant to reduce crime. It corresponds to the brief detention of individuals suspected of involvement in criminal activities. Officers are required to have reasonable suspicion, but deep causes of concerns [sarcasm] such as "inappropriate attire for the season," "wearing clothes commonly used in a crime," or "furtive movements" [sic!] are all justified reasons. The effect of stop and frisk is debatable and as some argue it may well be designed as an instrument of social control rather than a tool not to fight crime (e.g., [Tiratelli, Quinton, and Bradford, 2018](https://academic.oup.com/bjc/article/58/5/1212/4827589?)). In this problem set, we will not consider the efficacy of this police practice, but rather we will consider the use of force after an individual is stopped.
+
+To do so, like [Fryer (2019)](https://doi.org/10.1086/701423) and [Knox, Lowe, and Mummolo (2020)](https://doi.org/10.1017/S0003055420000039) (both available on moodle), we take advantage of the data released by the NYC Police Department. The data contain all the stops (more than 5 millions) made over the 2003-2013 period. It includes information about the precinct officers are from, the place and time of the stop (whether it is a high crime zone or time), the reason for the stops, whether any criminal activity was detected during the stop (e.g., carrying a weapon) and, most importantly for us, the use of violence against the stopped pedestrian as well as their ethnicity/race. (Side note: We follow Fryer and Knox et al. in talking about race, however, I prefer the term social group as in last week's problem set).
+
+The data have all the problems highlighted in last week's theoretical problem set. Only stops are recorded so we are unable to detect discrimination at the level of stops (this would require to know the proportion of interaction between officers and minorities). Second, only specific actions, which we will call violent actions, are documented. More casual form of discrimination (e.g., tone of voice) are omitted. Another problem we face is that violence is categorized: putting hands, using pepper sprays, drawing gun, etc. While we may (with some assumptions) rank these categories from less to more violent, we do not have values on the level of violence for each. In other words, we have an ordinal ranking, but not a cardinal one. Hence, we are forced to use the probability of violence rather than the level of violence to determine whether there is discrimination. Still, towards the end of the problem set, we will make use of the different forms of violence.
+
+One final point before we start the problem set. The full database (`discrimination_ps_data.dta`) is pretty large. It contains almost 5 millions observations (stops) and, consequently, the size of the dta is almost 1GB (880mb to be precise). If you do not have enough power or space, you can use the partial dataset (`discrimination_ps_data_2010.dta`), which contains observations for the year 2010 only (around 600,00 stops). If you choose the latter option, obviously, do not run regressions with year fixed effects.
+
+[Questions **Q1-Q6** will be solved in the seminar on Thursday 7 March.]{style="color: red;"}
+
+We first want to understand a bit more the demographics in our database. To do so, we will consider the five ethnic groups in the dataset: white, black, hispanics, asian, and others.
+
+**Q1:** Show the ethnic distribution of the five groups in our database (the proportion of individuals from each race) for all years and for each year separately. What do you observe?
+
+***Answer:*** 
+
+```{r descriptivestats, fig.cap="Proportion of each race in the dataset by year"}
+# You can insert the code to generate your answer here
+data <- read_dta("discrimination_ps_data.dta")
+des <- data |>
+  group_by(year) |>
+  summarise(White = sum(swhite, na.rm=T), Black = sum(sblack, na.rm=T), Hispanic = sum(shisp, na.rm=T), Asian = sum(sasian, na.rm=T), Other = sum(sother, na.rm=T)) |>
+  mutate(total = White + Black + Hispanic + Asian + Other) |>
+  mutate(White = White/total, Black = Black/total, Hispanic = Hispanic/total, Asian = Asian/total, Other = Other/total) |>
+  select(-total)
+
+des |>
+  pivot_longer(cols = -year, names_to = "race", values_to="prop") |>
+  ggplot(aes(x=year, y=prop, fill=race)) + geom_col() + theme_bw() +
+  scale_y_continuous(labels=scales::percent) +
+  labs(x="Year", y="Proportion", fill="Race")
+```
+
+<font color="blue">
+
+From Figure \@ref(fig:descriptivestats), we can see that the ethnic composition in the dataset has been stable over time. The black people are the most represented in the dataset, followed by Hispanics, whites, and Asians.
+
+</font>
+
+From now on, you will need to refer to the codebook. For this problem set, the codebook is actually an excel file titled `codebook.xlsx` on the moodle page of the course.
+
+```{r tabletwo, echo = F}
+# You can insert the code to generate your answer here
+des |> kbl(digits=3, caption="Racial composition of the dataset by year") |> kable_styling(full_width = F)
+```
+
+Let's also try to understand whether members of minorities and white individuals get stopped for different reasons. Since the codebook is directly taken from NYPD and does not necessarily match the different variables, here is the list and description of each variable you should use in the next question.
+
+**Q2:** Display the ethnic distribution for different kind of justifications. Comment the table you created.
+
+***Answer:*** 
+
+```{r stopreasons, fig.cap="Ethnic distribution for different kind of justifications for stops"}
+# You can insert the code to generate your answer here
+data <- data |>
+  mutate(race=case_when(swhite==1 ~ "White", sblack==1 ~ "Black", shisp==1 ~ "Hispanic", sasian==1 ~ "Asian", sother==1 ~ "Other")) |>
+  mutate(stop_reason=case_when(carrysuspobj==1~"Suspecious Object",
+                               fitreldescr==1~"Relevant Description", 
+                              prepforcrime==1~"Preparing for Crime", 
+                              lookout==1~"Lookout", 
+                              crimattire==1~"Criminal Attire", 
+                              appdrugtrans==1~"Drug Transaction", 
+                              suspmovements==1~"Furtive Movements", 
+                              engageviolcrime==1~"Violent Crime", 
+                              concealsuspobj==1~"Suspicious Bulge", 
+                              othersuspbehav==1~"Other"))
+
+ggplot(data, aes(x=stop_reason)) + geom_bar(aes(fill=race), position="fill") + theme_bw() +
+  scale_x_discrete(guide = guide_axis(angle = 45)) +
+  labs(x="Stop Reason", y="Proportion", fill="Race")
+  
+```
+
+We now look at the police's use of force.
+
+**Q3:** Display the percentage of stop that ends in a form of violence and break down for each type of violence. Look at the ethnic decomposition for each type of violence. Comment your results, comparing it to your answer in **Q1**.
+
+Note that we have two variables that capture any use of violence `useanyforce` and `useanyforce_other`. Include both in your table. For the different forms of violence, it is not always easy to classify them from less to more. We, thus, follow the ordering displayed in Figure 1 in Fryer (2019).
+
+***Answer:*** 
+
+```{r forceused, fig.cap="Racial breakdown for each type of violence"}
+# You can insert the code to generate your answer here
+force <- data |>
+  filter(useanyforce==1 | useanyforce_other==1) |>
+  mutate(violence=case_when(force_hands==1~"Hands", 
+                            force_wall==1~"Wall", 
+                            force_ground==1~"Ground", 
+                            force_drawweap==1~"Draw Weapon", 
+                            force_pointweap==1~"Point Weapon", 
+                            force_batonorpepspray==1~"Baton or Pepper Spray", 
+                            force_handcuff_orig==1~"Handcuffs", 
+                            useanyforce_other==1~"Other"))
+
+ggplot(force, aes(x=violence)) + geom_bar(aes(fill=race), position="fill") + theme_bw() +
+  scale_x_discrete(guide = guide_axis(angle = 45)) +
+  labs(x="Violence", y="Proportion", fill="Race")
+```
+
+<font color="blue">
+
+From Figure \@ref(fig:forceused), we can see that the the black and Hispanic are slightly more represented in violence than in stops.
+
+</font>
+
+```{r comptable}
+crosstab <- data |> mutate(useanyforce=as.factor(useanyforce)) |>
+  select(race, useanyforce)
+
+datasummary_balance(formula=~useanyforce, data=crosstab,
+                    title="Comparing the proportion of stops that ends in violence")
+
+(chisq <- chisq.test(with(crosstab, table(race, useanyforce))))
+rm(crosstab, des, force)
+```
+
+<font color="blue">
+
+This difference is statistically significant, as we can see from the chi-squared test.
+
+</font>
+
+Descriptive statistics can only tell us so much. We will, thus, run several regressions in the following questions to try to understand better the extent of possible discrimination in the use of force. Now, before doing so, remember that absent a research design, regression analyses are only fancy descriptive statistics. They allow us to make better comparisons (controlling for some factors) and to present them in a simple and neat form (the regression tables).
+
+Your next task is to replicate Panel A of Table 2 in Fryer (2019) until year $\times$ precinct fixed effects (the regression with these fixed effects will take quite some time, you can skip it in case; the regression with month $\times$ year $\times$ precinct fixed effects require too much computer power for a problem set).
+
+For this, you need a bit of guidance. Fryer uses a logit to regress `useanyforce` on race variables `sblack`, `shisp`, `sasian`, `sother.` He then collects the coefficient on the race dummies, call it $b_r$, one for each non-white individual (subscript $r$ for race) and calculate the odd ratio as [exp($b_r$)]{style="color: red;"}^[For reasons I cannot explain, Fryer applies the following formula: $\frac{exp(b_r)/(1+exp(b_r))}{(1−exp(b_r))/(1+exp(b_r))}$. This formula will give you wrong odd ratios if you do not follow exactly how Fryer calculates it.]. The standard errors are given by $exp(b_r)\times\sigma_{b_r}$, where $\sigma_{b_r}$ is the standard error of the coefficient. You do not have to include the stars on the table. Finally, do not expect the coefficients to match (though I find minimal differences). Fryer includes missing observations (with a dummy variable denoting a particular characteristics is missing for an individual). We follow Knox et al. (2020) and do not do so. Finally, for this regression and all those that follow, we cluster standard errors at the precinct level. With this in mind,
+
+**Q4:** Replicate Panel A of Table 2 of Fryer (2019). Comment on the differences you find (which are due to missing observations not being included as mentioned above). Comment on the table what do we learn from this exercise relative to questions **Q1** and **Q3**.
+
+***Answer:*** 
+
+```{r panelAFryer}
+# You can insert the code to generate your answer here
+a <- feglm(useanyforce ~ sblack + shisp + sasian + sother, data=data, cluster=~pct, family="binomial")
+b <- feglm(useanyforce ~ sblack + shisp + sasian + sother + smale + sage + sage^2, data=data, cluster=~pct, family="binomial")
+c <- feglm(useanyforce ~ sblack + shisp + sasian + sother + smale + sage + sage^2 + indoors + daytime + hicrimearea + hicrimetime + hicrimeareaXtime + inuniform + idphoto + idverbal + idrefused + idother + withothers, data=data, cluster=~pct, family="binomial")
+d <- feglm(useanyforce ~ sblack + shisp + sasian + sother + smale + sage + sage^2 + indoors + daytime + hicrimearea + hicrimetime + hicrimeareaXtime + inuniform + idphoto + idverbal + idrefused + idother + withothers + foundweapon + foundcontraorweap + carrysuspobj + fitreldescr + prepforcrime + lookout + crimattire + appdrugtrans + suspmovements + engageviolcrime + concealsuspobj + othersuspbehav, data=data, cluster=~pct, family="binomial")
+
+mods <- list("No controls" = a,
+     "+ civilian demographics" = b,
+     "+ encounter characteristics" = c,
+     "+ civilian behavior" = d)
+
+coef_map <- c("sblack" = "Black", "shisp" = "Hispanic", "sasian" = "Asian", "sother" = "Other Race")
+msummary(mods, coef_map=coef_map, exp=TRUE, stars=FALSE, 
+         shape = model + statistic ~ term,
+         title="Logit Regressions of Use of Force on Race")
+```
+
+<font color="blue">
+
+There are no noticeable differences between our reproduced and the original results. The coefficients for all minorities are statistically significant, except for the Asians. This provides evidence for higher probability of experiencing violence for ethnic minorities upon a stop.
+
+</font>
+
+In the rest of the problem set, we will use a linear probability model (that is, we will use OLS) rather than a logit. There are two reasons for this. First, it is much easier for R (or other software) to compute OLS minimization. Second, the meaning of OLS coefficients is clearer: It corresponds to the difference in probabilities between ethnic groups. And this will prove helpful when we connect the empirical problem set with our results from last week. But we would like to be sure that we are not loosing too much by using OLS so we check in the next question whether the results are sensitive to specification choices.^[I know that for many scholars, there is a religion of employing logit (or probit) for binary choice regression. But most follow the faith blindly as good believers. Logit (or probit) imposes strong parametric assumptions (normality, etc.), which are not always warranted. An advantage of logit/probit is that no predicted probabilities are above one or below zero by construction. But this is it. There is not much to be gained statistically from using this approach over simple OLS. Despite the strong norms and brainwashing in favor of logit, we will be heretics and use OLS.]
+
+**Q5:** Reproduce Fryer's Panel A of Table 2 using OLS rather than a logit. Compare your findings with the results from **Q4**.
+
+***Answer:*** 
+
+```{r panelAOLS}
+# You can insert the code to generate your answer here
+a <- feols(useanyforce ~ sblack + shisp + sasian + sother, data=data, cluster=~pct)
+b <- feols(useanyforce ~ sblack + shisp + sasian + sother + smale + sage + sage^2, data=data, cluster=~pct)
+c <- feols(useanyforce ~ sblack + shisp + sasian + sother + smale + sage + sage^2 + indoors + daytime + hicrimearea + hicrimetime + hicrimeareaXtime + inuniform + idphoto + idverbal + idrefused + idother + withothers, data=data, cluster=~pct)
+d <- feols(useanyforce ~ sblack + shisp + sasian + sother + smale + sage + sage^2 + indoors + daytime + hicrimearea + hicrimetime + hicrimeareaXtime + inuniform + idphoto + idverbal + idrefused + idother + withothers + foundweapon + foundcontraorweap + carrysuspobj + fitreldescr + prepforcrime + lookout + crimattire + appdrugtrans + suspmovements + engageviolcrime + concealsuspobj + othersuspbehav, data=data, cluster=~pct,)
+
+mods <- list("No controls" = a,
+     "+ civilian demographics" = b,
+     "+ encounter characteristics" = c,
+     "+ civilian behavior" = d)
+
+coef_map <- c("sblack" = "Black", "shisp" = "Hispanic", "sasian" = "Asian", "sother" = "Other Race")
+msummary(mods, coef_map=coef_map, stars=FALSE, 
+         shape = model + statistic ~ term,
+         title="Logit Regressions of Use of Force on Race")
+```
+
+<font color="blue">
+
+Although the coefficients are not exactly the same, due to the incomparable nature of the coefficients from the logit and OLS, the results are consistent. The coefficients for all minorities are statistically significant, except for the Asians. This provides evidence for higher probability of experiencing violence for ethnic monorities upon a stop.
+
+</font>
+
+As we know from last week's problem set, the observed difference in the probabilities of the use of force is a biased estimate of the Average Treatment effect on the Treated (which will be our quantity of interest in what follows). Indeed, we found that
+
+$$
+\Pi^+_m-\Pi^+_M=   ATT_{a=1} - \frac{1- q^c}{\pi^c q^c + (1-q^c)}\pi^v_m q^v + (\pi^v_m-\pi^v_M)q^v
+$$
+
+(refer to last week's problem set Table 3 for the meaning of these variables). Knox, Lowe, and Mummolo (2020) make a similar point using the potential outcome framework. $ATT_{a=1}$ (which they denote $ATT_{M=1}$), scholars need to make four assumptions: 1. All the violence is reported (Assumption 1 on page 625), 2. There is discrimination against minorities at the level of stops (Assumption 2 on page 626), 3. An individuals stopped no matter their race, the always takers of stop, are more likely to suffer police violence as well as to suffer higher level of violence (Assumption 3 on page 626), 4. After controlling for available demographics and location characteristics, the proportion of individuals in each category (compliers, always takers, never takers for both stop and violence) is independent on race (Assumption 4 on page 626). With these assumptions, Know et al. argue that $\Pi^+_m-\Pi^+_M= ATT_{a=1}-\rho \Pi^+_M$, with $\rho$ the proportion of stops of minority members due to discrimination.
+
+**Q6:** Comparing our theoretical findings from last week with Knox, Lowe, and Mummolo's, what do their assumptions entail? What does this mean for the correction they advice? Can you make sense of the key assumption that explains the difference between our results and theirs?
+
+***Answer:*** 
+
+<font color="blue">
+
+1.  Our model does not assume that all the violence is reported.
+
+    There assumption would have implied that, in our model, the subjects are stopped even if they send a signal of $s^c_{I_g}=-1$.
+
+2.  We do not assume all individuals stopped no matter their race. 
+
+    There assumption would have implied that, in our model, cases where $s^v_{I_g}=-1$ or $s^v_{I_g}=s^c_{I_g}0$ are not censored into 0.
+
+3.  We also do not assume that the proportion of individuals in each category is independent of race, controlling for the demographics and location characteristics.
+
+    There assumption would have implied that, in our model, that $\pi^v_{g}=\pi^v$ and $\pi^c_{g}=\pi^c$ for all $g$. We do not make this assumption of no statistical discrimination.
+
+Our results suggest that higher violence experienced by the minorities may be due to prior beliefs that they are more violent ($(\pi^v_m-\pi^v_M)q^v$) (potential positive bias). Knox et al. suggest that the higher violence experienced by the minorities may be due to discrimination in the stops ($\rho \Pi^+_M$) (potential negative bias). The correction they advice is to subtract $\rho \Pi^+_M$ from the observed difference in the probabilities of the use of force, where $\rho=Pr(M_i(0)=0|D_i=1, M_i=1)$, or in our setting, $\rho=Pr(a_i(g_i=M)=0|g_i=m, a_i=1)$. 
+
+This is equivalent to estimating:
+
+$$
+\mathop{\mathbb{E}}[Y_i|g_i=m,a_i(m)=1]Pr(a_i=1|g_i=m) - \mathop{\mathbb{E}}[Y_i|g_i=M,a_i(M)=1]Pr(a_i=1|g_i=M)
+$$
+
+</font>
+
+[Questions **Q7-Q11** will be solved in the seminar on Thursday 14 March.]{style="color: red;"}
+
+In what follows, we seek to recover the $ATT$ taking our model as guidance:
+$$
+ATT_{a=1}=(\Pi^+_m-\Pi^+_M)+\frac{1- q^c}{\pi^c q^c + (1-q^c)}\pi^v_m q^v - (\pi^v_m-\pi^v_M)q^v
+$$.
+
+We are particularly interested in the following quantity: $(\pi^v_m-\pi^v_M)q^v$. But first, we would like to get a sense whether criminals are more likely to trigger violence by officers than non-criminals. Obviously, we do not know who is a criminal in the dataset so we have to make assumptions. We are going to assume that searches do not generate false positive. That is, a person who is found to have illegal objects is a criminal (note that we do not assume that searches are always successful).
+
+**Q7:** Regress our indicator of violence on the indicator for weapon or contraband found. First show the simple correlation, then add successively demographic controls (including race), controls for stop conditions, precinct fixed effects and year fixed effects, and finally precinct-year fixed effects. Are criminals more prone to trigger violence (under our assumptions)?
+
+Recall that we use OLS now and in what follows (you are welcome to check that the same patterns hold with Logit).
+
+```{r criminalviolence, results = 'asis'}
+# You can insert the code to generate your answer here
+
+```
+
+***Answer:*** 
+
+We are now going to try to take our model very (too!) seriously to compute our own estimate of the $ATT_{a=1}$ make use of our answer to **Q7**. To do so, we will take advantage of two findings from last week's problem set. First, if an individual is stopped based on an ambiguous signal ($s^c_{I_g}=0$) then violence is documented ($v^*>0$) only if there is a clear signal the individual is prone to violent reaction ($s^v_{I_g}=1)$. That is, the difference in the probability of violence for this type of stops (conditional on $s^c_{I_g}=0$) is $(\pi^v_m-\pi^v_M)q^v$. In questions **Q8** and **Q9**, we try two different ways to recover this quantity. Second, assuming $b^v_m$ is not too large (possibly a $\underline{\text{strong}}$ assumption), the proportion of individuals from the majority being on the receiving hand of the highest level of violence is $\pi^v_M q^v$, the proportion of individuals from the minority being on the receiving end of the highest level of violence is $\frac{\pi^c_m q^c}{\pi^c_m q^c + (1-q^c)}$. Hence, the difference in probabilities between the two groups (the coefficient regressions) would be $\frac{\pi^c_m q^c}{\pi^c_m q^c + (1-q^c)}-\pi^v_M q^v$.
+In question **Q10**, we try to recover this quantity.
+
+Let's turn to our attempt to recover $(\pi^v_m-\pi^v_M)q^v$. We need to find ambiguous signals for stops ($s^c_{I_g}=0$). The problem set states that the most ambiguous a signal, the higher the discrimination at the level of stop. Now, we do not know the signal received by the police officer, but we know the reasons for the stop. In the next section, we treat reason stated as the signal received by the police officer.
+
+**Q8:** Based on your answers to **Q1** and **Q2**, pick four signals (reasons for stop) that appear to be disproportionally used against Black civilians (justify your answer).^[The most ambiguous signals for Black civilians may not be the most ambiguous signals for other minorities. But we will assume it is.] Regress the use of any force on race dummies (as well as demographic controls, controls for stop conditions, and finally precinct-year fixed effects) for any individual stopped with one of these four causes of arrest and for each ambiguous signal separately (five regressions in total, label them (1) to (5)). What are the issues with this approach based on your findings?
+
+```{r ambigoussignal, results = 'asis'}
+# You can insert the code to generate your answer here
+
+```
+
+***Answer:*** 
+
+Another approach is to note that the model predicts that the more ambiguous a signal, the less likely the use of force (given **Q7**). We try this approach in the following question.
+
+**Q9:** First, regress the use of force on the reasons for stop controlling for demographic controls (including race), controls for stop conditions, and precinct-year fixed effect. Use other suspicious behaviour as the reference category. Second, pick the four most ambiguous signals (reasons for stop) according to your regression results and redo the analysis in **Q8** with these signals (that is, create an index for ambiguous signals and then regress each signal separately, in columns labelled (1) to (5)).
+
+```{r idambigoussignal, results = 'asis'}
+# You can insert the code to generate your answer here
+
+
+```
+
+***Answer:*** 
+
+```{r ambisignal2, results = 'asis'}
+# You can insert the code to generate your answer here
+
+```
+
+
+
+In the next question, we use the variation we have in the intensity of violence. To do so, we will define the different level of violence by increasing order of intensity. Rather than coming up with our own ranking, we will use Fryer's. We have 7 categories:
+
+1.  *All* includes all violence
+2.  *Wall +* compromises of all stops where the citizen was at least pushed against the wall
+3.  *Handcuff +* comprises of all stops where the citizen was at least handcuffed
+4.  *Draw +* comprises of all stops where the citizen was at least drawn a weapon at
+5.  *Push +* comprises of all stops where the citizen was at least pushed to the ground
+6.  *Point +* comprises of all stops where the citizen was either drawn a weapon at or the police officer used her/his baton and/or pepper spray
+7.  *Max* consists of all stops where the police officer uses her/his baton or pepper spray
+
+Your goal is to reproduce Figure 1 in Fryer (2019) for Blacks. To do so, you should include the same control as in **Q8**. That is, you need to regress each level of intensity on race dummies with demographic controls, controls for stop conditions, and precinct-year fixed effects (like in specification (f) in Fryer's basically). Do not expect to find the exact same figure (this is why I say reproduce, not replicate) as Fryer. There are two reasons for this. First, as noted above, we drop the missings when Fryer does not. Second, in Fryer (2019), the baseline is always stopped civilians who do not experience violence from officers. We follow Knox et al. and for each regression, the baseline is all civilians who received a lower level of violence than the one we consider.
+
+**Q10:** Reproduce Figure 1 in Fryer (2019) in the form of a table for all minorities and in the form of a figure for Black civilians.
+
+```{r blackforcegraph, caption = "Level of force and discrimination"}
+# You can insert the code to generate your answer here
+
+```
+
+***Answer:*** 
+
+```{r forcetables, results = 'asis'}
+# You can insert the code to generate your answer here
+
+```
+
+We can now use your answers to **Q8-Q10**, to provide an upper and lower bound for the $ATT_{a=1}$. To do so, fill the following table.
+
+|             | **(1)**  | **(2)** | **(3)** | **(4)** | **(5)** |
+|-------------|:--------:|:-------:|:-------:|:-------:|:-------:|
+|             | *Ambigous* |   ...   |   ...   |   ...   |   ...   |
+| Wall+       |     $\overbrace{\beta_{Black}}^{\text{From Q5}} \\+ \overbrace{(\beta_{Black}+ \mu_{White})}^{\text{From Q10}}\\ - \overbrace{\beta_{Black}}^{\text{From Q8 or Q9 }}$     |         |         |         |         |
+| Handcuff+   |            |         |         |         |         |
+| Draw+       |            |         |         |         |         |
+| Push+       |            |         |         |         |         |
+| Point+      |            |         |         |         |         |
+| Max         |            |         |         |         |         |
+| **Minimum** |            |         |         |         |         |
+| **Maximum** |            |         |         |         |         |
+
+Each column in the table above corresponds to a specification in **Q8** or **Q9** (pick the one you prefer and explain why): ambiguous (the index) in column (1) and the four most ambiguous signals according to the method used in column (2)-(5). Each row corresponds to one level of intensity of violence described above (Wall+ means at least pushed against the wall, Handcuff+ means at least handcuffed, etc.).
+For each entry above Minimum in the table, we want to compute the $ATT$.
+
+To do so, recall our formula for the $ATT$:
+$$
+ATT_{a=1}=(\Pi^+_m-\Pi^+_M)+\frac{1- q^c}{\pi^c q^c + (1-q^c)}\pi^v_m q^v - (\pi^v_m-\pi^v_M)q^v
+$$
+The first term---($\Pi^+_m-\Pi^+_M$)---is given by **Q5**. It will be the coefficient in the regression with demographic controls, controls for stop conditions, and precinct-year fixed effects. The second term---$\frac{1- q^c}{\pi^c q^c + (1-q^c)}\pi^v_m q^v$---can be recovered from **Q10**. For each row, it corresponds to the coefficient on Black in the regression plus the mean for white for this particular category. For example, suppose you obtained a coefficient of $0.007$ for Point+ with a mean of $0.004$ in **Q10**. Then, $\frac{1- q^c}{\pi^c q^c + (1-q^c)}\pi^v_m q^v=0.007+0.004=0.011$. Finally, the last term---$(\pi^v_m-\pi^v_M)q^v$---corresponds to the coefficient for each possible ambiguous signal regression in question **Q8** or **Q9** (pick the one you prefer). In the last two rows, collect the maximum and minimum associated with each column (1) to (5). The minimum of the row labelled Minimum is then our lower bound for the $ATT_{a=1}$ and the maximum of the row labelled Maximum is then the upper bound for the $ATT_{a=1}$.
+
+**Q11:** Compare the lower and upper bounds you obtained to Knox, Lowe, and Mummolo's preferred value for $ATT_{a=1}$ (to compute it use Proposition 1 and their stated choice of $\rho$ on page 631).
+Comment your findings.
+
+***Answer:*** 

@@ -1,0 +1,241 @@
+---
+title: "I prefer not to say"
+#header-includes: |
+#  \AtBeginDocument{\title[I prefer not to say]{I prefer not to say}}
+date: last-modified
+author: Dianyi Yang
+format:
+  beamer:
+    theme: Madrid
+link-citations: true
+csl: extra/apa.csl
+project:
+  execute-dir: "D:/OneDrive - London School of Economics/Desktop/lse assignments/GV482/prefernottosay"
+---
+
+# Inspiration
+
+Governments/organisations often want to give preferential treatment to disadvantaged groups. However, they rely on self-reported data for identification.
+
+-   Even if we eliminate the the possibility of misreporting for some easily verifiable characteristics
+
+    -   e.g. race, poverty
+
+-   Imperfect information arises from refusal to report one's true identity
+
+    -   "I prefer not to say"
+
+# Model Setting (1/2)
+
+-   Players:
+
+    -   Government (G)
+
+    -   Disadvantaged group ($i\in D$)
+
+    -   Advantaged group ($i\in A$)
+
+-   Strategies:
+
+    -   G: level of support given to applicant $i$: $v_{i}\in[0,1]$
+
+    -   D: report that they belong to the disadvantaged group or choose not to say
+
+        -   $s_{i,D}=\{ D, N \}$
+
+    -   A: report that they belong to the advantaged group or choose not to say
+
+        -   $s_{i,A}=\{ A,N \}$
+
+# Model Setting (2/2)
+
+-   Payoffs:
+
+    -   G: $U_{G}=-(v_{i}-I(i\in D))^2$
+
+    -   D: $U_{i,D}(s=D)=\mu_{D}+\epsilon_{i,D}$
+
+    -   A: $U_{i,A}(s=A)=\mu_{A}+\epsilon_{i,A}$
+
+    -   $U_{i,D}(s=N)=U_{i,A}(s=N)=U(s=N)$
+
+        -   unrealistic but good for plotting and does not affect conclusion
+
+    -   $\mu_D>\mu_A$ due to preferential treatment
+
+    -   $\epsilon$s are normally distributed for plotting (or can really be of any distribution)
+
+-   Common knowledge:
+
+    -   The utility functions
+
+    -   The distribution of $\epsilon$s
+
+-   Special assumption
+
+    -   Equal sizes of $D$ and $A$ (for simplicity)
+
+# Best strategies
+
+For government ($G$):
+
+$$
+v_{i}=E(i\in D| s_{i})
+$$
+
+For $D$ and $A$:
+
+-   Choose to reveal their true identity when
+
+    $$
+    U_{i,D}(s=D)>U(s=N)~~~~U_{i,A}(s=A)>U(s=N)
+    $$
+
+-   "I prefer not to say" otherwise
+
+# Solve for $U(s=N)$ (baseline)
+
+Parameters:
+
+-   $\mu_{D}=1,~\mu_{A}=0$, $Var(\epsilon_{D})=Var(\epsilon_{A})=1$
+
+-   $U(s=N)=\frac{\text{Blue Shaded Area}}{\text{Total Shaded Area}}\approx0.278$
+
+Outcome:
+
+-   61% of Advantaged Group refuse to self-identify
+
+-   24% of the Disadvantaged Group refuse to self-identify
+
+```{r, fig.width=8, fig.height=3}
+library(tidyverse)
+x <- seq(-1,5,0.01)
+ya <- dnorm(x, 0, 1)
+yd <- dnorm(x, 1, 1)
+u=0.278
+p1 <- data.frame(x=rep(x,2), y=c(ya, yd), group=c(rep("Advantaged",601), rep("Disadvantaged",601)))
+
+ggplot(p1, aes(x=x, y=y, color=group)) + facet_grid(rows = vars(group)) +
+  geom_line()+geom_vline(xintercept = u, linetype=2) + theme_bw() +
+  geom_ribbon(data=subset(p1,x<=u),aes(x=x,ymax=y, fill=group),ymin=0,alpha=0.3) +
+  theme(legend.position = "none") +
+  labs(x="U(s=A or G)", y="Probability Density")
+
+```
+
+# What if there is more social stigma (lower $\mu_{D}$)?
+
+Parameters:
+
+-   $\mu_{D}=0.5,~\mu_{A}=0$, $Var(\epsilon_{D})=Var(\epsilon_{A})=1$
+
+-   $U(s=N)=\frac{\text{Blue Shaded Area}}{\text{Total Shaded Area}}\approx0.413$
+
+Outcome:
+
+-   66%(↑) of Advantaged Group refuse to self-identify
+
+-   47%(↑) of the Disadvantaged Group refuse to self-identify
+
+```{r, fig.width=8, fig.height=3}
+x <- seq(-1,5,0.01)
+ya <- dnorm(x, 0, 1)
+yd <- dnorm(x, 0.5, 1)
+u=0.413
+p2 <- data.frame(x=rep(x,2), y=c(ya, yd), group=c(rep("Advantaged",601), rep("Disadvantaged",601)))
+
+ggplot(p2, aes(x=x, y=y, color=group)) + facet_grid(rows = vars(group)) +
+  geom_line()+geom_vline(xintercept = u, linetype=2) + theme_bw() +
+  geom_ribbon(data=subset(p2,x<=u),aes(x=x,ymax=y, fill=group),ymin=0,alpha=0.3) +
+  theme(legend.position = "none") +
+  labs(x="U(s=A or G)", y="Probability Density")
+
+```
+
+# What if the advantaged group is less cheeky (higher $\mu_{A}$)?
+
+Parameters:
+
+-   $\mu_{D}=1,~\mu_{A}=0.5$, $Var(\epsilon_{D})=Var(\epsilon_{A})=1$
+
+-   $U(s=N)=\frac{\text{Blue Shaded Area}}{\text{Total Shaded Area}}\approx0.371$
+
+Outcome:
+
+-   45%(↓) of Advantaged Group refuse to self-identify
+
+-   26%(↑) of the Disadvantaged Group refuse to self-identify
+
+```{r, fig.width=8, fig.height=3}
+x <- seq(-1,5,0.01)
+ya <- dnorm(x, 0.5, 1)
+yd <- dnorm(x, 1, 1)
+u=0.371
+p3 <- data.frame(x=rep(x,2), y=c(ya, yd), group=c(rep("Advantaged",601), rep("Disadvantaged",601)))
+
+ggplot(p3, aes(x=x, y=y, color=group)) + facet_grid(rows = vars(group)) +
+  geom_line()+geom_vline(xintercept = u, linetype=2) + theme_bw() +
+  geom_ribbon(data=subset(p3,x<=u),aes(x=x,ymax=y, fill=group),ymin=0,alpha=0.3) +
+  theme(legend.position = "none") +
+  labs(x="U(s=A or G)", y="Probability Density")
+
+```
+
+# What if people only care about the preferential treatment *per se* and not about reporting?
+
+Smaller variances:
+
+-   $\mu_{D}=1,~\mu_{A}=0$, $Var(\epsilon_{D})=Var(\epsilon_{A})=0.5$
+
+-   $U(s=N)=\frac{\text{Blue Shaded Area}}{\text{Total Shaded Area}}\approx0.0506$
+
+Outcome:
+
+-   54%(↓) of Advantaged Group refuse to self-identify
+
+-   2.9%(↓↓) of the Disadvantaged Group refuse to self-identify
+
+```{r, fig.width=8, fig.height=2.5}
+x <- seq(-1,5,0.01)
+ya <- dnorm(x, 0, .5)
+yd <- dnorm(x, 1, .5)
+u=0.0506
+p4 <- data.frame(x=rep(x,2), y=c(ya, yd), group=c(rep("Advantaged",601), rep("Disadvantaged",601)))
+
+ggplot(p4, aes(x=x, y=y, color=group)) + facet_grid(rows = vars(group)) +
+  geom_line()+geom_vline(xintercept = u, linetype=2) + theme_bw() +
+  geom_ribbon(data=subset(p4,x<=u),aes(x=x,ymax=y, fill=group),ymin=0,alpha=0.3) +
+  theme(legend.position = "none") +
+  labs(x="U(s=A or G)", y="Probability Density")
+
+```
+
+# Takeaways
+
+-   Social stigma can be taken advantage of by the advantaged group.
+
+-   The advantaged group's sympathy leads to lower self-identification of the disadvantaged group.
+
+-   When people only care about the preferential treatment *per se*, both group self-identify less.
+
+# Possible Extensions
+
+-   Different sizes of the two groups
+
+    -   when the disadvantaged group is larger relative to the advantaged group, more of the advantaged group choose not to self-identify (intuitively).
+
+-   Different utility derived from the preferential treatment for different groups
+
+    -   Realistically, the disadvantaged group tend to derive more utility from the preferential treatment
+
+        -   Diminishing marginal utility
+
+    -   Changes the numeric results but not the conclusion.
+
+-   Different distributions
+
+    -   Changes the numeric results but not the conclusion.
+
+-   Misreporting (when the identity is not verifiable)
+
+    -   More complex

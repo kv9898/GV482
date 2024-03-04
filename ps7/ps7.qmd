@@ -1,0 +1,286 @@
+---
+title: Discrimination
+subtitle: GV482 Problem Set - Game Theory
+date: last-modified
+authors:
+  - name: Dianyi Yang
+execute:
+  echo: false
+  warning: false
+  error: false
+format:
+  orcid-pdf:
+    number-sections: false
+    fig-pos: 'H'
+---
+
+# 1 Preliminaries (not covered in the seminar)
+
+(a) Explain briefly why the real effect of being Black on police violence is 2%.
+
+    \color{blue}
+
+    Controlling for criminal records, the difference in police violence between the two groups is 2%.
+
+    \color{black}
+
+(b) Show that the researcher overestimates the effect of being Black on police violence if $x_B < x_W$ (i.e., Whites would be discriminated at the level of stop) and underestimates it if $x_B > x_W$ (i.e., Blacks would be discriminated at the level of stop as it is most likely).
+
+    \color{blue}
+
+    ```{=tex}
+    \begin{align*}
+    \widehat{ATE}_{\text{Black}}&=4\%x_B+12\%(1-x_B)-2\%x_W-10\%(1-x_W) \\
+    &=0.12-0.08x_B-0.1+0.08x_W \\
+    &=0.02+0.08(x_W-x_B) \\
+    \text{Bias}&=0.08(x_W-x_B) \\
+    \end{align*}
+    ```
+    \color{black}
+
+(c) Explain why we should think of the effects (rather than the effect) of race on police violence.
+
+    \color{blue}
+
+    1.  Differential stops
+    2.  Heterogeneous effect of criminal record
+    3.  Socio-economic disadvantages that led to higher crime rates.
+
+    \color{black}
+
+(d) Suppose that the proportion of individuals stopped from each group is equal to their proportion in the population (that is, there is no discrimination at the level of stops). Explain why the estimated effect is higher than any real effect of being Black on political violence whenever $\alpha_W\geq \frac{1}{6}+\alpha_B\frac{5}{6}$.
+
+    \color{red}
+
+    ```{=tex}
+    \begin{align*}
+    \text{Bias}&=\widehat{ATE}-ATE \\
+    &=[7\%\alpha_B+12\%(1-\alpha_B)-4\%\alpha_W-10\%(1-\alpha_W)]+[(7\%-4\%)\frac{\alpha_W+\alpha_B}{2}-(12\%-10\%)(\frac{1-\alpha_W+1-\alpha_B}{2})] \\
+    &=[12\%-5\%\alpha_B-10\%+6\%\alpha_W]-[\frac{3}{2}\%(\alpha_W+\alpha_B)-2\%+1\%(\alpha_W+\alpha_B)] \\
+    &=3.5\%\alpha_W-7.5\%\alpha_B>0
+    \end{align*}
+    ```
+    \color{red}
+
+# 2 The model
+
+## Part A - Police behaviour
+
+In this first part, we think to determine the police officer’s behavior as a function of his information: $v^{*}(s^c_{I_g},s^v_{I_g})$. To do so, we first consider what the signals tell $P$ about the civilian’s level of criminality and propensity for violence.
+
+### Q1 {#sec-q1}
+
+In this question, we seek to understand what the police officer can infer from the signals. To answer these questions, you need to use Bayes’ rule.
+
+(a) Show that the officer’s posterior after signal $s^c_{I_g} = 1$ satisfies: $Pr(θ^c_{I_g}=1|s^c_{I_g} = 1) = 1$.
+
+    \color{blue}
+
+    ```{=tex}
+    \begin{align*}
+    Pr(θ^c_{I_g}=1|s^c_{I_g} = 1)&=\frac{Pr(θ^c_{I_g}=1)Pr(s^c_{I_g} = 1|θ^c_{I_g}=1)}{Pr(θ^c_{I_g}=1)Pr(s^c_{I_g} = 1|θ^c_{I_g}=1)+Pr(θ^c_{I_g}=-1)Pr(s^c_{I_g} = 1|θ^c_{I_g}=-1)} \\
+    &=\frac{\pi_g^c q^c}{\pi_g^c q^c+(1-\pi_g^c)\times0} \\
+    &=1
+    \end{align*}
+    ```
+    \color{black}
+
+(b) Show that the officer’s posterior after signal $s^c_{I_g} = -1$ satisfies: $Pr(θ^c_{I_g}=1|s^c_{I_g} = -1) = 0$.
+
+    \color{blue}
+
+    ```{=tex}
+    \begin{align*} 
+    Pr(θ^c_{I_g}=1|s^c_{I_g} = -1)&=\frac{Pr(θ^c_{I_g}=1)Pr(s^c_{I_g} = -1|θ^c_{I_g}=1)}{Pr(θ^c_{I_g}=1)Pr(s^c_{I_g} = -1|θ^c_{I_g}=1)+Pr(θ^c_{I_g}=-1)Pr(s^c_{I_g} = -1|θ^c_{I_g}=-1)} \\ 
+    &=\frac{\pi_g^c\times0}{\pi_g^c\times0+(1-\pi_g^c)\times q^c} \\ 
+    &=0
+    \end{align*}
+    ```
+    \color{black}
+
+(c) Show that the officer’s posterior after signal $s^c_{I_g} = 0$ satisfies: $Pr(θ^c_{I_g}=1|s^c_{I_g} = 0) = \pi_g^c$.
+
+    \color{blue}
+
+    ```{=tex}
+    \begin{align*}  
+    Pr(θ^c_{I_g}=1|s^c_{I_g} = 0)&=\frac{Pr(θ^c_{I_g}=1)Pr(s^c_{I_g} = 0|θ^c_{I_g}=1)}{Pr(θ^c_{I_g}=1)Pr(s^c_{I_g} = 0|θ^c_{I_g}=1)+Pr(θ^c_{I_g}=-1)Pr(s^c_{I_g} = 0|θ^c_{I_g}=-1)} \\  
+    &=\frac{\pi_g^c\times(1-q^c)}{\pi_g^c\times(1-q^c)+(1-\pi_g^c)\times (1-q^c)} \\  
+    &=\frac{\pi^c_g}{\pi^c_g+(1-\pi^c_g)} \\
+    &=\pi^c_g
+    \end{align*}
+    ```
+    \color{black}
+
+(d) Show that the police officer’s posterior regarding the propensity for violence ($θ^v_{I_g}$) satisfies:
+
+    ```{=tex}
+    \begin{align*}
+    Pr(θ^v_{I_g} = 1|s^v_{I_g}= 1) &= 1 \\
+    Pr(θ^v_{I_g} = 1|s^v_{I_g}= 0) &= \pi^v_g \\
+    Pr(θ^v_{I_g} = 1|s^v_{I_g}= -1) &= 0
+    \end{align*}
+    ```
+    \color{blue}
+
+    Same as above.
+
+    \color{black}
+
+### Q2
+
+(a) Explain briefly, but carefully why: $v^∗(s^c_{I_g},s^v_{I_g}) = E_{\theta^c_{I_g},\theta^v_{I_g}}(\alpha\theta^c_{I_g}+\theta^v_{I_g} |s^c_{I_g},s^v_{I_g}) + b^v_g$.
+
+    Comment: The expression $E_{\theta^c_{I_g},\theta^v_{I_g}}$ means that we are taking the expectations over the random variables $\theta^c_{I_g},\theta^v_{I_g}$, which are the unknown from $P$’s perspective.
+
+    \color{blue}
+
+    Take FOC of $E_{\theta^c_{I_g},\theta^v_{I_g}}(U_P)$ with respect to $v$:
+
+    ```{=tex}
+    \begin{align*}
+    E_{\theta^c_{I_g},\theta^v_{I_g}}[-2(v-(\alpha\theta^c_{I_g}+\theta^v_{I_g}+b^v_g))|s^c_{I_g},s^v_{I_g}]&=0 \\
+    E_{\theta^c_{I_g},\theta^v_{I_g}}[v-(\alpha\theta^c_{I_g}+\theta^v_{I_g}+b^v_g)|s^c_{I_g},s^v_{I_g}]&=0 \\
+    v^*&=E_{\theta^c_{I_g},\theta^v_{I_g}}(\alpha\theta^c_{I_g}+\theta^v_{I_g}+b^v_g|s^c_{I_g},s^v_{I_g}) \\
+    v^*&=E_{\theta^c_{I_g},\theta^v_{I_g}}(\alpha\theta^c_{I_g}+\theta^v_{I_g}|s^c_{I_g},s^v_{I_g})+b^v_g
+    \end{align*}
+    ```
+    \color{black}
+
+(b) Explain briefly, but carefully why we can rewrite: $v^∗(s^c_{I_g},s^v_{I_g}) = \alpha E_{\theta^c_{I_g},\theta^v_{I_g}}(\theta^c_{I_g}|s^c_{I_g})+E_{\theta^c_{I_g},\theta^v_{I_g}}(\theta^v_{I_g} |s^v_{I_g}) + b^v_g$.
+
+    \color{blue}
+
+    ```{=tex}
+    \begin{align*}
+    v^*&=E_{\theta^c_{I_g},\theta^v_{I_g}}(\alpha\theta^c_{I_g}+\theta^v_{I_g}|s^c_{I_g},s^v_{I_g})+b^v_g \\
+    &=\alpha E_{\theta^c_{I_g},\theta^v_{I_g}}(\theta^c_{I_g}|s^c_{I_g},s^v_{I_g})+E_{\theta^c_{I_g},\theta^v_{I_g}}(\theta^v_{I_g} |s^c_{I_g},s^v_{I_g}) + b^v_g \\
+    &=\alpha E_{\theta^c_{I_g},\theta^v_{I_g}}(\theta^c_{I_g}|s^c_{I_g})+E_{\theta^c_{I_g},\theta^v_{I_g}}(\theta^v_{I_g} |s^v_{I_g}) + b^v_g \\
+    &~\text{\textcolor{red}{independence of signals}}
+    \end{align*}
+    ```
+    \color{black}
+
+(c) Using your answer to [Q1](#sec-q1), explain briefly why
+
+    ![](images/clipboard-2433206821.png)
+
+    \color{blue}
+
+    Most are uncontroversial as $\theta$ can only take 0 and 1/-1 given the signal. The $2\pi^v_g-1$ term comes from:
+
+    ```{=tex}
+    \begin{align*}
+    E_{\theta^c_{I_g}}(\theta^c_{I_g}|s^c_{I_g}=0)&= 1Pr(\theta^c_{I_g}=1|s^c_{I_g}=0)+(-1)Pr(\theta^c_{I_g}=-1|s^c_{I_g}=0)\\
+    &=\pi^c_g-(1-\pi^c_g) \\
+    &=2\pi^c_g-1
+    \end{align*}
+    ```
+    \color{black}
+
+## Part B - The decision whether to stop the civilian
+
+### Q3
+
+We can now turn to the decision whether to stop the civilian. We denote $A_g(s^c_{I_g})$ $P$’s expected utility from stopping $I_g$ after receiving signal $s^c_{I_g}$ (remember that $s^v_{I_g}$ is received after stopping so cannot be condition his decision on it at this stage). We will compute it in this question. Note that this question is algebra intensive. It is not too hard, but it is quite tedious. If you hate algebra, you may want to skip it, though it is always good practice (for your exams, for your future life) to try to answer this sort of questions.
+
+(a) Show that $−(v^∗(s^c_{I_g},s^v_{I_g}) − b^v_g − \theta^v_{I_g} − \alpha\theta^c_{I_g})^2 = −(E(\theta^v_{I_g} |s^v_{I_g} ) − \theta^v_{I_g})^2 − \alpha^2 (E(\theta^c_{I_g} |s^c_{I_g}) − \theta^c_{I_g})^2 − 2\alpha(E(\theta^v_{I_g}|s^v_{I_g}) − \theta^v_{I_g})(E(\theta^c_{I_g} |s^c_{I_g}) − \theta^c_{I_g})$.
+
+    \color{blue}
+
+    ```{=tex}
+    \begin{align*}
+    &−(v^∗(s^c_{I_g},s^v_{I_g}) − b^v_g − \theta^v_{I_g} − \alpha\theta^c_{I_g})^2 \\
+    =&-((\alpha E(\theta^c_{I_g}|c^v_{I_g})+E(\theta^v_{I_g}|c^v_{I_g})+b^v_g)-b^v_g-\theta^v_{I_g}-\alpha\theta^c_{I_g})^2 \\
+    =&-(\alpha(E(\theta^c_{I_g}|c^v_{I_g})-\theta^c_{I_g})+E(\theta^v_{I_g}|c^v_{I_g})-\theta^v_{I_g})^2 \\
+    =&−(E(\theta^v_{I_g} |s^v_{I_g} ) − \theta^v_{I_g})^2 − \alpha^2 (E(\theta^c_{I_g} |s^c_{I_g}) − \theta^c_{I_g})^2 − 2\alpha(E(\theta^v_{I_g}|s^v_{I_g}) − \theta^v_{I_g})(E(\theta^c_{I_g} |s^c_{I_g}) − \theta^c_{I_g})
+    \end{align*}
+    ```
+    \color{black}
+
+(b) Show that $E_{\theta^c_{I_g},\theta^v_{I_g}}[−(E(\theta^v_{I_g} |s^v_{I_g} ) − \theta^v_{I_g})^2 − \alpha^2 (E(\theta^c_{I_g} |s^c_{I_g}) − \theta^c_{I_g})^2 − 2\alpha(E(\theta^v_{I_g}|s^v_{I_g}) − \theta^v_{I_g})(E(\theta^c_{I_g} |s^c_{I_g}) − \theta^c_{I_g})|\theta^c_{I_g},\theta^v_{I_g}]=-Var(\theta^v_{I_g} |s^v_{I_g})-\alpha^2 Var(\theta^c_{I_g} |s^c_{I_g})$.
+
+    \color{blue}
+
+    ```{=tex}
+    \begin{align*}
+    &E_{\theta^c_{I_g},\theta^v_{I_g}}[−(E(\theta^v_{I_g} |s^v_{I_g} ) − \theta^v_{I_g})^2 − \alpha^2 (E(\theta^c_{I_g} |s^c_{I_g}) − \theta^c_{I_g})^2 − 2\alpha(E(\theta^v_{I_g}|s^v_{I_g}) − \theta^v_{I_g})(E(\theta^c_{I_g} |s^c_{I_g}) − \theta^c_{I_g})|\theta^c_{I_g},\theta^v_{I_g}] \\
+    =&-Var(\theta^v_{I_g}|s^v_{I_g})-\alpha^2 Var(\theta^c_{I_g}|s^c_{I_g})-2\alpha(0)(0) \\
+    =&-Var(\theta^v_{I_g}|s^v_{I_g})-\alpha^2 Var(\theta^c_{I_g}|s^c_{I_g})
+    \end{align*}
+    ```
+    \color{black}
+
+(c) Show that
+
+    $Var(\theta^v_{I_g}|s^v_{I_g}=1)=0$
+
+    \color{blue}
+
+    Because $P(\theta^v_{I_g}=1|s^v_{I_g}=1)=1$.
+
+    \color{black}
+
+    $Var(\theta^v_{I_g}|s^v_{I_g}=0)=4\pi^v_{g}(1-\pi^v_{g})$
+
+    \color{blue}
+
+    ```{=tex}
+    \begin{align*}
+    &Var(\theta^v_{I_g}|s^v_{I_g}=0) \\
+    =&E[\theta^{v2}_{I_g}|s^v_{I_g}=0]-E[\theta^{v}_{I_g}|s^v_{I_g}=0]^2 \\
+    =&[1Pr(\theta^{v2}=1_{I_g}|s^v_{I_g}=0)+1Pr(\theta^{v2}_{I_g}=1|s^v_{I_g}=0)] - (2\pi^v_g-1)^2 \\
+    =&1-(4\pi^{v2}_g-4\pi^v_g+1) \\
+    =&4\pi^v_g(\pi^v_g-1)
+    \end{align*}
+    ```
+    \color{black}
+
+    $Var(\theta^v_{I_g}|s^v_{I_g}=-1)=0$
+
+    \color{blue}
+
+    Because $P(\theta^v_{I_g}=-1|s^v_{I_g}=-1)=1$.
+
+    \color{black}
+
+## Part C - The researchers’ problem
+
+### Q5
+
+In this question, we compare the average violence against members of group $M$ and members of group $m$, which we denote $\bar{V_M}$ and $\bar{V_m}$, respectively. We, first, need to compute these expected level of violence.
+
+(a) We start with a civilian from the majority group. Recall that a citizen from group $M$ is stopped only if $s^c_{I_M} = 1$. Show that
+
+    $$
+    \bar{V_M}=\alpha+(2\pi^v_M-1)
+    $$
+
+    \color{blue}
+
+    ```{=tex}
+    \begin{align*}
+    \bar{V_M}&=Pr(s^v_M=1)(\alpha+1+b^v_M)+Pr(s^v_M=0)(\alpha+2\pi^v_M-1+b^v_g)+Pr(s^v_M=-1)(\alpha-1+b^v_g) \\
+    &=\pi^v_M q^v(\alpha+1+b^v_M)+(\pi^v_M(1-q^v)+(1-\pi^v_M)(1-q^v))(\alpha+2\pi^v_M-1+b^v_M)+(1-\pi^v_M)q^v(\alpha-1+b^v_g) \\
+    &=\pi^v_M q^v(\alpha+1+b^v_M)+(1-q^v)(\alpha+2\pi^v_M-1+b^v_M)+(1-\pi^v_M)q^v(\alpha-1+b^v_M) \\
+    &=\alpha+\pi^v_M q^v+(1-q^v)(2\pi^v_M-1)-(1-\pi^v_M)q^v+b^v_M \\
+    &=\alpha+\pi^v_M q^v+2\pi^v_M-1-2\pi^v_Mq^v+q^v-q^v+\pi^v_Mq^v+b^v_M \\
+    &=\alpha+2\pi^v_M-1+b^v_M \\
+    &=\alpha+2\pi^v_M-1
+    \end{align*}
+    ```
+    \color{black}
+
+(b) We now turn to $\bar{V_m}$, which will prove slightly more complicated. Recall that a member of group $m$ is stopped whenever she produces signal $s^c_{I_m} = 1$ or $s^c_{I_m} = 0$. Explain why the proportion of minority individuals with signal $s^c_{I_m} = 1$ among those *arrested* is: $\frac{\pi^c_mq^c}{\pi^c_mq^c+1-q^c}$.
+
+    \color{blue}
+
+    Assume being stopped is equivalent to being arrested.
+
+    \begin{align*}
+    \text{prop}&=\frac{P(s^c_m=1)}{P(s^c_m=1)+P(s^c_m=0)} \\
+    &=\frac{\pi^c_mq^c}{\pi^c_mq^c+\pi^c_m(1-q^c)+(1-\pi^c_m)(1-q^c)} \\
+    &=\frac{\pi^c_mq^c}{\pi^c_mq^c+(1-q^c)} 
+    \end{align*}
+
+    \color{black}
