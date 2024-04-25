@@ -1,0 +1,89 @@
+The database contains the following variables:
+
+- Country (3 letters abbreviation)
+
+- Year 
+
+- Total vote share for left-wing populist parties
+The data are from Timbro (https://docs.google.com/spreadsheets/d/1H6AktPr-jRK5vRh7_owPvED96EqmKfUdjKFX9wiZMI4/edit#gid=0)
+Data are for legislative elections.
+When a country uses a two-round system, first-round results are used.
+Countries CAN have multiple elections in a year.
+
+- Total vote share for right-wing populist parties
+Same comment as for left-wing populists
+
+- Election date
+Variable stating the date of the election. If two-round elections, first-round date is considered. If elections are held over two days, 
+later date is considered.
+
+- Terrorist data
+Data on all attacks are taken from the Global Terrorism Database
+Data on Islamist attacks are taken from the Fondation Pour l'Innovation Politique
+The data are available here: https://data.fondapol.org/en/non-classe-en/islamist-terrorist-attacks-in-the-world-1979-2019-2/
+Data on left-wing and right-wing terrorism have been hand-coded in two steps: (1) When the terrorist group carrying the attack
+is known, the group has been classified left or right (see file here where a value of one designates a left-wing group and a 
+value of zero a right-wing group: https://www.dropbox.com/scl/fi/quj8g1pcaexymx2njukhd/LeftRightTerrorism.xlsx?rlkey=6voln1s89m46lybw70enduns0&dl=0)
+(2) when the group is unknown, classification has been done by looking at the motive of the attack (more details available by email if needed).
+All data are aggregated yearly relative to the election date for each country.
+Attacks look at the number of attacks for all terrorist attacks
+nkill look at the number of killed citizens for all terrorist attacks
+nwound look at the number of wounded citizens for all terrorist attacks
+leftproxy rightproxy are the number of attacks by left-wing and right-wing groups/individuals, respectively 
+nkill_left nwound_left nkill_right nwound_right are the number of deaths and wounded linked to groups with left-wing/right-wing ideology
+IslClaim are all attacks claimed by Islamist movements as categorized by the Fondation Pour l'Innovation Politique
+IslPoss are all attacks which can be attributed to Islamist movements as categorized by the Fondation Pour l'Innovation Politique
+nkill_Isl* and nwound_Isl* are the number of deaths and wounded linked to the different type of Islamist attacks
+Home* means attacks that happen in the country where the election is held Y1 to Y4 indicate the number of years to election
+(e.g., Y1 means that the attacks/n death/ n wounded are in the year to the election (in the 365 days prior to the election in X))
+You also have attacks in other countries which took place in the years prior to the election in country X. 
+The name of these variables have three components: variable type, country attacked, year(s) prior to election
+(e.g., AttacksITAY1 captures the attacks who took place in Italy in the year prior to the election in country X
+nkillICEY3 captures the number of killed in Iceland in the third year (1095 days to 730 days) prior to the election in country X) 
+
+- Language
+The language similarity measures are taken from the dataset prepared by Toubal and Melitz, introduced in their Journal of International
+Economics paper (2014).
+The dataset is available here: http://faridtoubal.com/Paper/LangJIE/lang.html
+Three measures can be used: prox1, prox2, and cle which are described on pages 354-355 of their article
+Note that there is no data for Serbia and Montenegro. Belgium and Luxembourg are also equivalent in the data so they have similar indices
+A variable name has two components: type of variable (prox1, prox2, cle) + comparison country
+
+
+- Border
+Comes from https://www.geodatasource.com  
+The dummy takes a value of one if country X borders the country listed under the variable Country
+Note that a country is not considered as bordering itself (e.g., the variable BorderAUT has a value of 0 for country AUT, 
+the variable BorderUK has a value of 0 for country UK).
+Only neighbors included in the dataset are considered (e.g., Ukraine is not considered though it borders Poland for example).
+BorderITA, for example, would take value 1 if a country borders Italy and 0 otherwise 
+
+- Cultural similarity
+The cultural similarity index is constructed using the data from Michalopoulos and Xue's paper "Folklore" published in the QJE
+The paper compute the number of tales containing certain motifs (23 different motifs in total). We use the country level data (MTurk_countries.dta)
+Two index are computed: 1) normalised_culturalsimilarity uses the number of tales using the motifs normalised
+2) percent_culturalsimilarity use the percentage of tales using a motif per country.
+In both cases, a difference index is computed by taking the average distance over each motif. A similarity index corresponds to one minus the difference 
+A variable name, like above, has two components: the similarity index used + the abbreviation of the comparison country
+
+- Unemployment, etc. are a set of possible controls
+Percentage are expressed in percent (so 9 would mean 9%)
+Economic variables are expressed in millions euros
+More details on the variables can be found below
+Unemployment: Unemployment rate (Source: Eurostat)
+Import: Yearly import (Source: Eurostat)
+Export: Yearly export (Source: Eurostat)
+Tertiary: % over 25 with tertiary education (Source: Worldbank)
+population: population (Source: Eurostat)
+marriage: Crude marriage rate (source:Eurostat)
+immigration: immigration (Source: Eurostat)
+gdp: gdp (Source: Eurostat)
+emigration: emigration (Source: Eurostat)
+Divorce: Crude divorce rate (Source: Eurostat)
+Over65: % pop over 65 years old (Source: Eurostat)
+Growth: GDP growth % on yearly basis (Source: Eurostat)
+Export_penetration: Export as % of GDP (Source: Eurostat)
+Import_penetration: Import as % of GDP (Source: Eurostat)
+Immigration_percent: Immigration as percent of pop (Source: Eurostat)
+Emigration_percent: Emigration as percent of pop (Source: Eurostat)
+

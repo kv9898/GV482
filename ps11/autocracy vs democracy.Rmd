@@ -1,0 +1,606 @@
+---
+title: 'Autocracy v Democracy'
+subtitle: "Problem Set - Empirics"
+author: "Dianyi Yang <br>GV482^[Questions? Email [l.s.bosshart@lse.ac.uk](mailto:l.s.bosshart@lse.ac.uk).<br>R adaption of Stephane Wolton's STATA problem set implemented by [Felix Wortmann Callejón](https://www.wortmanncallejon.de).]"
+date: "`r as.character(Sys.Date())`"
+output:
+  bookdown::html_document2:
+    fig_caption: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE,
+                      message = FALSE,
+	warning = FALSE,
+  root.dir = "D:/OneDrive - London School of Economics/Desktop/lse assignments/GV482/ps11")
+#dirname(rstudioapi::getSourceEditorContext()$path)
+setwd("D:/OneDrive - London School of Economics/Desktop/lse assignments/GV482/ps11") #change to your own directory
+
+need <- c('tidyverse','haven','modelsummary',"fixest","estimatr","kableExtra",
+          "arsenal","car","ggfixest") # list packages
+have <- need %in% rownames(installed.packages()) # checks packages you have
+if(any(!have)) install.packages(need[!have]) # install missing packages
+invisible(lapply(need, library, character.only=T))
+
+rm(list = ls())
+data <- read_dta("AutocracyVDemocracy_ps_data.dta")
+```
+
+In this problem set, we will continue our discussion on the efficiency of democracy (or representative regime as we call it) versus autocracy. We will tackle an important question: is the representative regime good for economic growth? To get a better picture on this important issue, you are tasked with replicating and extending Acemoglu, Naidu, Retrepo, Robinson's (henceforth, ANRR) recent paper ``Democracy Does Cause Growth'' (published in the Journal of Political Economy in 2019, already cited more than a thousand times, and available on Moodle). Notice that the authors take a strong position on the issue. They assert and emphasize the positive causal effect of democracy on economic performance.
+
+There are two main difficulties with measuring the impact of democracy on the economy. First, institutions are sticky. Not so many countries switch from autocracy to democracy. Second, the countries which transition to democracy may do so because they are susceptible to benefit more from a change of regimes. In other words, we, researchers, face a problem of selection into the treatment.
+
+To resolve the first problem, scholars have been using panel data analysis. They take a long time series with country fixed effects and year fixed effects and use the few countries that change regimes to measure the effect of democracy. This is akin to a form of difference-in-differences strategy, with differential date of treatment (but it is not exactly a diff-in-diffs!, more on this below). ANRR contend that this approach is flawed because countries that transition are on a different trajectories as countries that remain autocratic (or remain democratic). ANRR assert that we need to correct for the failure of the parallel trends assumption. They employ different approaches to do so and we will discuss them in this problem set.
+
+The second problem is more difficult to tackle. As we know (and as you will solve again below), the difference-in-differences approach recovers the average treatment effect on the treated (or $ATT$). With selection into the treatment, the $ATT$ is a biased estimate of the average treatment effect ($ATE$), which is the quantity of interest if one wants to assert that democracy *does* cause growth. We will not replicate this part of the paper, but we will substantively discuss their approach in the ante-penultimate question of the problem set.
+
+There is no codebook available for this problem set, but I will let you know the variables to be used.
+
+
+**Q1:** We first want to investigate the problem caused by the failure of the parallel trend assumption. To do so, we turn to the potential outcome framework. We consider two groups of equal size across two periods. In the first period, no group is treated; in the second, one group is treated. We denote $\overline{Y}_{UT_t}(T)$ the average outcome of interest (in our case economic performance) of the treated group ($UT$ stands for untreated then treated) in period $t \in \{1,2\}$) as a function of its potential treatment status $T \in \{0,1\}$ (the treatment here is democratization). We denote $\overline{Y}_{UU_t}(T)$ the average outcome of interest (in our case economic performance) of the control group ($UU$ stands for untreated in both periods) in period $t \in \{1,2\}$) as a function of its potential treatment status $T \in \{0,1\}$. The researchers observe:
+
+| Quantity                 | Meaning                                                 |
+|:-------------------------|:-------------------------------------------------------:|
+| $\overline{Y}_{UT_1}(0)$ | Average in $t=1$ for the treated group absent treatment |
+| $\overline{Y}_{UT_2}(1)$ | Average in $t=2$ for the treated group with treatment   |
+| $\overline{Y}_{UU_1}(0)$ | Average in $t=1$ for the control group absent treatment |
+| $\overline{Y}_{UU_2}(0)$ | Average in $t=2$ for the control group absent treatment |
+
+**(a)** Using the notation above, what is the average treatment effect ($ATE$)? What is the average treatment effect on the treated ($ATT$)?
+
+***Answer:*** 
+
+<font color="blue">
+
+
+\begin{align*}
+ATE&= \frac{\overline{Y}_{UT_2}(1)-\overline{Y}_{UT_2}(0)}{2}+\frac{\overline{Y}_{UU_2}(1)-\overline{Y}_{UU_2}(0)}{2}\\
+ATT&=\overline{Y}_{UT_2}(1)-\overline{Y}_{UT_2}(0)
+\end{align*}
+
+
+</font>
+
+**(b)** Show that the difference-in-differences estimator, which we label $D$, is equal to:
+
+$$
+D = ATT + \big[(\overline{Y}_{UT_2}(0)-\overline{Y}_{UT_1}(0))-(\overline{Y}_{UU_2}(0)-\overline{Y}_{UU_1}(0))\big]
+$$
+
+***Answer:*** 
+
+<font color="blue">
+
+
+\begin{align*}
+D&=\overline{Y}_{UT_2}(1)-\overline{Y}_{UT_1}(0)-[\overline{Y}_{UU_2}(0)-\overline{Y}_{UU_1}(0)]\\
+&=\overline{Y}_{UT_2}(1)-\overline{Y}_{UT_2}(0)+\overline{Y}_{UT_2}(0)-\overline{Y}_{UT_1}(0)-[\overline{Y}_{UU_2}(0)-\overline{Y}_{UU_2}(0)]\\
+&=ATT + \big[(\overline{Y}_{UT_2}(0)-\overline{Y}_{UT_1}(0))-(\overline{Y}_{UU_2}(0)-\overline{Y}_{UU_1}(0))\big]
+\end{align*}
+
+
+</font>
+
+**(c)** The parallel trend assumption is that $(\overline{Y}_{UT_2}(0)-\overline{Y}_{UT_1}(0))=(\overline{Y}_{UU_2}(0)-\overline{Y}_{UU_1}(0))$. Suppose that the treated units are on a downward trends relative to the control units. What does it entail for the relationship between $D$ and the $ATT$ (i.e., what sort of bias would this imply)?
+
+***Answer:*** 
+
+<font color="blue">
+
+This would imply a downward bias:
+
+$$
+\begin{align*}
+\overline{Y}_{UT_2}(0)-\overline{Y}_{UT_1}(0) &< \overline{Y}_{UU_2}(0)-\overline{Y}_{UU_1}(0)\\
+\text{Bias}&=(\overline{Y}_{UT_2}(0)-\overline{Y}_{UT_1}(0))-(\overline{Y}_{UU_2}(0)-\overline{Y}_{UU_1}(0))<0 \\
+D&=ATT + \text{Bias}\\
+D&<ATT
+\end{align*}
+$$
+
+</font>
+
+**(d)** Suppose you have evidence that the parallel trend assumption holds. Under which conditions does the difference-in-differences estimator recover the $ATE$? To answer this question, you can assume that $\overline{Y}_{UT_p}(T)=\gamma_{UT} T + \delta_{UT}+\kappa_p$ and $\overline{Y}_{UU_p}(T)=\gamma_{UU} T + \delta_{UU}+\kappa_p$, with $\gamma$ the effect of the treatment, $\delta$ a unit specific effect, and $\kappa$ a time specific effect.
+
+Discuss whether this assumption make sense in the context of this problem set.
+
+***Answer:***
+
+<font color="blue">
+
+This would require that $\text{ATE}=\text{ATT}=\text{ATC}$:
+
+$$
+\begin{align*}
+ATT&=ATC \\
+\overline{Y}_{UT_2}(1)-\overline{Y}_{UT_2}(0)&=\overline{Y}_{UU_2}(1)-\overline{Y}_{UU_2}(0)\\
+\gamma_{UT}1+\delta_{UT}+\kappa_2-(\gamma_{UT}0+\delta_{UT}+\kappa_2)&=\gamma_{UU}1+\delta_{UU}+\kappa_2-(\gamma_{UU}0+\delta_{UU}+\kappa_2)\\ 
+\gamma_{UT}1-\gamma_{UT}0&=\gamma_{UU}1-\gamma_{UU}0\\
+\gamma_{UT}&=\gamma_{UU}
+\end{align*}
+$$
+
+This assumption does not make sense in this problem set, as those who democratised self-selected into treatment (democratisation), presumably because they anticipated a greater treatment effect of democratisation on economic growth. This would imply that $\text{ATT}>\text{ATC}$.
+
+</font>
+
+**Q2** Here, we follow ANRR to document the failure of the parallel trend assumption. We seek to replicate Figure 1 in their article (page 3 on the pdf). To do so, you will need to perform the following steps.
+
+*Step 1:* Generate variables that correspond to the difference between the log gdp per capita (`y` in the dataset) *x* years before or after and the log gdp per capita 1 year before. \gray{(Comment: to do so, you need to use lags and forwards. A \textit{x}-year lag is created with `lag(y, x)`, a \textit{x}-year forward is created with `lead(y, x)`. It is crucial that you perform these operations within groups of each country.)}
+
+```{r question_2_1}
+data <- data |> group_by(country_name)
+for (lag in -15:-1){
+    name <- paste0("y_diff_lag_", -lag)
+    data <- data |> mutate(!!sym(name) := lag(y, -lag, default = NA) - lag(y, 1, default = NA))
+}
+
+for (lag in 0:30){
+    name <- paste0("y_diff_lead_", lag)
+    data <- data |> mutate(!!sym(name) := lead(y, lag, default = NA) - lag(y, 1, default = NA))
+}
+    
+```
+
+You should create variables from 15 years before (i.e., `lag(y, 15) - lag(y, 1)`) to 30 years after (i.e., `lead(y, 30) - lag(y, 1)`). Also remove observations that do not have values for the first four lags of gdp (this necessarily remove the first four years in the database).
+
+*Step 2:* Create a variable that captures democratic transition. To do so, use the variable `dem`, which equals $1$ when a country is free or partially free and $0$ otherwise. A transition occurs when `dem` is $1$ at year $t$ and $0$ in year $t-1$. Keep only the observations that remain autocratic (`dem` is zero in $t$ and $t-1$) or transition to democracy.
+
+```{r question_2_2}
+data <- data |>
+  mutate(dem_transition = if_else(dem == 1 & lag(dem, 1) == 0, 1, 0),
+         autocratic = if_else(dem == 0 & lag(dem, 1) == 0, 1, 0))
+
+data_preserve <- data |> filter(dem_transition == 1 | autocratic == 1)
+  
+```
+
+*Step 3:* Transform `year` in to a factor variable. Then, ANRR use the `teffect, ra` command in `STATA` 46 times, with each of the variables generated in *Step 1* as outcome variable, the variable you created in *Step 2* as treatment and the year factor variable as a control.
+
+The regression adjustment command estimates the ATE in two steps: 
+
+1. it runs a regression of the outcome on the control variables for each group of the treatment variable, and 
+2. subtracts the mean of the fitted values in the control group from the mean of the fitted values in the treatment group. This difference is the average treatment effect.
+
+The estimation for the ATT is slightly different:
+
+1. `teffect` runs a regression of the outcome on the control variables in the control group only, and 
+2. subtracts the mean of the fitted values predicted on the *treatment group* from the mean of *outcome variable* in the treatment group. This difference is the average treatment effect on the treated.
+
+See if you can write a function that achieves this yourself. If you can read STATA code, [this guide](https://clas.ucdenver.edu/marcelo-perraillon/sites/default/files/attached-files/matching_teffects_code_perraillon_0.do) will help you. 
+
+Otherwise, you can use the `teffect_ra` function, sourced from GitHub, that replicates the `teffects` function from `STATA`, with the `ra` option. It takes a model formula (just like your standard regression), as well as a data frame. It is **important** that you specify your formula exactly as indicated below, i.e.  the tilde should be followed by the treatment variable and only then other control variables. By default, the function returns an estimate for the ATE. You should switch the estimand by specifying `treatment.effect = "ATT"` to the function.
+
+```{r question_2_3}
+
+# Source the function by uncommenting this line
+ source("teffect.R")
+
+# Example code:
+#teffect_ra(outcome ~ treatment + control1 + control2, data = df, treatment.effect = "ATT") 
+
+data_preserve$year <- as.factor(data_preserve$year)
+
+results <- data.frame(time=integer(), estimate=double())
+for (lead in 30:0){
+  yname <- paste0("y_diff_lead_", lead)
+  formula <- as.formula(paste0(yname, " ~ dem_transition + year"))
+  est <- teffect_ra(formula, data = data_preserve, treatment.effect = "ATT")$estimate
+  results <- rbind(results, data.frame(time = lead, estimate = est))
+}
+
+for (lag in 1:15){
+  yname <- paste0("y_diff_lag_", lag)
+  formula <- as.formula(paste0(yname, " ~ dem_transition + year"))
+  est <- teffect_ra(formula, data = data_preserve, treatment.effect = "ATT")$estimate
+  results <- rbind(results, data.frame(time = -lag, estimate = est))
+}
+```
+
+*Step 4:* Plot the coefficients you obtained over time.
+
+```{r question-2-4, fig.cap="Average Treatment Effect on the Treated"}
+ggplot(results, aes(x = time, y = estimate)) + geom_line() +
+  labs(x = "Years around democratization",
+       y = "Change in GDP per capita log points") +theme_bw() +
+  scale_x_continuous(breaks = seq(-15, 30, by = 5)) +
+  scale_y_continuous(breaks = seq(-5, 25, by = 5), limits= c(-5,25)) +
+    theme( # remove the vertical grid lines
+           panel.grid.major.x = element_blank() ,
+           panel.grid.minor.x = element_blank() ,
+           panel.grid.major.y = element_line( size=.5, color="grey" ),
+           panel.grid.minor.y = element_blank() ,
+    )
+```
+
+***Answer:*** 
+
+**Q3** One issue with ARNN's graph is that it is not so easy to interpret. It is the plot of an estimated difference. We would like to have a better picture by plotting the (log) gdp (per capita) of countries that transition, countries that remain autocracies *and* countries that remain democracies. One difficulty is that not all countries transition at the same time. As a result, any observed differences in trends may be due to difference in timing of regime changes. In other words, we need to remove the time effect from the economic variable. We will plot the trends with and without the time effect removed. To do so, follow the following steps.
+
+*Step 1.* Generate lags (up to 15 years in the past) and leads (up to 30 years in the future). 
+
+```{r question_3_1}
+
+# You can insert your code here 
+
+```
+
+*Step 2:* Create a variable that captures democratic transition. To do so, use the variable `dem`, which equals $1$ when a country is free or partially free and $0$ otherwise. A transition occurs when `dem` is one at year $t$ and $0$ in year $t-1$. Keep the observations that remain autocratic (`dem` is zero in $t$ and $t-1$), remain democratic (`dem` is one in $t$ and $t-1$), or transition to democracy.
+
+```{r question_3_2}
+data <- data |>
+  mutate(dem_transition = if_else(dem == 1 & lag(dem, 1) == 0, 1, 0),
+         autocratic = if_else(dem == 0 & lag(dem, 1) == 0, 1, 0),
+         democratic = if_else(dem == 1 & lag(dem, 1) == 1, 1, 0))
+
+#democratised <- data |> filter(dem_transition == 1) |> select(wbcode) |> distinct() |> pull()
+#autocracy <- data |> filter(sum(dem) == 0) |> select(wbcode) |> distinct() |> pull()
+#reverse <- data |> filter(dem == 0 & lag(dem, 1) == 1) |> select(wbcode) |> distinct() |> pull()
+
+#preserve <- c(autocracy, democratised[democratised %nin% reverse]) 
+
+data_preserve <- data |> filter(dem_transition == 1 | autocratic == 1 | democratic == 1)
+
+```
+
+*Step 3:* For each lags and leads (those computed in step 1), generate year dummies for each observation without a missing value. Regress each lag or lead on these year fixed effects. Keep the residual gdp.
+
+```{r question_3_3}
+
+time_trend <- feols(f(y, 30:-15)~1|year, data=data_preserve, panel.id=~wbcode+year)
+res <- residuals(time_trend)
+data_preserve$y_res_lead <- rowMeans(res[,1:31])
+data_preserve$y_res_lag <- rowMeans(res[,32:46])
+
+data_preserve <- data_preserve |>
+  group_by(wbcode) |>
+  mutate(y_lead = mean(map_dbl(0:30, ~mean(lead(y, .x, default=NA), na.rm = TRUE))),
+    y_lag = mean(map_dbl(1:15, ~mean(lag(y, .x, default=NA), na.rm = TRUE)))
+         )
+```
+
+*Step 4:* Summarize the residual gdp for the three categories you defined in *Step 2*. To also so for the lag and lead variables. Keep the mean in all cases (this will give you 6 means). 
+
+```{r question_3_4}
+res_summary <- data_preserve |>
+  mutate(type = case_when(dem_transition == 1 ~ "transition",
+                          autocratic == 1 ~ "autocratic",
+                          democratic == 1 ~ "democratic")) |>
+  group_by(type) |>
+  summarise(y_res_lead = mean(y_res_lead, na.rm = TRUE),
+            y_res_lag = mean(y_res_lag, na.rm = TRUE),
+            y_lead = mean(y_lead, na.rm = TRUE),
+            y_lag = mean(y_lag, na.rm = TRUE))
+
+```
+
+
+**(a)** Plot the means for countries that transition to democracy, countries that remain autocratic, and countries that remain democratic that you obtained in *Step 4* (both purged of year effects and unpurged). How do the trends look like? Is there any difference between the purged and unpurged means?
+
+***Answer:*** 
+
+```{r question-3-a, fig.cap="Mean log GDP per capita with leads and lags for autocracies, democracies and democratised countries."}
+res_summary <- res_summary |>
+  pivot_longer(cols = c(y_res_lead, y_res_lag, y_lead, y_lag), names_to = "variable", values_to = "value")
+res_summary |>
+  mutate(res=if_else(grepl("res", variable), "residual", "original")) |>
+  mutate(leadlag=if_else(grepl("lead", variable), "lead", "lag")) |>
+  ggplot(aes(x = type, y = value, fill = leadlag)) + facet_wrap(~ res, scales="free") +
+  geom_col(position = "dodge")  + theme(legend.position = "top") + labs(y = "Mean log GDP per capita", x = "Type of country", fill = "Lead/Lag")
+```
+
+**(b)** For the purged means, construct an index that subtract the mean of the log gdp per capita lagged one time (the purged mean of $\texttt{l.y}$) to all lag and lead means. Plot this difference. Compare with the graph you obtained in **Q1**.
+
+***Answer:*** 
+
+```{r question-3-b, fig.cap="Difference between the purged meansfor autocracies, democracies and democratised countries. (ref=-1)"}
+for(i in 30:0) {
+  name=paste0("y_res_lead_", i)
+  data_preserve[,name] <- res[,31-i]
+}
+for(i in 1:15) {
+  name=paste0("y_res_lag_", i)
+  data_preserve[,name] <- res[,31+i]
+}
+res_period <- data_preserve |>
+  mutate(type = case_when(dem_transition == 1 ~ "transition",
+                          autocratic == 1 ~ "autocratic",
+                          democratic == 1 ~ "democratic")) |>
+  group_by(type) |>
+  summarise(across(`y_res_lead_30`:`y_res_lag_15`, ~ mean(.x, na.rm = TRUE)-mean(`y_res_lag_1`, na.rm = TRUE)))
+res_period <- res_period |>
+  pivot_longer(cols = c(`y_res_lead_30`:`y_res_lag_15`), names_to = "variable", values_to = "value") |>
+  mutate(variable = str_replace(variable, "y_res_lead_", "")) |>
+  mutate(variable = str_replace(variable, "y_res_lag_", "-")) |>
+  mutate(variable = as.numeric(variable))
+
+ggplot(res_period, aes(x = variable, y = value, color = type)) + geom_line() + labs(y = "Mean log GDP per capita", x = "Years from transition", color = "Type of country")+theme_bw()
+
+```
+
+By now, we should be convinced that the parallel trend assumption is violated. Let's suppose you are (and I am). To deal with this issue, ANRR run a series of model. We will focus on two approaches: (i) adding lags to the fixed effect regressions and (ii) a non-parametric approach. We study the first in questions **Q4** and **Q5** and the second in **Q7**.
+
+**Q4** Our goal in this question is to reproduce the first four columns of Table 2 on page 14 in the pdf (we will not reproduce the bottom).^[You do not need to reproduce columns (5)-(12). These estimates try to deal with the endogeneity of GDP. They are mostly used in macroeconomics and rarely employed in political economy.] ANRR use `xtreg`, a command for panel regressions in `STATA`, with fixed effect and standard errors clustered at the country level (`wbcode2`). They regress log gdp per capita (`y`) on democracy (`dem`), years fixed effect (`yy*`) and lags. To compute the long-run effect of democracy, you can use the formula on page 13 (equation (2)).
+
+Produce a table which contains in its first column the estimate of the impact of democracy without any lag and which reproduces in columns (2)-(5) ANRR's Table 2 column (1) to (4).
+
+***Answer:*** 
+
+```{r question-4}
+within0 <- feols(y ~ dem|wbcode2+year, data = data)
+within1 <- feols(y ~ dem + l(y,1)|wbcode2+year, data = data, panel.id=~wbcode2+year)
+within2 <- feols(y ~ dem + l(y,1) + l(y,2)|wbcode2+year, data = data, panel.id=~wbcode2+year)
+within3 <- feols(y ~ dem + l(y,1) + l(y,2) + l(y,3) + l(y,4)|wbcode2+year, data = data, panel.id=~wbcode2+year)
+within4 <- feols(y ~ dem + l(y,1:8)|wbcode2+year, data = data, panel.id=~wbcode2+year)
+
+within1$long_run <- deltaMethod(within1, 'dem/(1-`l(y, 1)`)')
+within2$long_run <- deltaMethod(within2, 'dem/(1-`l(y, 1)`-`l(y, 2)`)')
+within3$long_run <- deltaMethod(within3, 'dem/(1-`l(y, 1)`-`l(y, 2)`-`l(y, 3)`-`l(y, 4)`)')
+within4$long_run <- deltaMethod(within4, 'dem/(1-`l(y, 1)`-`l(y, 2)`-`l(y, 3)`-`l(y, 4)`-`l(y, 5)`-`l(y, 6)`-`l(y, 7)`-`l(y, 8)`)')
+
+class(within1) <- "within"
+class(within2) <- "within"
+class(within3) <- "within"
+class(within4) <- "within"
+
+mods <- list("(0)"= within0,
+             "(1)"= within1,
+             "(2)"= within2,
+             "(3)"= within3,
+             "(4)"= within4)
+coef_map <- c("dem"="Democracy",
+              "l(y, 1)"="Log GDP,<br>first lag",
+              "l(y, 2)"="Log GDP,<br>second lag",
+              "l(y, 3)"="Log GDP,<br>third lag",
+              "l(y, 4)"="Log GDP,<br>fourth lag",
+              "long_run"="Long Run")
+
+tidy.within <- function(x, ...) {
+  class(x) <- "fixest"
+  if('long_run' %in% names(x)){
+  long_run <- x$long_run
+  out <- get_estimates(x)
+  out2 <- data.frame(
+    term = "long_run",
+    estimate = long_run[["Estimate"]],
+    std.error = long_run[["SE"]],
+    conf.level = 0.95,
+    conf.low = long_run[["2.5 %"]],
+    conf.high = long_run[["97.5 %"]],
+    statistic = long_run[["Estimate"]]/long_run[["SE"]],
+    df.error=Inf,
+    p.value = 2*pt(-abs(long_run[["Estimate"]]/long_run[["SE"]]), df = Inf),
+    s.value = NA,
+    group = ""
+    )
+  #out2
+  rbind(out,out2)
+  }
+}
+glance.within <- function(x, ...) {
+  class(x) <- "fixest"
+  get_gof(x)
+}
+glance_custom.fixest <- function(x, ...) {
+  data.frame(
+    'country'=x$fixef_sizes[["wbcode2"]],
+    'cluster' = "Country"
+  )
+}
+
+gof_map <- list(list("raw" = "nobs", "clean" = "$N$", "fmt" = 0),
+                list('raw' = 'cluster', 'clean' = 'Clustered by', 'fmt' = NULL),
+                list('raw' = 'country', 'clean' = 'Countries in sample', 'fmt' = NULL))
+
+msummary(mods, stars = TRUE, coef_map=coef_map, 
+         gof_map=gof_map, escape=F,
+         title="Impact of Democracy on GDP per Capita",)
+```
+
+**Q5** ANRR contend that this approach solve the issues associated with the parallel trend assumption, but they do not really provide evidence this is so. One way to do so is to construct leads and lags of the treatment and plot the estimates. We will use five years around the treatment (5 leads and 5 lags). A $x$-year lead, with $x \in \{1,...,5\}$, is a dummy variable which takes value one $x$ years before a country transition and zero otherwise. A $x$-year lag corresponds to a dummy variable which takes a value one $x$ years after a country transition and zero otherwise. When the parallel trend assumption holds, then all leads should be statistically insignificant (**beware** this is a necessary, but not sufficient condition: all leads being statistically insignificant do not prove that the parallel trends assumption holds).^[A probably better way to check for this would be to perform an event study. For those of you interested, here is a useful guide on how to do so:  [link](https://lost-stats.github.io/Model_Estimation/Research_Design/event_study.html).]
+
+Run the five analyses of **Q4** with 5 leads and 5 lags. Plot the estimate for leads and lags and the treatment (`dem`) for each analysis. Does ANRR's approach solve the issue with parallel trends?
+
+```{r question-5}
+democratised <- data |> filter(dem_transition == 1) |> select(wbcode) |> distinct() |> pull()
+autocracy <- data |> filter(sum(dem) == 0) |> select(wbcode) |> distinct() |> pull()
+reverse <- data |> filter(dem == 0 & lag(dem, 1) == 1) |> select(wbcode) |> distinct() |> pull()
+preserve <- c(autocracy, democratised[democratised %nin% reverse]) 
+
+data_screen <- data |> filter(wbcode %in% preserve)
+data_screen <- data_screen |>
+  group_by(wbcode) |>
+  mutate(dem_transition = if_else(dem_transition == 1, year, 0)) |>
+  mutate(dem_transition = max(dem_transition)) |>
+  mutate(dem_transition=if_else(dem_transition==0, 99999, dem_transition))
+
+es0 <- feols(y ~ sunab(dem_transition, year)|wbcode2+year, data = data_screen)
+es1 <- feols(y ~ sunab(dem_transition, year) + l(y, 1)|wbcode2+year, data = data_screen,panel.id=~wbcode2+year)
+es2 <- feols(y ~ sunab(dem_transition, year) + l(y, 1:2)|wbcode2+year, data = data_screen,panel.id=~wbcode2+year)
+es3 <- feols(y ~ sunab(dem_transition, year) + l(y, 1:4)|wbcode2+year, data = data_screen,panel.id=~wbcode2+year)
+es4 <- feols(y ~ sunab(dem_transition, year) + l(y, 1:8)|wbcode2+year, data = data_screen,panel.id=~wbcode2+year)
+mods_es <- list("(0)"= es0,
+             "(1)"= es1,
+             "(2)"= es2,
+             "(3)"= es3,
+             "(4)"= es4)
+
+coef_map <- c("year::0"="Treatment (0)",
+              "year::-2"="Lead 2",
+              "year::-3"="Lead 3",
+              "year::-4"="Lead 4",
+              "year::-5"="Lead 5"
+              )
+msummary(mods_es, stars = TRUE, coef_map=coef_map, 
+         gof_map=gof_map, escape=F,
+         title="Impact of Democracy on GDP per Capita (event study)")
+
+```
+
+***Answer:***
+
+<font color='blue'>The parallel trends assumption is not satisfied. The leads are statistically significant. This means that the parallel trends assumption is not satisfied. </font>
+
+```{r question-5a, fig.cap="Impact of Democracy on GDP per Capita (event study)"}
+es_plot <- confint(es0) |> as.data.frame() |> rownames_to_column(var = "term") |> mutate(estimate=coef(es0),lag=0)
+es_plot <- rbind(es_plot, confint(es1) |> as.data.frame() |> rownames_to_column(var = "term") |> mutate(estimate=coef(es1),lag=1))
+es_plot <- rbind(es_plot,confint(es4) |> as.data.frame() |> rownames_to_column(var = "term") |> mutate(estimate=coef(es4),lag=4))
+
+es_plot <- es_plot |> filter(grepl("year::",term)==T)
+es_plot <- es_plot |> mutate(term=as.numeric(gsub("year::","",term)))
+es_plot <- es_plot |> filter(term %in% c(-5:5))
+
+ggplot(es_plot, aes(x=term, y=estimate, ymin=`2.5 %`, ymax=`97.5 %`, 
+                    color=factor(lag), shape=factor(lag))) +
+  geom_point(position = position_dodge(width=0.5)) +
+  geom_errorbar(width=0.2,position = position_dodge(width=0.5)) +
+  geom_hline(yintercept=0, linetype="dashed") +
+  labs(x="Years from transition", y="Effect of democracy",
+       color="lag", shape="lag") +
+  theme_minimal()
+```
+
+**Q6** ANRR's approach is only one possible way to deal with the failure of the parallel trends assumption. Another possibility is to add country specific time trends. Then, our regression model computes the deviation from the country trajectory caused by the treatment in a pure difference-in-differences design (as noted above, we do not have a pure diff-in-diffs design, but we assume so for now).
+
+Produce a regression table with six columns. The first column should have no time trend. The second column should have linear country-specific time trend. The third *adds* quadratic country-specific time trend, the fourth cubed country-specific time trend, the fifth contains a fourth order polynomial for country specific time trend, and the last column contains a fifth order polynomial. Your table should only include the estimate for the treatment. 
+
+Produce as well a lead and lag figure along the same line as in **Q5**. Compare your answer to **Q6** to the results you obtained in **Q4** and **Q5**.
+
+
+***Answer:*** 
+
+```{r question-6}
+data_screen$year <- as.numeric(data_screen$year)
+cstt1 <- feols(y ~ dem|wbcode2+year, data = data_screen)
+cstt2 <- feols(y ~ dem+wbcode*year|wbcode2+year, data = data_screen)
+cstt3 <- feols(y ~ dem+wbcode*year+wbcode*I(year^2)|wbcode2+year, data = data_screen)
+cstt4 <- feols(y ~ dem+wbcode*year+wbcode*I(year^2)+wbcode*I(year^3)|wbcode2+year, data = data_screen)
+cstt5 <- feols(y ~ dem+wbcode*year+wbcode*I(year^2)+wbcode*I(year^3)+wbcode*I(year^4)|wbcode2+year, data = data_screen)
+cstt6 <- feols(y ~ dem+wbcode*year+wbcode*I(year^2)+wbcode*I(year^3)+wbcode*I(year^4)+wbcode*I(year^5)|wbcode2+year, data = data_screen)
+
+mods_cstt <- list("(0)"= cstt1,
+             "(1)"= cstt2,
+             "(2)"= cstt3,
+             "(3)"= cstt4,
+             "(4)"= cstt5,
+             "(5)"= cstt6)
+coef_map <- c("dem"="Democracy")
+msummary(mods_cstt, stars = TRUE, coef_map=coef_map, 
+         gof_map=gof_map, escape=F,
+         title="Impact of Democracy on GDP per Capita (country specific time trends)")
+
+```
+
+```{r question-6a, fig.cap="Impact of Democracy on GDP per Capita (country specific time trends)"}
+data_screen$time_to_treat <- data_screen$year - data_screen$dem_transition
+data_screen <- data_screen |> mutate(time_to_treat = ifelse(time_to_treat < -10000, -1, time_to_treat))
+data_screen <- data_screen |> mutate(treatment=ifelse(dem_transition==99999,0,1))
+
+cstt_es1 <- feols(y ~ i(time_to_treat,treatment,ref=-1)|wbcode2+year, data = data_screen)
+cstt_es2 <- feols(y ~ i(time_to_treat,treatment,ref=-1)+wbcode*year|wbcode2+year, data = data_screen)
+cstt_es6 <- feols(y ~ i(time_to_treat,treatment,ref=-1)+wbcode*year+wbcode*I(year^2)+wbcode*I(year^3)+wbcode*I(year^4)+wbcode*I(year^5)|wbcode2+year, data = data_screen)
+
+cstt_plot <- confint(cstt_es1) |> as.data.frame() |> rownames_to_column(var = "term") |> mutate(estimate=coef(cstt_es1),polynomial=0)
+cstt_plot <- rbind(cstt_plot, confint(cstt_es2) |> as.data.frame() |> rownames_to_column(var = "term") |> mutate(estimate=coef(cstt_es2),polynomial=1))
+cstt_plot <- rbind(cstt_plot, confint(cstt_es6) |> as.data.frame() |> rownames_to_column(var = "term") |> mutate(estimate=coef(cstt_es6),polynomial=5))
+
+cstt_plot <- cstt_plot |> filter(grepl("time_to_treat::",term)==T)
+cstt_plot <- cstt_plot |> mutate(term=as.numeric(gsub(":treatment","",gsub("time_to_treat::","",term))))
+cstt_plot <- cstt_plot |> filter(term %in% c(-5:5))
+
+ggplot(cstt_plot, aes(x=term, y=estimate, ymin=`2.5 %`, ymax=`97.5 %`, 
+                    color=factor(polynomial), shape=factor(polynomial))) +
+  geom_point(position = position_dodge(width=0.5)) +
+  #geom_errorbar(width=0.2,position = position_dodge(width=0.5)) +
+  geom_hline(yintercept=0, linetype="dashed") +
+  labs(x="Years from transition", y="Effect of democracy",
+       color="polynomial", shape="polynomial") +
+  theme_minimal()
+```
+
+**Q7** In this question, we look at ANRR's semi-parametric approach. The idea is to let the data speak for the impact of past gdp per capita on current gdp per capita. Our goal is to reproduce figure 3 (page 30 of the pdf) and figure 5 (page 33).
+
+To reproduce Figure 3, first rerun steps 1-2 of **Q2**. Repeat step 3 of **Q2**, while controlling this time around for four lags of the log of gdp per capita. Run the analysis from 15 years prior the treatment to 30 years post-treatment and collect the estimates (be careful that estimates for 4 to 1 year prior to the treatment are zero by construction since we control for these lags), still using the 
+`treatment.effect = "ATT"`.^[See what happens when you use the option `ATE` instead if you are interested.]
+
+Compute an *approximation* of the confidence interval by multiplying the standard error of the estimate by `qnorm(0.975)`.^[`teffect_ra` bootstraps the standard error. In [this repo](https://github.com/ohines/teffectsR) you can find a solution that estimates the SEs analytically, but the package is not maintained and does not work.] To get standard errors from `teffect_ra`, please specify `bootstrap_se = T`. You can control the number of bootstrapped samples to be drawn using `iter`, which is set to `1000`by default. The larger this number, the longer it will take to estimate the standard errors, but the more precise they will be.^[If you set `bootstrap_se = T`, `teffect_ra` will also supply you with confidence intervals, he level of which you can control using `alpha`, which is set to `0.95` by default.] 
+
+```{r question-7-a, fig.cap="Impact of past GDP per capita on current GDP per capita"}
+data_preserve <- data_preserve |>
+  group_by(wbcode2) |>
+  mutate(ylag1 = lag(y, 1),
+         ylag2 = lag(y, 2),
+         ylag3 = lag(y, 3),
+         ylag4 = lag(y, 4))
+
+#results_q7 <- data.frame(time=integer(), estimate=double())
+#for (lead in 30:0){
+#  yname <- paste0("y_diff_lead_", lead)
+#  formula <- as.formula(paste0(yname, " ~ dem_transition + year + ylag1 + ylag2 + ylag3 + ylag4"))
+#  mod_temp <- teffect_ra(formula, data = data_preserve, treatment.effect = "ATT", bootstrap_se = #T)
+#  est <- mod_temp$estimate
+#  results_q7 <- rbind(results_q7, data.frame(time = lead, estimate = est, #conf.low=mod_temp$conf.low, conf.high=mod_temp$conf.high))
+#}
+
+#for (lag in 1:15){
+#  yname <- paste0("y_diff_lag_", lag)
+#  formula <- as.formula(paste0(yname, " ~ dem_transition + year + ylag1 + ylag2 + ylag3 + ylag4"))
+#  mod_temp <- teffect_ra(formula, data = data_preserve, treatment.effect = "ATT", bootstrap_se = #T)
+#  est <- mod_temp$estimate
+#  results_q7 <- rbind(results_q7, data.frame(time = -lag, estimate = est, #conf.low=mod_temp$conf.low, conf.high=mod_temp$conf.high))
+#}
+#save(results_q7, file = "results_q7.RData")
+
+load("results_q7.RData")
+
+ggplot(results_q7, aes(x = time, y = estimate)) + geom_line() +
+  geom_line(aes(y = conf.low), linetype = "dashed") +
+  geom_line(aes(y = conf.high), linetype = "dashed") +
+  labs(x = "Years around democratization",
+       y = "Change in GDP per capita log points") +theme_bw() +
+  scale_x_continuous(breaks = seq(-15, 30, by = 5)) +
+  scale_y_continuous(breaks = seq(-20, 40, by = 5), limits= c(-20,40)) +
+    theme( # remove the vertical grid lines
+           panel.grid.major.x = element_blank() ,
+           panel.grid.minor.x = element_blank() ,
+           panel.grid.major.y = element_line( size=.5, color="grey" ),
+           panel.grid.minor.y = element_blank() ,
+    )
+```
+
+To reproduce Figure 5, the steps are very similar with the exception that you should now weight the units by the inverse of the *propensity score*.^[You can read more about inverse propensity weights (IPW) in the [Library of Statistical Techniques](https://lost-stats.github.io/Model_Estimation/Matching/propensity_score_matching.html) or (more in-depth) in a *Political Analysis* article by [King and Nielsen (2019)](https://gking.harvard.edu/sites/scholar.harvard.edu/files/gking/files/pan1900011_rev.pdf).]
+
+`teffect_ra` can estimate propensity scores for you and will weight the estimator if you specify the option `ipw = T`.
+
+```{r question_7_b}
+# Example code:
+# teffect_ra(outcome ~ treatment + control1 + control2, data = df, treatment.effect = "ATT", bootstrap_se = T, ipw = T) 
+
+# You can insert your code here 
+
+```
+
+***Answer:*** 
+
+
+**Q8** One issue ANRR face and do not mention much is that their setting is not a pure difference-in-differences design. Countries are treated at very different times (from the 1960s to the 2000s) and our regressions are comparing early switchers to late switchers, early switchers to never switchers, etc. etc. (where a switcher is a country that changes regimes at some points in the data). This makes it very difficult to actually interpret the estimates of their regression (see [Goodman-Bacon, 2018](https://www.nber.org/papers/w25018) for a discussion). There are different ways to deal with this issue (see [here](https://cdn.vanderbilt.edu/vu-my/wp-content/uploads/sites/2318/2019/10/09023516/so_youve_been_told_dd_10_9_2019.pdf) and [here](https://asjadnaqvi.github.io/DiD/) for two useful guides), but they are pretty complicated and too much to ask at the end of the last problem set... We will, instead, take another approach inspired by it. We will focus on democratization which occurs around the fall of the USSR in 1990 (okay, end of 1991 to be precise, but we will take 1990 as our reference year). The idea here is that all regime switches in this period are likely to be triggered by the same event (the fall of an empire that subsidized these regimes) around the same time and so should better satisfy the parallel trends assumption (note that we are not making any claim about the estimate obtained from the design here).
+
+First, restrict the sample by removing all countries that transition prior to 1985 and after 1995. Second, remove Russia from the sample. Rerun the analyses from questions **Q4** to **Q6** on this restricted sample. Compare your results with your findings in **Q4** to **Q6**.
+
+***Answer:*** 
+
+```{r question_8}
+
+# You can insert your code here 
+
+```
+
+**Q9** ANRR are aware that their panel analysis is unlikely to recover the ATE. In a later part of the paper, they use an instrumental variable approach to deal with this issue. In the first stage of their 2SLS, they regress the democratic status of country $c$ in year $t$ on the number of democratic country in the same region in year $t$ which shared the same regime as $c$ at the beginning of the sample. This is basically a model of diffusion of democracy. The key exogeneity assumption here is that the instrument captures regional trends that have little to do with the potential economic impact of democracy (see pages 31-37 for a discussion).
+
+Using a recent paper by [Abramson and Monteiro (2020)](https://doi.org/10.1017/S0003055420000325), discuss the validity of this exogeneity assumption.
+
+***Answer:*** 
+
+**Q10** Based on your *findings in this problem*, do you believe democracy *does* cause growth as ANRR assert?
+
+***Answer:***

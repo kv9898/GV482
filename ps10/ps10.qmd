@@ -1,0 +1,534 @@
+---
+title: Autocracy vs Democracy
+subtitle: GV482 Problem Set - Game Theory
+date: last-modified
+authors:
+  - name: Dianyi Yang
+execute:
+  echo: false
+  warning: false
+  error: false
+format:
+  orcid-pdf:
+    number-sections: false
+    fig-pos: 'H'
+---
+
+# Part A - Democracy
+
+## Q1
+
+Explain briefly why if $\omega = 1$, then the best retention rule for the villagers is: $\rho(1, 1) = 1$ and $\rho(x, S) = 0$ in all other cases (for all others combinations of x and S); if $\omega = 0$, then the best retention rule for the villagers is: $\rho(0, 1) = 1$ and $\rho(x, S) = 0$ in all other cases.
+
+\color{blue}
+
+The rule implies that the official is only retained when it proposes the policy preferred by the villagers and she succeeds. This is the only way to incentivise the official to propose the preferred policy and work hard toward it. If failures were allowed, the official would not have incentives to work hard; if unpopular proposals were allowed, the official would not commit to the preferred policy.
+
+\color{black}
+
+## Q2
+
+From now on, we will use the retention rule defined in [Q1]. In this question, we determine the action of the official.
+
+(a) Show that a competent official picks $x = 1$ if $\omega = 1$ and $x = 0$ if $\omega = 0$. Show that her equilibrium level of effort is $e^D(c)=\frac{R}{C}$ in both states, where $D$ stands for democracy and $c$ for competent.
+
+    \color{blue}
+
+    ```{=tex}
+    \begin{align*}
+    U_o(e)&=R+
+    \begin{cases}
+    R~\text{if retained} \\
+    0~\text{if not retained}
+    \end{cases}
+    -C\frac{e^2}{2} \\
+    EU_c(e,x)&=R+R\times Pr(\text{retained})-C\frac{e^2}{2} \\
+    &=R+R\times I(x=\omega)\times Pr(S=1)-C\frac{e^2}{2} \\
+    &=R+eR\times I(x=\omega)-C\frac{e^2}{2}
+    \end{align*}
+    ```
+    The official therefore chooses $x=\omega$:
+
+    $$
+    EU_c(e,\omega)=R+eR-C\frac{e^2}{2}\geq R-C\frac{e^2}{2}=EU_o(e,\neg\omega)
+    $$
+
+    Equilibrium level effort:
+
+    ```{=tex}
+    \begin{align*}
+    EU_c(e,\omega)&=R+eR-C\frac{e^2}{2} \\
+    \frac{\partial EU_c(e,\omega)}{\partial e}&=R-Ce=0 \\
+    e^D(c)&=\frac{R}{C}
+    \end{align*}
+    ```
+    \color{black}
+
+(b) Explain briefly why an incompetent official is indifferent between $x = 1$ and $x = 0$ (whatever the state) and always chooses effort $e^D(nc) = 0$.
+
+    \color{blue}
+
+    ```{=tex}
+    \begin{align*}
+    U_o(e)&=R+ \begin{cases} R~\text{if retained} \\ 0~\text{if not retained} \end{cases} -C\frac{e^2}{2} \\
+    EU_{nc}(e)&=R+R\times Pr(\text{retained})-C\frac{e^2}{2} \\ &=R+R\times I(x=\omega)\times Pr(S=1)-C\frac{e^2}{2} \\
+    &=R+R\times I(x=\omega)\times 0-C\frac{e^2}{2} \\
+    &=R-C\frac{e^2}{2}
+    \end{align*}
+    ```
+    An incompetent official is indifferent between policies as she will never succeed and always removed for the second term.
+
+    Solve for equilibrium level effort:
+
+    ```{=tex}
+    \begin{align*}
+    EU_{nc}(e)&=R-C\frac{e^2}{2} \\ 
+    \frac{\partial EU_{nc}(e)}{\partial e}&=-Ce<0 \\ 
+    e^D(nc)&=0
+    \end{align*}
+    ```
+    Since the expected utility always decreases with effort ($e$), it is best for an incompetent official to exert no effort.
+
+    \color{black}
+
+## Q3
+
+We can then conclude our analysis of democracy by looking at the electoral choice of the villagers.
+
+(a) Explain briefly why the villagers always choose competent candidates over incompetent ones.
+
+    \color{blue}
+
+    We just showed that, if a competent candidate were elected, she would propose the preferred policy which would succeed with probability $\frac{R}{C}$, if an incompetent candidate were elected, she could propose either policy but it would be deemed to fail.
+
+    Therefore, choosing the competent candidates gives higher expected payoff than the incompetent ones:
+
+    ```{=tex}
+    \begin{align*}
+    EU_v(c)&=Pr(S)\times I(x=\omega) -Pr(S)-I(x\neq\omega)\\
+    &= e\times1-e\times0 \\
+    &=\frac{R}{C} \\
+    EU_v(nc)&=Pr(S)\times I(x=\omega) -Pr(S)-I(x\neq\omega)\\
+    &=Pr(S)(I(x=\omega)-I(x\neq\omega)) \\
+    &=0\times(I(x=\omega)-I(x\neq\omega)) \\
+    &=0 \\
+    EU_v(c)&>EU_v(nc)
+    \end{align*}
+    ```
+    \color{black}
+
+(b) Show that all competent villagers run (remember that with many candidates and villagers randomly coordinate to one of them when indifferent).
+
+    \color{blue}
+
+    The expected utility from (not) running:
+
+    ```{=tex}
+    \begin{align*}
+    EU_c(\text{run})&=Pr(\text{win})(R+\frac{R}{C}R-C\frac{(\frac{R}{C})^2}{2})+(1-Pr(\text{win}))\frac{R}{C}\\
+    &=\frac{1}{\pi n}(R+\frac{R^2}{C}-\frac{R^2}{2C})+(1-\frac{1}{\pi n})\frac{R}{C} \\
+    &=\frac{1}{\pi n}(R+\frac{R^2}{2C})+(1-\frac{1}{\pi n})\frac{R}{C} \\
+    EU_c(\neg\text{run})&=\frac{R}{C}
+    \end{align*}
+    ```
+    Since $R+\frac{R^2}{2C}>R>\frac{R}{C}$, $EU_c(\text{run})>EU_c(\neg\text{run})$, therefore all competent villagers run.
+
+    \color{black}
+
+# Part B - Appointment
+
+## Q4
+
+Explain briefly why if $G$'s retention rule satisfies $\kappa(1, 1, 1) = 1$ (the official is always retained after successfully implementing $x = 1$ and $G$ learning it) and $\kappa(x, S, 1) = 0$ for all other $x$ and $S$.
+
+\color{blue}
+
+The rule implies that the official is only retained when it proposes the policy preferred by the Government and she succeeds. This is the only way to incentivise the official to propose the preferred policy and work hard toward it. If failures were allowed, the official would not have incentives to work hard; if unpreferred proposals were allowed, the official would not commit to the preferred policy.
+
+\color{black}
+
+## Q5
+
+In the retention rule above, we have not determined what $G$ should do after learning nothing ($d = 0$). We know that in this case, $G$ cannot condition her retention decision on $x$ or $S$ (for the simple fact that it does not learn it). Hence, the retention rule must satisfy $\kappa(1, 1, 0) = \kappa(1, 0, 0) = \kappa(0, 1, 0) = \kappa(0, 0, 0) = \kappa_0$. We will solve for $\kappa_0$ below. In this question, we consider the official's choices.
+
+(a) Given the (partial) retention rule defined in [Q4], explain why a competent official always picks $x = 1$.
+
+    \color{blue}
+
+    ```{=tex}
+    \begin{align*}
+    U_o(e)&=R+\begin{cases}R~\text{if retained} \\0~\text{if not retained}\end{cases}-C\frac{e^2}{2} \\
+    EU_c(e,x)&=R+R\times Pr(\text{retained})-C\frac{e^2}{2} \\
+    &=R+\lambda R\times I(x=1)\times Pr(S=1) + (1-\lambda)\kappa_0 R-C\frac{e^2}{2} \\
+    &=R+\lambda R\times I(x=1)\times Pr(S=1) + (1-\lambda)\kappa_0 R-C\frac{e^2}{2} \\
+    &=R+\lambda eR\times I(x=1) + (1-\lambda)\kappa_0 R-C\frac{e^2}{2}
+    \end{align*}
+    ```
+    The official therefore chooses $x=1$:
+
+    $$
+    EU_c(e,1)=R+\lambda eR + (1-\lambda)\kappa_0 R-C\frac{e^2}{2}>R+(1-\lambda)\kappa_0 R-C\frac{e^2}{2}=EU_o(e,0)
+    $$
+
+    \color{black}
+
+(b) Explain briefly why a competent official's maximization problem is:
+
+    $$
+    \max_{e\geq0} \lambda\times e\times R+(1-\lambda)(e\times \kappa_0+(1-e)\kappa_0)\times R-C\frac{e^2}{2}
+    $$
+
+    \color{blue}
+
+    ```{=tex}
+    \begin{align*}
+    EU_c(e,x)&=R+\lambda eR\times I(x=1) + (1-\lambda)\kappa_0 R-C\frac{e^2}{2} \\
+    \max_{e\geq0}EU_c(e,x)&=\max_{e\geq0}R+\lambda eR + (1-\lambda)\kappa_0 R-C\frac{e^2}{2} \\
+    &=\max_{e\geq0}\lambda eR + (1-\lambda)\kappa_0 R-C\frac{e^2}{2}
+    \end{align*}
+    ```
+    \color{black}
+
+(c) Show that a competent official's equilibrium level of effort is $e^A(c) = \lambda \frac{R}{C}$ (where $A$ stands for appointment).
+
+    \color{blue}
+
+    Take FOC:
+
+    ```{=tex}
+    \begin{align*}
+    \frac{\partial}{\partial e}\lambda eR + (1-\lambda)\kappa_0 R-C\frac{e^2}{2}&=0 \\
+    \lambda R-Ce&=0 \\
+    e^A(c)&=\frac{\lambda R}{C}
+    \end{align*}
+    ```
+    \color{black}
+
+## Q6
+
+We can then conclude our analysis of appointment by considering whether $G$ retains the official conditional on learning nothing.
+
+Explain briefly why the government is indifferent between all $\kappa_0 \in[0, 1]$.
+
+\color{blue}
+
+As we have shown in [Q5]c, the official's equilibrium effort is $\frac{\lambda R}{C}$, which is independent of $\kappa_0$. Therefore, $\kappa_0$ does not affect the official's effort or policy proposal, and thus does not affect the government's expected utility. Therefore, the government is indifferent between all $\kappa_0 \in[0, 1]$.
+
+\color{black}
+
+# Part C - Democracy with oversight
+
+## Q7
+
+In this question, we consider the official's best responses (plural, since it consists of effort and policy choice) given the retention rules above.
+
+(a) Show that a competent official maximizes the following expected payoff with respect to $e$ in state $\omega = 1$ after choosing $x = 1$:
+
+    $$
+    e\times R-C\frac{e^2}{2}
+    $$
+
+    \color{blue}
+
+    ```{=tex}
+    \begin{align*}
+    EU(e\mid\omega=1,x=1)&=R+ \begin{cases} R~\text{if retained} \\ 0~\text{if not retained} \end{cases} -C\frac{e^2}{2} \\
+    &=R+RPr(S=1)I(x=1)I(x=\omega)-C\frac{e^2}{2} \\
+    &=R+Re-C\frac{e^2}{2} \\
+    \max_{e\geq0}EU(e\mid\omega=1,x=1)&=\max_{e\geq0}R+Re-C\frac{e^2}{2} \\
+    &=\max_{e\geq0}Re-C\frac{e^2}{2}
+    \end{align*}
+    ```
+    \color{black}
+
+(b) Show that a competent official exerts $e^O(c; 1,1) = \frac{R}{C}$ after picking $x = 1$ in state $\omega = 1$.
+
+    To solve for the maximisation problem, take FOC:
+
+    ```{=tex}
+    \begin{align*}
+    \frac{\partial}{\partial e}Re-C\frac{e^2}{2}&=0 \\
+    R-Ce&=0 \\
+    e&=\frac{R}{C}
+    \end{align*}
+    ```
+
+(c) Briefly explain why a competent official never picks $x = 0$ in state $\omega = 1$.
+
+    \color{blue}
+
+    Similar to [Q1] (a), if a competent official picks $x=0$ in this state, she would be deemed to leave for the second term, which would yield lower expected payoff than picking $x=1$.
+
+    \color{black}
+
+(d) Show that a competent official maximizes the following expected payoff with respect to $e$ after choosing policy $x = 0$ in state $\omega = 0$ is:
+
+    $$
+    (1-\lambda)e \times R + \lambda(1-e)\times R-C\frac{e^2}{2}
+    $$
+
+    \color{blue}
+
+    ```{=tex}
+    \begin{align*}
+    EU(e\mid\omega=0,x=0)&=R+ \begin{cases} R~\text{if retained} \\ 0~\text{if not retained} \end{cases} -C\frac{e^2}{2} \\
+    &=R+RPr(S=1)(1-\lambda)+R\lambda Pr(S=0)-C\frac{e^2}{2} \\
+    &=R+Re(1-\lambda)+R(1-e)\lambda-C\frac{e^2}{2} \\
+    \max_{e\geq0}EU(e\mid\omega=0,x=0)&=\max_{e\geq0}R+Re(1-\lambda)+R(1-e)\lambda-C\frac{e^2}{2} \\
+    &=\max_{e\geq0}Re(1-\lambda)+R(1-e)\lambda-C\frac{e^2}{2} \\
+    \end{align*}
+    ```
+    \color{black}
+
+(e) Show that a competent official exerts $e^O(c; 0,0) = \max\{(1-2\lambda)\frac{R}{C}, 0\}$ after picking $x = 0$ in state $\omega = 0$.
+
+    Take FOC:
+
+    \color{blue}
+
+    ```{=tex}
+    \begin{align*}
+    \frac{\partial}{\partial e}Re(1-\lambda)+R(1-e)\lambda-C\frac{e^2}{2}&=0 \\
+    R(1-\lambda)-R\lambda-Ce&=0 \\
+    R(1-2\lambda)-Ce&=0 \\
+    e&=(1-2\lambda)\frac{R}{C}
+    \end{align*}
+    ```
+    Since $e$ cannot be lower than 0, therefore $e^O(c; 0,0) = \max\{(1-2\lambda)\frac{R}{C}, 0\}$.
+
+    \color{black}
+
+(f) Show that the official's expected utility from choosing $x = 0$ in state $\omega = 0$ (taking into account her effort) is:
+
+    ```{=tex}
+    \begin{align*}
+    V^o(0,0)&=R+\lambda R+(1-2\lambda)e^O(c;0,0)R-C\frac{(e^O(c;0,0))^2}{2} \\
+    &=R+\lambda R+(\max\{(1-2\lambda),0\})^2\frac{R^2}{2C}
+    \end{align*}
+    ```
+    \color{blue}
+
+    ```{=tex}
+    \begin{align*}
+    V^o(0,0)&=R+Re(1-\lambda)+R(1-e)\lambda-C\frac{e^2}{2}\\
+    &=R+Re-\lambda Re+R\lambda-\lambda Re-C\frac{e^2}{2} \\
+    &=R+\lambda R-(1-2\lambda)eR-C\frac{e^2}{2} \\
+    &=R+\lambda R+(1-2\lambda)e^O(c;0,0)R-C\frac{(e^O(c;0,0))^2}{2} \\
+    &=R+\lambda R+(1-2\lambda)R\max\{(1-2\lambda)\frac{R}{C},0\}-C\frac{\max\{(1-2\lambda)\frac{R}{C},0\}^2}{2} \\
+    &=R+\lambda R+(1-2\lambda)\frac{R^2}{C}\max\{(1-2\lambda),0\}-\frac{R^2}{2C}\max\{(1-2\lambda),0\}^2 \\
+    &=R+\lambda R+\frac{R^2}{C}\max\{(1-2\lambda),0\}^2-\frac{R^2}{2C}\max\{(1-2\lambda),0\}^2 \\
+    &=R+\lambda R+\frac{R^2}{2C}\max\{(1-2\lambda),0\}^2
+    \end{align*}
+    ```
+    \color{black}
+
+(g) Repeating **(c)** and **(d)**, show that a competent official exerts $e^O(c; 1, 0) = \max\{(2\lambda-1)\frac{R}{C},0\}$ after picking $x = 1$ in state $\omega = 0$.
+
+    \color{blue}
+
+    ```{=tex}
+    \begin{align*}
+    EU(e\mid\omega=0,x=1)&=R+ \begin{cases} R~\text{if retained} \\ 0~\text{if not retained} \end{cases} -C\frac{e^2}{2} \\
+    &=R+RPr(S=1)\lambda+R(1-\lambda)Pr(S=0)-C\frac{e^2}{2} \\
+    &=R+Re\lambda+R(1-e)(1-\lambda)-C\frac{e^2}{2} \\\max_{e\geq0}EU(e\mid\omega=0,x=1)&=\max_{e\geq0}R+Re\lambda+R(1-e)(1-\lambda)-C\frac{e^2}{2}  \\
+    &=\max_{e\geq0}Re\lambda+R(1-e)(1-\lambda)-C\frac{e^2}{2} \\
+    \frac{\partial}{\partial e}Re\lambda+R(1-e)(1-\lambda)-C\frac{e^2}{2}&=0 \\
+    R\lambda-R(1-\lambda)&=Ce \\
+    R(2\lambda-1)&=Ce \\
+    e&=(2\lambda-1)\frac{R}{C}
+    \end{align*}
+    ```
+    Since $e$ cannot be negative, $e^O(c; 1, 0) = \max\{(2\lambda-1)\frac{R}{C},0\}$.
+
+    \color{black}
+
+(h) Show that the official's expected utility from choosing $x = 1$ in state $\omega = 0$ (taking into account her effort) is:
+
+    $$
+    V^o(1,0)=R+(1-\lambda)R+(\max\{(2\lambda-1),0\})^2\frac{R^2}{2C}
+    $$
+
+    \color{blue}
+
+    ```{=tex}
+    \begin{align*}
+    V^O(1,0)&=R+Re\lambda+R(1-e)(1-\lambda)-C\frac{e^2}{2} \\
+    &=R+R\lambda e+R-Re-R\lambda+R\lambda e-C\frac{e^2}{2} \\
+    &=2R-R\lambda+2R\lambda e-Re-C\frac{e^2}{2} \\
+    &=2R-R\lambda+2R\lambda\max\{(2\lambda-1)\frac{R}{C},0\}-R\max\{(2\lambda-1)\frac{R}{C},0\}-C\frac{\max\{(2\lambda-1)\frac{R}{C},0\}^2}{2} \\
+    &=2R-R\lambda+2\lambda\frac{R^2}{C}\max\{(2\lambda-1),0\}-\frac{R^2}{C}\max\{(2\lambda-1),0\}-\frac{R^2}{2C}\max\{(2\lambda-1),0\}^2 \\
+    &=2R-R\lambda+(2\lambda-1)\frac{R^2}{C}\max\{(2\lambda-1),0\}-\frac{R^2}{2C}\max\{(2\lambda-1),0\}^2 \\
+    &=2R-R\lambda+\frac{R^2}{C}\max\{(2\lambda-1),0\}^2-\frac{R^2}{2C}\max\{(2\lambda-1),0\}^2 \\
+    &=R+(1-\lambda)R+\frac{R^2}{2C}\max\{(2\lambda-1),0\}^2
+    \end{align*}
+    ```
+    \color{black}
+
+(i) Demonstrate that, in state $\omega = 0$, a competent official chooses $x = 1$ if and only if $\lambda \leq 1/2$ and $x = 0$ if and only if $\lambda > 1/2$. What is her level of effort then? Provide some intuition for this result.
+
+      \color{blue}
+
+      ```{=tex}
+        \begin{align*}
+        &V^O(1,0)-V^O(0,0) \\
+        =&(R+(1-\lambda)R+\frac{R^2}{2C}\max\{(2\lambda-1),0\}^2)-(R+\lambda R+(\max\{(1-2\lambda),0\})^2\frac{R^2}{2C})\\
+        =&(1-2\lambda)R+\frac{R^2}{2C}[\max\{(2\lambda-1),0\}^2-\max\{(1-2\lambda),0\})^2]
+        \end{align*}
+      ```
+      When $0\leq\lambda\leq1/2$, the winner chooses $x=1$
+
+      ```{=tex}
+        \begin{align*}
+        &V^O(1,0)-V^O(0,0) \\
+        =&(1-2\lambda)R+\frac{R^2}{2C}[0-(1-2\lambda)^2] \\
+        =&(1-2\lambda)R-(1-2\lambda)^2\frac{R^2}{2C}
+        \end{align*}
+      ```
+      Since $0\leq1-2\lambda\leq1$, $1-2\lambda>(1-2\lambda)^2$ . As we assume $C>R>1$, $\frac{R}{C}<1$ . Therefore $R\times1>\frac{R}{2}\times\frac{R}{C}=\frac{R^2}{2C}$, therefore $V^O(1,0)>V^O(0,0)$ in this case.
+
+      Effort: $e^O(c;1,0)=\max\{(2\lambda-1)\frac{R}{C},0\}=0$.
+
+      The opposite is true when $1/2\leq\lambda\leq1$.
+
+      Effort: $e^O(c;0,0)=\max\{(1-2\lambda)\frac{R}{C},0\}=0$.
+
+      \color{black}
+
+## Q8
+
+Explain briefly why all competent villagers run and the villagers (randomly) pick one of these competent candidates to be elected.
+
+\color{blue}
+
+For competent villagers in this case:
+
+When $\omega=1$, obviously they will run as the utility functions are the same as in [Part A - Democracy] .
+
+When $\omega=0$ and $\lambda\leq1/2$,
+
+```{=tex}
+\begin{align*}
+EU_c(\neg\text{run})&=-Pr(S=1) \\ 
+&=-e^O(c; 1, 0) \\
+&= \max\{(2\lambda-1)\frac{R}{C},0\} \\ 
+&=0 \\
+EU_c(\text{run})&=Pr(\text{win})(R+(1-\lambda)R+(\max\{(2\lambda-1),0\})^2\frac{R^2}{2C})+(1-Pr(\text{win}))0\\
+&=\frac{1}{\pi n}(R+(1-\lambda)R+0\frac{R^2}{2C})\\
+&=\frac{1}{\pi n}(R+(1-\lambda)R)>0=EU_c(\text{run})
+\end{align*}
+```
+When $\omega=0$ and $\lambda\geq1/2$,
+
+```{=tex}
+\begin{align*} 
+EU_c(\neg\text{run})&=Pr(S=1) \\ &=e^O(c; 0, 0) = \max\{(1-2\lambda)\frac{R}{C}, 0\} \\ &=0 \\  
+EU_c(\text{run})&=Pr(\text{win})(R+\lambda R+\frac{R^2}{2C}\max\{(1-2\lambda),0\}^2)+(1-Pr(\text{win}))0\\ &=
+\frac{1}{\pi n}(R+\lambda R+0\frac{R^2}{2C})\\ 
+&=\frac{1}{\pi n}(R+\lambda R)>0=EU_c(\text{run})
+\end{align*}
+```
+As for the incompetent villagers, they exert no effort even if elected (similar logic in [Part A - Democracy]):
+
+```{=tex}
+\begin{align*}
+EU_c(\neg\text{run})&=0 \\  
+EU_c(\text{lose})&=0 \\ 
+EU_c(\text{win})&=R
+\end{align*}
+```
+Therefore they will also run. However, the villagers will only choose among the competent due to the possibility that their interests align with those of the central government:
+
+```{=tex}
+\begin{align*}
+EU_v(c)&= \alpha\frac{R}{C}+(1-\alpha)0=\alpha\frac{R}{C}\\
+EU_v(nc)&=0 \\
+EU_v(c)&>EU_v(nc)
+\end{align*}
+```
+\color{black}
+
+# Part D - Comparison
+
+## Q9
+
+Show that all villagers (again, those not in office) strictly prefer democracy to democracy with oversight and strictly prefer democracy with oversight to appointment: $\mathcal{W}_v(D) > \mathcal{W}_v(O) > \mathcal{W}_v(A)$.
+
+\color{blue}
+
+Note $\alpha\geq2\alpha-1$ since $0\leq\alpha\leq1$.
+
+```{=tex}
+\begin{align*}
+\mathcal{W}_v(D)&=\frac{R}{C}\\
+\mathcal{W}_v(A)&=\pi(\alpha\lambda\frac{R}{C}-(1-\alpha)\lambda\frac{R}{C})+(1-\pi)0\\ &=(2\alpha-1)\pi\lambda\frac{R}{C} \\
+\mathcal{W}_v(O\mid \lambda\leq1/2)&=\alpha\frac{R}{C} -(1-\alpha)0=\alpha\frac{R}{C} \\
+\mathcal{W}_v(O\mid \lambda\geq1/2)&=\alpha\frac{R}{C} +(1-\alpha)0=\alpha\frac{R}{C} \\
+ \mathcal{W}_v(D)&=\frac{R}{C}>\mathcal{W}_v(O)=\alpha\frac{R}{C}\geq\mathcal{W}_v(A)=(2\alpha-1)\lambda\pi\frac{R}{C}
+\end{align*}
+```
+\color{black}
+
+## Q10
+
+Show that the central government strictly prefers democracy with oversight to pure democracy: $\mathcal{W}_G(D) < \mathcal{W}_G(O)$.
+
+\color{blue}
+
+```{=tex}
+\begin{align*}
+\mathcal{W}_G(D)&=\alpha\frac{R}{C}-(1-\alpha)\frac{R}{C}=(2\alpha-1)\frac{R}{C}\\
+\mathcal{W}_G(O\mid \lambda\leq1/2)&=\alpha\frac{R}{C} +(1-\alpha)0=\alpha\frac{R}{C} \\
+\mathcal{W}_G(O\mid \lambda\geq1/2)&=\alpha\frac{R}{C} -(1-\alpha)0=\alpha\frac{R}{C} \\
+\mathcal{W}_G(D)&=(2\alpha-1)\frac{R}{C}<\mathcal{W}_G(O)=\alpha\frac{R}{C}~(\alpha<1)
+\end{align*}
+```
+\color{black}
+
+## Q11
+
+Show that the central government strictly prefers the central government prefers appointment over democracy with oversight whenever $\alpha<\pi\lambda$. Provide some intuition for this result.
+
+\color{blue}
+
+$$
+\mathcal{W}_G(A)=\pi\lambda\frac{R}{C}
+$$
+
+Solve for:
+
+```{=tex}
+\begin{align*}
+\mathcal{W}_G(O)&<\mathcal{W}_G(A) \\
+\alpha\frac{R}{C}&<\pi\lambda\frac{R}{C} \\
+\alpha&<\pi\lambda
+\end{align*}
+```
+Intuition: The central government prefers appointment over democracy with oversight when:
+
+1.  its interests are likely at odds with the people (villagers);
+2.  Proportion of competent villagers are sufficiently high (when people are smart);
+3.  the central government can observe behaviour of local officials ($\lambda$ is high).
+
+\color{black}
+
+## Q12
+
+Suppose that efficiency is measured by the likelihood that the central government's preferred policy is successfully implemented. Consider a researcher who compares efficiency in a system of democracy with oversight and a system of appointment within the same country (e.g., performing a difference-in-differences research design).[^1] The researcher finds that appointment is more efficient than oversight. Explain why the finding of the researcher is likely to be upwardly biased (i.e., the positive effect of appointment the researcher finds is too high).
+
+[^1]: If we are in autocracy, these would be the only two systems ever observed by [Q10].
+
+\color{blue}
+
+It could be due to the fact that the officials from democracy with oversight refuse to carry out the policy as its unpopular among the local people - lesson from [Q7] (i).
+
+\color{black}
+
+## Q13
+
+Explain why efficiency (as defined above) is not everything.
+
+\color{blue}
+
+Efficiency for whom? The central government? The people? The local officials? The country as a whole? The world?
+
+\color{black}

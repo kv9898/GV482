@@ -44,18 +44,13 @@ We first want to understand a bit more the demographics in our database. To do s
 ```{r descriptivestats, fig.cap="Proportion of each race in the dataset by year"}
 # You can insert the code to generate your answer here
 data <- read_dta("discrimination_ps_data.dta")
+
 des <- data |>
   group_by(year) |>
   summarise(White = sum(swhite, na.rm=T), Black = sum(sblack, na.rm=T), Hispanic = sum(shisp, na.rm=T), Asian = sum(sasian, na.rm=T), Other = sum(sother, na.rm=T)) |>
   mutate(total = White + Black + Hispanic + Asian + Other) |>
   mutate(White = White/total, Black = Black/total, Hispanic = Hispanic/total, Asian = Asian/total, Other = Other/total) |>
   select(-total)
-
-des |>
-  pivot_longer(cols = -year, names_to = "race", values_to="prop") |>
-  ggplot(aes(x=year, y=prop, fill=race)) + geom_col() + theme_bw() +
-  scale_y_continuous(labels=scales::percent) +
-  labs(x="Year", y="Proportion", fill="Race")
 ```
 
 <font color="blue">
@@ -68,7 +63,9 @@ From now on, you will need to refer to the codebook. For this problem set, the c
 
 ```{r tabletwo, echo = F}
 # You can insert the code to generate your answer here
-des |> kbl(digits=3, caption="Racial composition of the dataset by year") |> kable_styling(full_width = F)
+des |> kbl(digits=3, caption="Racial composition of the dataset by year") |>
+  kable_classic() |>
+  kable_styling(full_width = F)
 ```
 
 Let's also try to understand whether members of minorities and white individuals get stopped for different reasons. Since the codebook is directly taken from NYPD and does not necessarily match the different variables, here is the list and description of each variable you should use in the next question.
@@ -157,22 +154,34 @@ For this, you need a bit of guidance. Fryer uses a logit to regress `useanyforce
 
 ***Answer:*** 
 
-```{r panelAFryer}
+```{r panelAFryer, eval=F}
 # You can insert the code to generate your answer here
 a <- feglm(useanyforce ~ sblack + shisp + sasian + sother, data=data, cluster=~pct, family="binomial")
 b <- feglm(useanyforce ~ sblack + shisp + sasian + sother + smale + sage + sage^2, data=data, cluster=~pct, family="binomial")
 c <- feglm(useanyforce ~ sblack + shisp + sasian + sother + smale + sage + sage^2 + indoors + daytime + hicrimearea + hicrimetime + hicrimeareaXtime + inuniform + idphoto + idverbal + idrefused + idother + withothers, data=data, cluster=~pct, family="binomial")
-d <- feglm(useanyforce ~ sblack + shisp + sasian + sother + smale + sage + sage^2 + indoors + daytime + hicrimearea + hicrimetime + hicrimeareaXtime + inuniform + idphoto + idverbal + idrefused + idother + withothers + foundweapon + foundcontraorweap + carrysuspobj + fitreldescr + prepforcrime + lookout + crimattire + appdrugtrans + suspmovements + engageviolcrime + concealsuspobj + othersuspbehav, data=data, cluster=~pct, family="binomial")
+d <- feglm(useanyforce ~ sblack + shisp + sasian + sother + smale + sage + sage^2 + indoors + daytime + hicrimearea + hicrimetime + hicrimeareaXtime + inuniform + idphoto + idverbal + idrefused + idother + withothers + 
+             #foundweapon + foundcontraorweap + 
+             carrysuspobj + fitreldescr + prepforcrime + lookout + crimattire + appdrugtrans + suspmovements + engageviolcrime + concealsuspobj + othersuspbehav, data=data, cluster=~pct, family="binomial")
+e <- feglm(useanyforce ~ sblack + shisp + sasian + sother + smale + sage + sage^2 + indoors + daytime + hicrimearea + hicrimetime + hicrimeareaXtime + inuniform + idphoto + idverbal + idrefused + idother + withothers + 
+             #foundweapon + foundcontraorweap + 
+             carrysuspobj + fitreldescr + prepforcrime + lookout + crimattire + appdrugtrans + suspmovements + engageviolcrime + concealsuspobj + othersuspbehav|pct+year, data=data, cluster=~pct, family="binomial")
 
 mods <- list("No controls" = a,
      "+ civilian demographics" = b,
      "+ encounter characteristics" = c,
-     "+ civilian behavior" = d)
+     "+ civilian behavior" = d,
+     "+ precint and year FE" = e)
 
 coef_map <- c("sblack" = "Black", "shisp" = "Hispanic", "sasian" = "Asian", "sother" = "Other Race")
-msummary(mods, coef_map=coef_map, exp=TRUE, stars=FALSE, 
+logit <- msummary(mods, coef_map=coef_map, exp=TRUE, stars=FALSE, 
          shape = model + statistic ~ term,
          title="Logit Regressions of Use of Force on Race")
+save(logit, file="logit.RData")
+```
+
+```{r panelAFryertab, eval=T}
+load("logit.RData")
+logit
 ```
 
 <font color="blue">
@@ -187,12 +196,14 @@ In the rest of the problem set, we will use a linear probability model (that is,
 
 ***Answer:*** 
 
-```{r panelAOLS}
+```{r panelAOLS, eval=F}
 # You can insert the code to generate your answer here
 a <- feols(useanyforce ~ sblack + shisp + sasian + sother, data=data, cluster=~pct)
 b <- feols(useanyforce ~ sblack + shisp + sasian + sother + smale + sage + sage^2, data=data, cluster=~pct)
 c <- feols(useanyforce ~ sblack + shisp + sasian + sother + smale + sage + sage^2 + indoors + daytime + hicrimearea + hicrimetime + hicrimeareaXtime + inuniform + idphoto + idverbal + idrefused + idother + withothers, data=data, cluster=~pct)
-d <- feols(useanyforce ~ sblack + shisp + sasian + sother + smale + sage + sage^2 + indoors + daytime + hicrimearea + hicrimetime + hicrimeareaXtime + inuniform + idphoto + idverbal + idrefused + idother + withothers + foundweapon + foundcontraorweap + carrysuspobj + fitreldescr + prepforcrime + lookout + crimattire + appdrugtrans + suspmovements + engageviolcrime + concealsuspobj + othersuspbehav, data=data, cluster=~pct,)
+d <- feols(useanyforce ~ sblack + shisp + sasian + sother + smale + sage + sage^2 + indoors + daytime + hicrimearea + hicrimetime + hicrimeareaXtime + inuniform + idphoto + idverbal + idrefused + idother + withothers + 
+             #foundweapon + foundcontraorweap + 
+             carrysuspobj + fitreldescr + prepforcrime + lookout + crimattire + appdrugtrans + suspmovements + engageviolcrime + concealsuspobj + othersuspbehav, data=data, cluster=~pct,)
 
 mods <- list("No controls" = a,
      "+ civilian demographics" = b,
@@ -200,9 +211,16 @@ mods <- list("No controls" = a,
      "+ civilian behavior" = d)
 
 coef_map <- c("sblack" = "Black", "shisp" = "Hispanic", "sasian" = "Asian", "sother" = "Other Race")
-msummary(mods, coef_map=coef_map, stars=FALSE, 
+panelAOLS <- msummary(mods, coef_map=coef_map, stars=FALSE, 
          shape = model + statistic ~ term,
-         title="Logit Regressions of Use of Force on Race")
+         title="OLS Regressions of Use of Force on Race")
+save(panelAOLS, file="panelAOLS.RData")
+```
+
+
+```{r panelAOLStab}
+load("panelAOLS.RData")
+panelAOLS
 ```
 
 <font color="blue">
@@ -216,6 +234,13 @@ As we know from last week's problem set, the observed difference in the probabil
 $$
 \Pi^+_m-\Pi^+_M=   ATT_{a=1} - \frac{1- q^c}{\pi^c q^c + (1-q^c)}\pi^v_m q^v + (\pi^v_m-\pi^v_M)q^v
 $$
+
+-   First term: difference in observed violence
+
+-   Second term: proportion of stops due to discrimination
+
+-   statistical discrimination in beliefs about violence levels.
+
 
 (refer to last week's problem set Table 3 for the meaning of these variables). Knox, Lowe, and Mummolo (2020) make a similar point using the potential outcome framework. $ATT_{a=1}$ (which they denote $ATT_{M=1}$), scholars need to make four assumptions: 1. All the violence is reported (Assumption 1 on page 625), 2. There is discrimination against minorities at the level of stops (Assumption 2 on page 626), 3. An individuals stopped no matter their race, the always takers of stop, are more likely to suffer police violence as well as to suffer higher level of violence (Assumption 3 on page 626), 4. After controlling for available demographics and location characteristics, the proportion of individuals in each category (compliers, always takers, never takers for both stop and violence) is independent on race (Assumption 4 on page 626). With these assumptions, Know et al. argue that $\Pi^+_m-\Pi^+_M= ATT_{a=1}-\rho \Pi^+_M$, with $\rho$ the proportion of stops of minority members due to discrimination.
 
@@ -260,12 +285,45 @@ We are particularly interested in the following quantity: $(\pi^v_m-\pi^v_M)q^v$
 
 Recall that we use OLS now and in what follows (you are welcome to check that the same patterns hold with Logit).
 
-```{r criminalviolence, results = 'asis'}
-# You can insert the code to generate your answer here
+***Answer:*** 
 
+```{r criminalviolence, eval=F}
+a <- feols(useanyforce ~ foundweapon + foundcontraorweap, data=data, cluster=~pct)
+b <- feols(useanyforce ~ foundweapon + foundcontraorweap + sblack + shisp + sasian + sother + smale + sage + sage^2, data=data, cluster=~pct)
+c <- feols(useanyforce ~ foundweapon + foundcontraorweap + sblack + shisp + sasian + sother + smale + sage + sage^2 + indoors + daytime + hicrimearea + hicrimetime + hicrimeareaXtime + inuniform + idphoto + idverbal + idrefused + idother + withothers, data=data, cluster=~pct)
+d <- feols(useanyforce ~ foundweapon + foundcontraorweap + sblack + shisp + sasian + sother + smale + sage + sage^2 + indoors + daytime + hicrimearea + hicrimetime + hicrimeareaXtime + inuniform + idphoto + idverbal + idrefused + idother + withothers + carrysuspobj + fitreldescr + prepforcrime + lookout + crimattire + appdrugtrans + suspmovements + engageviolcrime + concealsuspobj + othersuspbehav, data=data, cluster=~pct,)
+e <- feols(useanyforce ~ foundweapon + foundcontraorweap + sblack + shisp + sasian + sother + smale + sage + sage^2 + indoors + daytime + hicrimearea + hicrimetime + hicrimeareaXtime + inuniform + idphoto + idverbal + idrefused + idother + withothers + carrysuspobj + fitreldescr + prepforcrime + lookout + crimattire + appdrugtrans + suspmovements + engageviolcrime + concealsuspobj + othersuspbehav|pct+ year, data=data, cluster=~pct,)
+
+mods <- list("No controls" = a,
+     "+ civilian demographics" = b,
+     "+ encounter characteristics" = c,
+     "+ civilian behavior" = d,
+     "+ precinct and year fixed effects" = e)
+
+coef_map <- c("foundweapon" = "Weapon found",
+              "foundcontraorweap" = "Contraband found",
+              "sblack" = "Black", 
+              "shisp" = "Hispanic", 
+              "sasian" = "Asian", 
+              "sother" = "Other Race")
+
+criminalviolence <- msummary(mods, coef_map=coef_map, stars=T, 
+         shape = model + statistic ~ term,
+         title="OLS Regressions of violence on weapon or contraband found")
+save(criminalviolence, file="criminalviolence.RData")
 ```
 
-***Answer:*** 
+```{r criminalviolencetab}
+load("criminalviolence.RData")
+criminalviolence
+```
+
+
+<font color="blue">
+
+Criminals are more prone to trigger violence (under our assumptions)
+
+</font>
 
 We are now going to try to take our model very (too!) seriously to compute our own estimate of the $ATT_{a=1}$ make use of our answer to **Q7**. To do so, we will take advantage of two findings from last week's problem set. First, if an individual is stopped based on an ambiguous signal ($s^c_{I_g}=0$) then violence is documented ($v^*>0$) only if there is a clear signal the individual is prone to violent reaction ($s^v_{I_g}=1)$. That is, the difference in the probability of violence for this type of stops (conditional on $s^c_{I_g}=0$) is $(\pi^v_m-\pi^v_M)q^v$. In questions **Q8** and **Q9**, we try two different ways to recover this quantity. Second, assuming $b^v_m$ is not too large (possibly a $\underline{\text{strong}}$ assumption), the proportion of individuals from the majority being on the receiving hand of the highest level of violence is $\pi^v_M q^v$, the proportion of individuals from the minority being on the receiving end of the highest level of violence is $\frac{\pi^c_m q^c}{\pi^c_m q^c + (1-q^c)}$. Hence, the difference in probabilities between the two groups (the coefficient regressions) would be $\frac{\pi^c_m q^c}{\pi^c_m q^c + (1-q^c)}-\pi^v_M q^v$.
 In question **Q10**, we try to recover this quantity.
@@ -274,12 +332,52 @@ Let's turn to our attempt to recover $(\pi^v_m-\pi^v_M)q^v$. We need to find amb
 
 **Q8:** Based on your answers to **Q1** and **Q2**, pick four signals (reasons for stop) that appear to be disproportionally used against Black civilians (justify your answer).^[The most ambiguous signals for Black civilians may not be the most ambiguous signals for other minorities. But we will assume it is.] Regress the use of any force on race dummies (as well as demographic controls, controls for stop conditions, and finally precinct-year fixed effects) for any individual stopped with one of these four causes of arrest and for each ambiguous signal separately (five regressions in total, label them (1) to (5)). What are the issues with this approach based on your findings?
 
-```{r ambigoussignal, results = 'asis'}
-# You can insert the code to generate your answer here
+```{r ambigoussignal, eval=F}
+a <- feols(useanyforce ~ sblack + shisp + sasian + sother + smale + sage + sage^2 + indoors + daytime + hicrimearea + hicrimetime + hicrimeareaXtime + inuniform + idphoto + idverbal + idrefused + idother + withothers|pct+ year, data=data, cluster=~pct,
+           subset=~concealsuspobj==1)
 
+b <- feols(useanyforce ~ sblack + shisp + sasian + sother + smale + sage + sage^2 + indoors + daytime + hicrimearea + hicrimetime + hicrimeareaXtime + inuniform + idphoto + idverbal + idrefused + idother + withothers|pct+ year, data=data, cluster=~pct,
+           subset=~crimattire==1)
+
+c <- feols(useanyforce ~ sblack + shisp + sasian + sother + smale + sage + sage^2 + indoors + daytime + hicrimearea + hicrimetime + hicrimeareaXtime + inuniform + idphoto + idverbal + idrefused + idother + withothers|pct+ year, data=data, cluster=~pct,
+           subset=~suspmovements==1)
+
+d <- feols(useanyforce ~ sblack + shisp + sasian + sother + smale + sage + sage^2 + indoors + daytime + hicrimearea + hicrimetime + hicrimeareaXtime + inuniform + idphoto + idverbal + idrefused + idother + withothers|pct+ year, data=data, cluster=~pct,
+           subset=~engageviolcrime==1)
+
+e <- feols(useanyforce ~ sblack + shisp + sasian + sother + smale + sage + sage^2 + indoors + daytime + hicrimearea + hicrimetime + hicrimeareaXtime + inuniform + idphoto + idverbal + idrefused + idother + withothers|pct+ year, data=data, cluster=~pct,
+           subset=~prepforcrime==1)
+
+mods <- list("Suspicious object" = a,
+             "Criminal attire" = b,
+             "Furtive movements" = c,
+             "Violent crime" = d,
+             "Preparing for crime" = e)
+
+coef_map <- c("sblack" = "Black", 
+              "shisp" = "Hispanic", 
+              "sasian" = "Asian", 
+              "sother" = "Other Race")
+
+ambigoussignal <- msummary(mods, coef_map=coef_map, stars=T, 
+         shape = model + statistic ~ term,
+         title="OLS Regressions of violence on race for each signal")
+
+save(ambigoussignal, file="ambigoussignal.RData")
+```
+
+```{r ambigoussignaltab}
+load("ambigoussignal.RData")
+ambigoussignal
 ```
 
 ***Answer:*** 
+
+<font color="blue">
+
+The issue with this approach is that, the ambiguous signals might lead to more discrimination, as our theory predicts, whereas the seemingly discriminant discriminant signals might lead to less discrimination if they are unambiguous.
+
+</font>
 
 Another approach is to note that the model predicts that the more ambiguous a signal, the less likely the use of force (given **Q7**). We try this approach in the following question.
 
