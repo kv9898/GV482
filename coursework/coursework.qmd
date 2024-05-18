@@ -4,7 +4,7 @@ subtitle: GV482 Coursework
 date: last-modified
 date-format: |
     | DD/MM/YYYY
-    | [Word Count]: `r wordcountaddin:::word_count('coursework.qmd')`
+    | [Word Count]: 2999
 authors:
   - name: "Candidate Number: 23850"
 execute:
@@ -25,31 +25,31 @@ format:
             \newcommand{\elandscape}{\end{landscape}}
 ---
 
-\pagebreak
-
 ```{r setup}
-need <- c('tidyverse','modelsummary','haven','fixest','kableExtra',"TAM") # list packages needed
+need <- c('tidyverse','modelsummary','haven','fixest','kableExtra',"TAM","car") # list packages needed
 have <- need %in% rownames(installed.packages()) # checks packages you have
 if(any(!have)) install.packages(need[!have]) # install missing packages
 invisible(lapply(need, library, character.only=T))
 
-#data <- read_dta("PopulismTerrorism.dta")
-#data <- as_factor(data)
 load("cleaned/data.RData")
 ```
 
 # Introduction
 
-This project attempts to explore the impact of terrorism on populism.
+Motivated by the wide-spread association of terrorism and the recent rise of populism in Europe [@Mudde2016], this project explores the impact of terrorism on populism in Europe. Using data from 33 (former) EU countries from 1980 and 2020 and a Two Way Fixed Effects (TWFE) approach, this project finds no evidence for an *overall* effect of domestic terrorism on electoral support for populist parties in legislative elections, due to neutralising effects of different terrorist ideologies. Nevertheless, casualties from terrorism in *neighbouring* countries are found to weakly increase home support
+for populism. Terrorist attacks in neighbouring countries are found to substantively increase support for
+populism in the *next* year, although this effect offset by earlier attacks.
+
+Counter-intuitively, the numbers of attacks by Islamic and right-wing attacks are found to have opposite effects to the *casualties* from such attacks. The former are found to increase support for populism while the latter are found to reduce it. This suggests that different types of terrorism (demonstrative and destructive) have different impacts as they are strategically implemented to achieve different goals.
 
 # Descriptive Statistics
 
-The panel data used in this project contains `r nrow(data)` observations and `r ncol(data)` variables. The unit of observation is national elections. The data encompasses `r length(unique(data$Country))` EU member countries, including the UK ($N=`r length(unique(data[["Country"]]))`$), and spans from `r min(data$Year)` to `r max(data$Year)`. The data is unbalanced due to the nature of different electoral cycles, with a minimum of `r min(table(data[["Country"]]))` observations (elections) per country, and a maximum of `r max(table(data[["Country"]]))`. The election dates for each country are presented in @fig-election. It can be seen that most elections have been held at regular intervals, with few exceptions of snap elections.
+The panel data contains `r nrow(data)` observations and `r ncol(data)` variables, at the unit of national elections. The data encompasses `r length(unique(data$Country))` EU member countries, including the UK ($N=`r length(unique(data[["Country"]]))`$), and spans from `r min(data$Year)` to `r max(data$Year)`. The data is unbalanced due to the nature of different electoral cycles, with a minimum of `r min(table(data[["Country"]]))` observations (elections) per country, and a maximum of `r max(table(data[["Country"]]))`. The election dates for each country are presented in @fig-election. It can be seen that most elections have been held at regular intervals, with few snap elections.
 
 ```{r}
 #| label: fig-election
 #| fig-cap: Election date by country
-#| fig-height: 5
+#| fig-height: 4.5
 data|>
   mutate(Country=forcats::fct_rev(Country),
          ystart = as.numeric(Country) - 0.5,
@@ -66,19 +66,18 @@ The unweighted summary statistics for key variables are provided in @tbl-summary
 ```{r summary}
 #| label: tbl-summary
 #| tbl-cap: Summary statistics of the populism dataset (unweighted)
-#| tbl-pos: H
 datasummary(PopulistLeft+PopulistRight+HomeAttacksY1+HomenkillY1+HomenwoundY1+
               GrowthY1+UnemploymentY1+Export_penetrationY1+Import_penetrationY1+
               Immigration_percentY1+Emigration_percentY1
             ~N+Mean+SD+Min+(Q1=P25)+Median+(Q3=P75)+Max,
             data=data)
 ```
+
 In later analysis, the weights of observations are adjusted according to the national population and number of elections held in each country. This is explained further in @sec-weights. The summary statistics of the weighted dataset are presented in @tbl-summary-weighted.
 
 ```{r summary-weighted}
 #| label: tbl-summary-weighted
 #| tbl-cap: Summary statistics of the populism dataset (weighted)
-#| tbl-pos: H
 q1 <- function(x) weighted_quantile(x, w=data$weight)[['25%']]
 q3 <- function(x) weighted_quantile(x, w=data$weight)[['75%']]
 datasummary(PopulistLeft+PopulistRight+HomeAttacksY1+HomenkillY1+HomenwoundY1+
@@ -90,11 +89,12 @@ datasummary(PopulistLeft+PopulistRight+HomeAttacksY1+HomenkillY1+HomenwoundY1+
             data=data)
 ```
 
-The weighted mean vote share of populist parties in each election year is presented in @fig-populism. The figure suggests that the vote share of populist parties had been increasing from 1980 to 2020. Over the same period, right-wing populism had been more prevalent, whereas left-wing populism had been on the decline.
+The weighted mean vote share of populist parties by election year is presented in @fig-populism. The figure suggests the vote share of populist parties had been increasing from 1980 to 2020. This is accompanied by a rise in right-wing populism and a decline of left-wing populism.
 
 ```{r}
 #| label: fig-populism
 #| fig-cap: Weighted mean vote share of populist parties in elections over time
+#| fig-height: 3
 data |>
   group_by(Year) |>
   summarise(PopulistLeft = weighted.mean(PopulistLeft, weight), 
@@ -103,14 +103,15 @@ data |>
   ggplot(aes(x = Year, y = Mean/100, fill = Populist)) + theme_bw() + geom_area() +
   scale_fill_discrete(name = "Populism", labels =  c("Left", "Right"))+
   scale_y_continuous(labels = scales::percent) + theme(legend.position="bottom") +
-  labs(x = "Election Year", y = "Weighted mean vote share for populist parties")
+  labs(x = "Election Year", y = "Weighted mean vote share\nfor populist parties")
 ```
 
-As for terrorism, @fig-terrorism summarises the total number of attacks and the casualties thereof within 1 year prior to national elections. Despite more frequent attacks before 2000, the highest number of casualties were seen before elections in 2004 and 2017, attributed to the 2004 Madrid train bombings and 2016 Nice truck attack, respectively.
+As for terrorism, @fig-terrorism summarises the total number of attacks and the casualties thereof one year before national elections. Despite more frequent attacks before 2000, the highest number of casualties were seen before elections in 2004 and 2017, attributed to the 2004 Madrid train bombings and 2016 Nice truck attack, respectively.
 
 ```{r}
 #| label: fig-terrorism
 #| fig-cap: Number of terrorist attacks and casualties thereof 1 year prior to elections over time
+#| fig-height: 3
 data |>
   group_by(Year) |>
   summarise(HomenkillY1 = sum(HomenkillY1), HomenwoundY1 = sum(HomenwoundY1), HomeAttacksY1=sum(HomeAttacksY1)) |>
@@ -127,29 +128,113 @@ data |>
 
 # Identification Strategies
 
-To identify the impact of terrorist attacks on the vote share of populist parties, this project employs a number of specifications and measurements to cross-validate results and overcome the shortcomings of each specification.
+To identify the causal impact, different specifications and measures are employed for cross-validation and robustness check.
 
 ## Weights {#sec-weights}
 
-Since the unit of observation for this project is national elections, unweighed analysis risks over-representing countries with more elections and less population. To account for this distortion, this project weighs the observations by their national population at the time, divided by the number of national elections for that nation. As a result, the sum of weights of each country is proportional to their (election weighted-average) population:
+Since the unit of observation is national elections, unweighed analysis risks over-representing countries with more elections and less population. To account for this distortion, this project weights the observations by their current national population, divided by the number of national elections. As a result, the sum of weights of each country is proportional to their population:
 
 $$
 w_{i,t}\propto\frac{\text{Population}_{i,t}}{\text{Number of Elections}_{i}}
 $$
-For convenience, this project sets the sum of weights to the number of observations ($\sum_{i,t}w_{i,t}=329$).
+
+```{r create_population_data}
+#| eval: false
+data <- read_dta("PopulismTerrorism.dta")
+data <- as_factor(data)
+# clean population data
+library(tidyverse)
+pop_data <- data |> group_by(Country) |> distinct(Year, .keep_all=T) |> #remove elections in the same year
+  ungroup() |>    
+  select(Country,Year, populationY1,populationY2,populationY3)
+    #min(data$Year) #1980
+    #max(data$Year) #2020
+pop_data <- pop_data |>
+  group_by(Country) |>
+  complete(Year = seq(1977, 2020))
+pop_data <- pop_data |>
+  group_by(Country) |>
+  mutate(populationY2 = dplyr::lead(populationY2,1),
+         populationY3 = dplyr::lead(populationY3,2))
+pop_data <- pop_data |>
+  mutate(population = coalesce(populationY1, populationY2, populationY3)) |>
+  relocate(population,.after=Year)
+pop_external <- read_csv("popdata.csv")
+country_code_map <- c(
+  AT = "AUT", BE = "BEL", BG = "BUL", HR = "CRO", CY = "CYP", CZ = "CZE", 
+  DK = "DEN", ES = "ESP", EE = "EST", FI = "FIN", FR = "FRA", DE_TOT = "GER", 
+  EL = "GRE", HU = "HUN", IS = "ICE", IE = "IRE", IT = "ITA", LV = "LAT", 
+  LT = "LIT", LU = "LUX", MT = "MAL", ME = "MNE", NL = "NET", NO = "NOR", 
+  PL = "POL", PT = "POR", RO = "ROM", RS = "SER", SK = "SLK", SI = "SLN", 
+  SE = "SWE", CH = "SWI", UK = "UK"
+)
+pop_data$Code <- names(country_code_map)[match(pop_data$Country, country_code_map)]
+pop_data <- pop_data |> select(Country,Code,Year,population)
+pop_external <- pop_external |> rename(population_external=population)
+pop_data <- left_join(pop_data, pop_external, by=c("Code","Year"))
+
+discrepancy <- pop_data |> filter(population != population_external)
+rm(pop_external, discrepancy, country_code_map)
+pop_data <- pop_data |> mutate(population=coalesce(population, population_external)) |> 
+  select(-c(population_external,Code))
+pop_data <- pop_data |> mutate(population=replace_na(population,0))
+saveRDS(pop_data, "cleaned/pop_data.RDS")
+```
+
+```{r merge_population}
+#| eval: false
+data <- read_dta("PopulismTerrorism.dta")
+data <- as_factor(data)
+#merge by population
+pop_data <- readRDS("cleaned/pop_data.RDS")
+
+#sum(is.na(data$populationY1)) #3
+#sum(is.na(data$populationY2)) #3
+#sum(is.na(data$populationY3)) #6
+
+pop_data <- pop_data |>
+  mutate(populationY1=population, 
+         populationY2=dplyr::lag(population,1), 
+         populationY3=dplyr::lag(population,2)) |>
+  select(-population)
+data <- left_join(data, pop_data, by=c("Country","Year"),
+                           suffix=c("",".y"))
+
+#a <- data_combined |>
+#  filter(
+#    populationY1 != populationY1.y | 
+#      populationY2 != populationY2.y | 
+#      populationY3 != populationY3.y
+#  ) |> 
+#  select(Country, Year, populationY1, populationY1.y, populationY2, 
+#         populationY2.y, populationY3, populationY3.y) #0 unmatched
+
+data <- data |>
+  mutate(
+    populationY1 = coalesce(populationY1, populationY1.y),
+    populationY2 = coalesce(populationY2, populationY2.y),
+    populationY3 = coalesce(populationY3, populationY3.y)
+  ) |>
+  select(-c(populationY1.y, populationY2.y, populationY3.y))
+
+#a <- data |>
+#  filter(
+#      is.na(populationY1) | 
+#      is.na(populationY2) | 
+#      is.na(populationY3)
+#  ) |> 
+#  select(Country, Year, populationY1, populationY2, populationY3) #1 left - Serbia 1998 (didn't exist back then)
+```
 
 ```{r weights}
 #| eval: false
-data$populationY1[103] <- 53713830 # France 1980 source: macrotrends
-data$populationY1[104] <- 55108106 # 1985
-data$populationY1[105] <- 55641541 # 1987
 data <- data |> group_by(Country) |> mutate(weight=populationY1/n()) |> ungroup()
 data <- data |> mutate(weight=n()*weight/sum(data$weight))
 ```
 
 ## Dependent Variables
 
-This project takes on three dependent variables - Total vote share for left-wing populist parties `PopulistLeft`, Total vote share for right-wing populist parties `PopulistRight`, and Total vote share for all populist parties `PopulistTotal`. This is to distinguish the effect of terrorism on different streams of populism, as left-wing and right-wing populisms have followed different trends historically (@fig-populism), it is sensible to assume that terrorism may have a differential impact on them.
+This project takes on three dependent variables - Vote share for left-wing populist parties `PopulistLeft`, vote share for right-wing populist parties `PopulistRight`, and Total populist vote share `PopulistTotal`. This is to distinguish the effect of terrorism on different streams of populism, as left-wing and right-wing populisms have followed different trends historically (@fig-populism).
 
 ```{r populism_total}
 #| eval: false
@@ -158,15 +243,15 @@ data$PopulistTotal <- data$PopulistLeft+data$PopulistRight
 
 ## Independent Variables
 
-There are two sets of independent variables the effects of which on populist vote shares are of interest: local terrorist attacks and foreign terrorist attacks. To make their coefficients comparable, the same measurement of terrorist attacks is used in each regression.
+There are two sets of independent variables: local terrorism and foreign terrorism. To make their coefficients comparable, the same measure of terrorism is used in each regression.
 
-### Effect of Local Terrorist Attacks
+### Effect of Local Terrorism
 
-There are four sets of measurements of local terrorist attacks used in this project:
+There are four sets of measures of local terrorism used in this project:
 
--   Number of terrorist attacks in home country $i$, $l$ year(s) before election (`HomeAttacksY*`).
+-   Number of terrorist attacks in home country $i$, $l$ year(s) before election (`HomeAttacksY*`) per million population.
 
--   Casualties, the numbers of people killed or wounded in terrorist attacks in home country $i$, $l$ year(s) before election (`HomenkillY*`+`HomenwoundY*`).
+-   Casualties, i.e. the numbers of people killed or wounded in terrorist attacks in home country $i$, $l$ year(s) before election (`HomenkillY*`+`HomenwoundY*`) per million population.
 
 ```{r casualty}
 #| eval: false
@@ -181,9 +266,22 @@ for (l in 1:4){
 }
 ```
 
--   (Proxies for) Number of terrist attacks attributed to Left/Right/Islamic groups in home country $i$, $l$ year(s) before election (`HomeleftproxyY*`/`HomerightproxyY*`/`HomeIslClaimY*`).
+```{r local}
+#| eval: false
+data <- data |>
+  mutate(HomeAttackspopY1 = HomeAttacksY1 * 1000000 / populationY1,
+         HomeAttackspopY2 = HomeAttacksY2 * 1000000 / populationY1,
+         HomeAttackspopY3 = HomeAttacksY3 * 1000000 / populationY1,
+         HomeAttackspopY4 = HomeAttacksY4 * 1000000 / populationY1,
+         HomencaspopY1    = HomencasY1 * 1000000 / populationY1,
+         HomencaspopY2    = HomencasY2 * 1000000 / populationY1,
+         HomencaspopY3    = HomencasY3 * 1000000 / populationY1,
+         HomencaspopY4    = HomencasY4 * 1000000 / populationY1,
+  )
+```
+-   (Proxies for) Number of terrorist attacks attributed to Left/Right/Islamic groups in home country $i$, $l$ year(s) before election (`HomeleftproxyY*`/`HomerightproxyY*`/`HomeIslClaimY*`) per million population.
 
--   (Proxies for) Casualties, the number of people killed or wounded in terrorist attacks in home country $i$, $l$ year(s) before election (`Homenkill_*Y*`+`Homenwound_*Y*`).
+-   (Proxies for) Casualties attributed to Left/Right/Islamic groups in home country $i$, $l$ year(s) before election (`Homenkill_*Y*`+`Homenwound_*Y*`) per million population.
 
 ```{r casualty_proxy}
 #| eval: false
@@ -199,29 +297,35 @@ for (l in 1:4){
 }
 ```
 
-The total number of attacks/casualties (first two sets of measurements) are used in regressions where the dependent variable is total populist vote share; left/right/Islamic group-segregated measurements (last two sets of measurements) are used when the dependent variable is regressions where the dependent variable is left/right segmented vote share.
+Measures of terrorism are taken as a proportion of population to correct for the tendency that larger countries suffer more terrorist attacks and casualties. Therefore our independent variables measure the *intensity* of terrorism.
 
-The number of people killed or wounded in terrorist attacks are added up to form a *casualty* count to avoid multicollinearity, as they highly correlate ($\text{corr}(HomenkillY1,HomenwoundY1)=`r with(data,cor(HomenkillY1,HomenwoundY1)) |> round(2)`$).
+The number of people killed or wounded in terrorist attacks are summed as *casualties* to avoid multicollinearity, as they highly correlate ($\text{corr}(HomenkillY1,HomenwoundY1)=`r with(data,cor(HomenkillY1,HomenwoundY1)) |> round(2)`$).
 
-All independent variables are taken up to 4 years before election ($1\leq l\leq4$). Coefficient $\beta_l$ denotes the effect of local terrorism in $l$ year(s) before election on the populist vote share.
+All independent variables are taken up to 4 years before election ($1\leq l\leq4$).
 
-### Effect of Foreign Terrorist Attacks
+### Effect of Foreign Terrorist Attacks {#sec-foreign-attack}
 
-Due to the internal mobility of people and cultural proximity within the EU, the terrorist attacks in other EU countries may also affect domestic populist vote share. Hence the inclusion of foreign terrorist attacks in our estimation.
+Due to internal mobility and cultural proximity within the EU, terrorism in other EU countries may also affect domestic populist vote shares. Hence the inclusion of foreign terrorist measures in our estimation.
 
-Similar to local terrorist attacks, the number of terrorist attacks, the casualties thereof, and the left/right/Islamic segregated measurements of them are used as measurements. However, the same measurements of foreign countries ($i'\in N$) rather than the home country ($i$) are taken, and a weighted sum of such measurements is calculated as the measurement of foreign terrorist attacks ($\sum_{i'\in N}c_{i,i'}\text{Terrorism}_{i',t-l}$). The weight $0\leq c_{i,i'}\leq1$ measures the geographical/cultural proximity of home country $i$ and foreign country $i'$:
+Similar to local terrorism, the number of terrorist attacks per million population, the casualties thereof, and the left/right/Islamic segregated measures of them are used as measures. The same measures of foreign countries ($i'\in N$) are taken with respect to *foreign* population. Since the population data for foreign countries are missing, external population data are merged to the dataset, which is explained further in Appendix [-@sec-population-data]. A weighted sum of such measures is calculated as the measure of foreign terrorism ($\sum_{i'\in N}c_{i,i'}\text{Terrorism}_{i',t-l}$). The weight $0\leq c_{i,i'}\leq1$ measures the geographical/cultural proximity of home country $i$ and foreign country $i'$:
 
 -   Geographical: $c_{i,i'}^{geo}=\begin{cases}1~\text{when home country}~i~\text{borders country}~i'\\0~\text{when home country}~i~\text{does not border country}~i'\end{cases}$ (Variable `Border*`).
 
 ```{r geo_indexed}
 #| eval: false
 #create a function for calculating the weighted sum
+pop_data <- readRDS("cleaned/pop_data.RDS")
 geo_index <- function(row, prefix, l) {
   country <- row[['Country']]
+  year <- row[['Year']] |> as.numeric()
   index <- 0
   for (c in setdiff(countries, country)){
+    pop <- pop_data$population[pop_data$Country==c & pop_data$Year==(year-l+1)]/1000000 
+          #find foreign pop
+    if(pop!=0){
     index <- index + as.numeric(row[[paste0("Border",c)]]) * 
-      as.numeric(row[[paste0(prefix,c,"Y",l)]])
+      as.numeric(row[[paste0(prefix,c,"Y",l)]])/pop
+    }
   }
   return(index)
 }
@@ -261,10 +365,15 @@ save(data, file = "cleaned/data.RData")
 #create a function for calculating the weighted sum
 cul_index <- function(row, prefix, l) {
   country <- row[['Country']]
+  year <- row[['Year']] |> as.numeric()
   index <- 0
   for (c in setdiff(countries, country)){
+    pop <- pop_data$population[pop_data$Country==c & pop_data$Year==(year-l+1)]/1000000 
+    #find foreign pop
+    if(pop!=0){
     index <- index + as.numeric(row[[paste0("percent_culturalsimilarity",c)]]) * 
-      as.numeric(row[[paste0(prefix,c,"Y",l)]])
+      as.numeric(row[[paste0(prefix,c,"Y",l)]])/pop
+    }
   }
   return(index)
 }
@@ -297,43 +406,342 @@ for (l in 1:4){
 save(data, file = "cleaned/data.RData")
 ```
 
-The linguistic proximity is not included for two reasons. Firstly, the linguistic proximity is included in the cultural similarity index. Secondly, the linguistic proximity data is missing for two countries: Luxembourg and Montenegro.
+```{r proxy_varaibles}
+#| eval: false
+pop_data <- readRDS("cleaned/pop_data.RDS")
+data <- data |>
+  mutate(
+    Homeleftproxy = (HomeleftproxyY1+HomeleftproxyY2+HomeleftproxyY3+HomeleftproxyY4)*1000000/populationY1,
+    Homencas_left = (Homencas_leftY1+Homencas_leftY2+Homencas_leftY3+Homencas_leftY4)*1000000/populationY1,
+    Homerightproxy = (HomerightproxyY1+HomerightproxyY2+HomerightproxyY3+HomerightproxyY4)*1000000/populationY1,
+    Homencas_right = (Homencas_rightY1+Homencas_rightY2+Homencas_rightY3+Homencas_rightY4)*1000000/populationY1,
+    HomeIslClaim = (HomeIslClaimY1+HomeIslClaimY2+HomeIslClaimY3+HomeIslClaimY4)*1000000/populationY1,
+    Homencas_IslCl = (Homencas_IslClY1+Homencas_IslClY2+Homencas_IslClY3+Homencas_IslClY4)*1000000/populationY1,
+    
+    geoleftproxy = geoleftproxyY1+geoleftproxyY2+geoleftproxyY3+geoleftproxyY4,
+    geoncas_left = geoncas_leftY1+geoncas_leftY2+geoncas_leftY3+geoncas_leftY4,
+    georightproxy = georightproxyY1+georightproxyY2+georightproxyY3+georightproxyY4,
+    geoncas_right = geoncas_rightY1+geoncas_rightY2+geoncas_rightY3+geoncas_rightY4,
+    geoIslClaim = geoIslClaimY1+geoIslClaimY2+geoIslClaimY3+geoIslClaimY4,
+    geoncas_IslCl = geoncas_IslClY1+geoncas_IslClY2+geoncas_IslClY3+geoncas_IslClY4,
+    
+    culleftproxy = culleftproxyY1+culleftproxyY2+culleftproxyY3+culleftproxyY4,
+    culncas_left = culncas_leftY1+culncas_leftY2+culncas_leftY3+culncas_leftY4,
+    culrightproxy = culrightproxyY1+culrightproxyY2+culrightproxyY3+culrightproxyY4,
+    culncas_right = culncas_rightY1+culncas_rightY2+culncas_rightY3+culncas_rightY4,
+    culIslClaim = culIslClaimY1+culIslClaimY2+culIslClaimY3+culIslClaimY4,
+    culncas_IslCl = culncas_IslClY1+culncas_IslClY2+culncas_IslClY3+culncas_IslClY4)
+data <- data |>
+  mutate(
+    HomeAttackspop = HomeAttackspopY1+HomeAttackspopY2+HomeAttackspopY3+HomeAttackspopY4,
+    Homencaspop = HomencaspopY1+HomencaspopY2+HomencaspopY3+HomencaspopY4,
+    geoAttacks = geoAttacksY1+geoAttacksY2+geoAttacksY3+geoAttacksY4,
+    geoncas = geoncasY1+geoncasY2+geoncasY3+geoncasY4,
+    culAttacks = culAttacksY1+culAttacksY2+culAttacksY3+culAttacksY4,
+    culncas = culncasY1+culncasY2+culncasY3+culncasY4)
+save(data, file = "cleaned/data.RData")
+```
 
-Similarly, this composite index can be taken up to 4 years before the election ($1\leq\theta_l\leq4$). Hence, the coefficient $\theta_l$ can be interpreted as the impact of terrorist attacks in a bordering or culturally identical foreign country on domestic populist vote share. This coefficient is also comparable to the effect of domestic terrorist attack ($\beta_l$).
+The linguistic proximity is not included because of missing data for two countries: Luxembourg and Montenegro.
+
+Similarly, this composite index are taken up to 4 years before the election ($1\leq\theta_l\leq4$). Hence, the coefficient $\theta_l$ can be interpreted as the impact of terrorist attacks in a bordering or culturally identical foreign country on domestic populist vote share. This coefficient is therefore comparable to that of domestic terrorism.
 
 ## Control Variables
 
-A number of control variables are selected as they are believed to affect the outcome (populist vote share) but not (significantly) affected by terrorism. Some of these variables are correlated with terrorism, the inclusion of them in this case reduce the omitted variable bias; others help to improve the precision of our estimation and increase the statistical power.
+Several control variables are selected due to confounding. They are believed to affect the outcome (populist vote share) but not (significantly) affected by terrorism.
 
--   Growth in % (`GrowthY*`). Lower growth may induce terrorism and is expected to increase populist vote share. Terrorism is not expected to affect growth at the national level.
+-   Growth in % (`GrowthY*`) and Unemployment in % (`UnemploymentY*`). Bad economic performance may induce terrorism and is expected to increase populist vote share [@Algan2017; @Guiso2019]. Terrorism is not expected to affect the economy at the national level.
 
--   Unemployment in % (`UnemploymentY*`). Higher unemployment may increase terrorism and is expected to increase the populist vote share [@Algan2017; @Guiso2019]. Terrorism is not expected to affect unemployment at the national level.
+-   Import and Export penetration as % of GDP (`Import_penetrationY*` and `Export_penetrationY*`). Higher trade penetration implies potentially higher pressure under globalisation, which induces populism.
 
--   Export penetration as % of GDP (`Export_penetrationY*`). Higher export penetration implies potentially higher pressure under globalisation, which induces populism.
-
--   Import penetration in % of GDP (`Import_penetrationY*`). Higher import penetration implies local firms losing in global competition, which induces populism.
-
--   Immigration as % of population (`Immigration_percentY*`). Higher immigration is expected to increase support for populism, due to cultural shocks [@inglehart2016; @margalit2019] or a reputation shock [@Wolton2023].
-
--   Emigration as % of population (`Emigration_percentY*`).
+-   Immigration and Emigration as % of population (`Immigration_percentY*` and `Emigration_percentY*`). Higher immigration is expected to increase support for populism, due to cultural shocks [@inglehart2016; @margalit2019] or a reputation shock [@Wolton2023].
 
 All control variables are available and taken up to 3 years before election.
 
-## Baseline Model - Two-Way Fixed Effects
+## Main Models - Two-Way Fixed Effects
+
+This project uses a two-way fixed effects (TWFE) framework to identify the causal effect of terrorism on populist vote share. The TWFE estimator controls for the time-invariant and unit-invariant confounders and relaxes the assumptions needed to identify causal effects. We only need to assume that terrorism is exogenous *conditional* on the control variables and fixed effects, and the effect of terrorism is relatively homogeneous.
 
 $$
+Y_{i,t}=\alpha_i+\lambda_t+\beta\sum_{l=1}^4\text{Terrorism}_{i,t-l}+\theta\sum_{l=1}^4\sum_{i'\in N}c_{i,i'}\text{Terrorism}_{i',t-l}+\sum_{l=1}^4\boldsymbol{X_{i,t-l}^{'}\gamma_l}+\epsilon_{i,t}
+$$ {#eq-collapsed} $$
 Y_{i,t}=\alpha_i+\lambda_t+\sum_{l=1}^{4}\beta_{l}\text{Terrorism}_{i,t-l}+\sum_{l=1}^{4}\theta_l\sum_{i'\in N}c_{i,i'}\text{Terrorism}_{i',t-l} +\sum_{l=1}^{4}\boldsymbol{X_{i,t-l}^{'}\gamma_l}+\epsilon_{i,t}
 $$ {#eq-twfe}
 
-In the baseline setting of this project, a two-way fixed effects (TWFE) framework is used to identify the causal effect of terrorism on populist vote share. The functional form is presented in @eq-twfe. The unit fixed effects ($\alpha_i$) controls for the effects of time-invariant confounders in each country. The time fixed effects ($\lambda_t$) controls for the effects of events that uniformly affect populist share in all countries across the EU. $\beta_l$ denotes the effect of local terrorism $\text{Terrorism}_{i,t-l}$ in country $i$, $l$ year(s) before election in year $t$. $\theta_l$ denotes the effect of foreign terrorism $\text{Terrorism}_{i',t-l}$, weighted by the proximity $c_{i,i'}$ between home country $i$ and foreign country $i'$. $\boldsymbol{X_{it-l}}$ is a vector of control variables for country $i$, $l$ year(s) before election in year $t$. Their corresponding coefficients form a vector $\gamma_l$. $\epsilon_{i,t}$ is the error term.
+The functional forms of the main analysis are presented in @eq-collapsed and @eq-twfe. @eq-collapsed aggregates the terrorism measures 1 to 4 years before elections into single variables and @eq-twfe estimates the effect of terrorism in each year before elections. The unit fixed effects ($\alpha_i$) controls for the time-invariant confounders in each country. The time fixed effects ($\lambda_t$) controls for the events that uniformly affect populist share in all countries across the EU. $\beta_l$ denotes the effect of local terrorism $\text{Terrorism}_{i,t-l}$ in country $i$, $l$ year(s) before elections in year $t$. $\beta$ denotes the effect of the *aggregated* local terrorism within four years before elections. $\theta_l$ denotes the effect of foreign terrorism $\text{Terrorism}_{i',t-l}$, weighted by the proximity $c_{i,i'}$ between home country $i$ and foreign country $i'$. $\theta$ denotes the effect of the *aggregated* foreign terrorism four years before elections. $\boldsymbol{X_{it-l}}$ is a vector of control variables for country $i$, $l$ year(s) before elections in year $t$. Their corresponding coefficients form a vector $\gamma_l$. $\epsilon_{i,t}$ is the error term.
 
+## Ideology-disaggregated model
+
+$$
+Y_{i,t}=\alpha_i+\lambda_t+\sum_{g\in G}\beta_{g}\sum_{l=1}^{4}\text{Terrorism}_{i,t-l,g}+\sum_{g\in G}\theta_{g}\sum_{l=1}^{4}\sum_{i'\in N}c_{i,i'}\text{Terrorism}_{i',t-l,g} +\sum_{l=1}^{4}\boldsymbol{X_{i,t-l}^{'}\gamma_l}+\epsilon_{i,t}
+$$ {#eq-ideo}
+
+One may suspect that that terrorism of different ideological affiliations may have heterogeneous and even opposite effects on populism, in which case the main results are misleading. Hence, ideology-disaggregated models are estimated. The functional form of ideology-disaggregated model is is shown in @eq-ideo. Here $g$ denotes the terrorist ideology, which can be Left, Right or Islam ($g\in G=\{\text{Left},\text{Right},\text{Islam}\}$). To simplify results, terrorism measures within 4 years before election are summed.
+
+# Results
+
+## Effect of All Terrorism on Total Populism
+
+```{r main_load}
+load("output/twfe_main.RData") #main results
+load("output/twfe_collapsed_reg.RData") #collapsed results
+col3_main <- get_estimates(twfe_total[[3]])
+col7_collapsed <- get_estimates(twfe_collapsed[[7]])
+col8_main <- get_estimates(twfe_total[[8]])
+
+data_complete <- data[twfe_total[[2]][["obs_selection"]][["obsRemoved"]],]
+sd_geoAttacksY1 <- weighted_sd(data_complete$geoAttacksY1, w=data_complete$weight)
+sd_PopulistTotal <- weighted_sd(data_complete$PopulistTotal, w=data_complete$weight)
+
+sd_geoncas <- weighted_sd(data_complete$geoncas, w=data_complete$weight)
+```
+
+```{r twfe_main_plot}
+#| label: fig-twfe
+#| fig-cap: "Effect of Terrorist attacks before elections on populist vote shares."
+results <- rbind(get_estimates(twfe_total[[3]])[1:8,c(1,2,5,6)],
+                 get_estimates(twfe_collapsed[[3]])[1:2,c(1,2,5,6)])
+results <- results[c(1:4,9,5:8,10),] #change order
+results$region <- c(rep("Home",5),rep("Foreign (neighbouring)",5))
+results$time <- c(-1:-4,0)
+results <- results |> mutate(significant=(conf.low>0|conf.high<0),
+                             region=factor(region, levels=c("Home","Foreign (neighbouring)")))
+ggplot(results, aes(x=time, y=estimate, color=region, shape=significant)) + theme_bw() +
+  geom_hline(yintercept = 0, linetype="dashed")+
+  geom_vline(xintercept = -0.5, linetype="solid")+
+  geom_point(position = position_dodge(.3),
+             size=2,show.legend=F) +
+  scale_shape_manual(values=c(1, 16)) +
+  geom_errorbar(aes(ymin=conf.low,ymax=conf.high), width=.2,
+                position = position_dodge(.3)) +
+  theme(legend.position = "bottom") +
+  labs(x="Year(s) relative to Election",y="Effect Estimate",color="") +
+  scale_x_continuous(
+    breaks = sort(unique(c(results$time))),
+    labels = function(x) ifelse(x == 0, "Aggregated", as.character(x))
+  )
+```
+
+The results of the main analysis are presented in @tbl-collapsed with terrorist measures aggregated across years, and in @tbl-twfe with year-disaggregated measures. For both tables, columns (1) to (4) measure populism by total attacks per million population; columns (5) to (8) measure it by total casualties. Columns (1), (2), (5) and (6) *exclude* foreign terrorism ($c_{i,i'}=0$). In contrast, columns (3) and (7) include terrorism in neighbouring countries ($c=c^{geo}$); columns (4) and (8) weight foreign countries by cultural proximity to the home country ($c=c^{cul}$), as explained in @sec-foreign-attack. @fig-twfe visualises the coefficients of column (3) in @tbl-twfe, which is the preferred specification with the highest explanatory power ($R^2$ Adj.=`r get_gof(twfe_total[[3]])[["adj.r.squared"]]|>round(3)`), as well as the corresponding aggregated estimates in @tbl-collapsed.
+
+The results suggest that, overall, home terrorism within four years preceding elections, measured by number of attacks or casualties, does *not* have a statistically significant effect on total populist vote shares, as neither @tbl-collapsed nor @tbl-twfe shows statistically significant coefficients of home terrorism that are consistent and robust with control variables. @sec-disaggregated reveals that the null result is due to the cancelling effects of terrorism of different ideologies. 
+
+Although columns (4) and (7) of @tbl-twfe suggest a significantly *negative* effect of terrorism on populism, their coefficients do not match other specifications and are thus not robust. Moreover, even if they had an effect, they were likely offset by the positive effects from other years, as suggested by their close-to-zero aggregated coefficients in @tbl-collapsed.
+
+Furthermore, terrorism in foreign countries significantly is shown to impact the home populist vote shares in an intriguing way. On the one hand, one additional casualty from terrorist attack in *neighbouring* countries per million population within four years before elections is estimated to increase home populist vote share by 0.303 ($p=`r col7_collapsed[2,9]|>round(3)`$). Substantively, this means one standard deviation increase in neighbouring casualties is expected to increase home populist vote shares by `r round(col7_collapsed[2,2] * sd_geoncas / sd_PopulistTotal,2)` standard deviations. The size of the effect is moderate. Year-disaggregated results (@tbl-twfe) suggest this is mostly contributed by casualties two years before elections.
+
+On the other hand, terrorist attacks in neighbouring countries (column 3) and casualties in culturally close countries (column 8) are not found to have significant overall effects on total populist vote share. Nevertheless, a closer look in the year-disaggregated results (@tbl-twfe) reveals that this is due to the positive effects in some years offset by the negative effects in the others.
+
+Column (3) in @tbl-twfe suggests one additional terrorist attack per million population in a neighbouring country one year prior to elections increases local populist vote shares by `r col3_main[5,2]|>round(2)` percentage points ($p=`r col3_main[5,9] |> round(4)`$). The coefficient is significant despite multiple testing. Substantively, this means one standard deviation increase in the former is expected to increase the latter by `r round(col3_main[5,2] * sd_geoAttacksY1 / sd_PopulistTotal,2)` standard deviations. This is a relatively strong effect. However, this is largely cancelled out by the negative effects of the attacks three years before elections.
+
+Similarly, column (8) in @tbl-twfe suggests one additional casualty from terrorist attacks per million population in a *culturally identical* country three years prior to elections is estimated to increase local populist vote shares by `r col8_main[7,2]|>round(2)` percentage points ($p=`r col8_main[7,9] |> round(3)`$). This is offset by the positive effects from casualties one and four years prior to elections.
+
+```{r main_collapsed}
+#| eval: false
+load("cleaned/data.RData")
+
+outcome <- "PopulistTotal~"
+fe <- "|Country+Year"
+homeattacks <- "HomeAttackspop"
+homecasualty <- "Homencaspop"
+geoattacks <- "+geoAttacks"
+geocasualty <- "+geoncas"
+culattacks <- "+culAttacks"
+culcasualty <- "+culncas"
+controls <- "+GrowthY1+GrowthY2+GrowthY3+UnemploymentY1+UnemploymentY2+UnemploymentY3+
+Export_penetrationY1+Export_penetrationY2+Export_penetrationY3+
+Import_penetrationY1+Import_penetrationY2+Import_penetrationY3+
+Immigration_percentY1+Immigration_percentY2+Immigration_percentY3+
+Emigration_percentY1+Emigration_percentY2+Emigration_percentY3"
+
+#attacks
+reg_collapsed_attack_none <- feols(as.formula(paste0(outcome,homeattacks,fe)), weights=data$weight,data)
+reg_collapsed_attack_control <- feols(as.formula(paste0(outcome,homeattacks,controls,fe)), weights=data$weight,data)
+reg_collapsed_attack_geo <- feols(as.formula(paste0(outcome,homeattacks,geoattacks,controls,fe)), weights=data$weight,data)
+reg_collapsed_attack_cul <- feols(as.formula(paste0(outcome,homeattacks,culattacks,controls,fe)), weights=data$weight,data)
+#casualties
+reg_collapsed_casualty_none <- feols(as.formula(paste0(outcome,homecasualty,fe)), weights=data$weight,data)
+reg_collapsed_casualty_control <- feols(as.formula(paste0(outcome,homecasualty,controls,fe)), weights=data$weight,data)
+reg_collapsed_casualty_geo <- feols(as.formula(paste0(outcome,homecasualty,geocasualty,controls,fe)), weights=data$weight,data)
+reg_collapsed_casualty_cul <- feols(as.formula(paste0(outcome,homecasualty,culcasualty,controls,fe)), weights=data$weight,data)
+
+twfe_collapsed <- list(reg_collapsed_attack_none, reg_collapsed_attack_control, 
+                   reg_collapsed_attack_geo, reg_collapsed_attack_cul,
+                   reg_collapsed_casualty_none, reg_collapsed_casualty_control,
+                   reg_collapsed_casualty_geo, reg_collapsed_casualty_cul)
+
+glance_custom.fixest <- function(x, ...) {
+  data.frame(
+    "controls" = ifelse("GrowthY1" %in% names(coef(x)),"Yes","No"),
+    'weighted'= "Yes",
+    'CountryFE' = "Yes",
+    'YearFE' = "Yes"
+  )
+}
+
+gof_map <- list(list("raw"="controls", clean="Controls", fmt=NULL),
+                list("raw"="weighted", clean="Weighted", fmt=NULL),
+                list("raw" = "nobs", "clean" = "Obs", "fmt" = 0),
+                list("raw" = "adj.r.squared", "clean" = "$R^2$ Adj.", "fmt" = 3),
+                list("raw" = "r2.within.adjusted", "clean" = "$R^2$ Within Adj.", "fmt" = 3),
+                list("raw"="CountryFE", "clean" = "Country FE", "fmt" = NULL),
+                list("raw"="YearFE", "clean" = "Year FE", "fmt" = NULL))
+
+coef_map <- c("HomeAttackspop"="HomeTerrorism",
+              "Homencaspop"="HomeTerrorism",
+              "geoAttacks"="ForeignTerrorism",
+              "geoncas"="ForeignTerrorism",
+              "culAttacks"="ForeignTerrorism",
+              "culncas"="ForeignTerrorism")
+
+twfe_collapsed_table <- msummary(twfe_collapsed, escape=F,
+                       output="latex",
+         notes = "Note: Standard errors are clustered at the Country level ($N=33$).",
+                             gof_map = gof_map,
+                             coef_map=coef_map, 
+                             stars=T) |>
+  kable_styling(latex_options="scale_down") |>
+  add_header_above(c(" "=1,"$c=0$"=2,"$c=c^{geo}$"=1,"$c=c^{cul}$",
+                     "$c=0$"=2,"$c=c^{geo}$"=1,"$c=c^{cul}$"),
+                   escape=F) |>
+  add_header_above(c(" "=1,"Total Attacks per Million Population"=4,"Total Casualties per Million Population"=4))
+
+save(gof_map, coef_map, glance_custom.fixest, 
+     gen_stars, twfe_collapsed_table, file="output/twfe_collapsed.RData") #save for quarto
+save(twfe_collapsed, file="output/twfe_collapsed_reg.RData") #save for quarto
+```
+
+```{r twfe_collapsed}
+#| label: tbl-collapsed
+#| tbl-cap: "Main TWFE regression results. (Dep Var: Total populist vote share)"
+#| tbl-pos: h
+load("output/twfe_collapsed.RData")
+twfe_collapsed_table
+```
+
+```{=tex}
 \newpage
 \blandscape
-```{r twfe}
-#| label: tbl-twfe
-#| tbl-cap: "TWFE regression results for total populist vote share. (Dep Var: Total populist vote share)"
-load("twfe_total.RData")
-msummary(twfe_total, escape=F,
+```
+```{r twfe-analysis}
+#| eval: false
+load("cleaned/data.RData")
+
+outcome <- "PopulistTotal~"
+fe <- "|Country+Year"
+homeattacks <- "HomeAttackspopY1+HomeAttackspopY2+HomeAttackspopY3+HomeAttackspopY4"
+homecasualty <- "HomencaspopY1+HomencaspopY2+HomencaspopY3+HomencaspopY4"
+geoattacks <- "+geoAttacksY1+geoAttacksY2+geoAttacksY3+geoAttacksY4"
+geocasualty <- "+geoncasY1+geoncasY2+geoncasY3+geoncasY4"
+culattacks <- "+culAttacksY1+culAttacksY2+culAttacksY3+culAttacksY4"
+culcasualty <- "+culncasY1+culncasY2+culncasY3+culncasY4"
+controls <- "+GrowthY1+GrowthY2+GrowthY3+UnemploymentY1+UnemploymentY2+UnemploymentY3+
+Export_penetrationY1+Export_penetrationY2+Export_penetrationY3+
+Import_penetrationY1+Import_penetrationY2+Import_penetrationY3+
+Immigration_percentY1+Immigration_percentY2+Immigration_percentY3+
+Emigration_percentY1+Emigration_percentY2+Emigration_percentY3"
+
+#attacks
+reg_total_attack_none <- feols(as.formula(paste0(outcome,homeattacks,fe)), weights=data$weight,data)
+reg_total_attack_control <- feols(as.formula(paste0(outcome,homeattacks,controls,fe)), weights=data$weight,data)
+reg_total_attack_geo <- feols(as.formula(paste0(outcome,homeattacks,geoattacks,controls,fe)), weights=data$weight,data)
+reg_total_attack_cul <- feols(as.formula(paste0(outcome,homeattacks,culattacks,controls,fe)), weights=data$weight,data)
+#casualties
+reg_total_casualty_none <- feols(as.formula(paste0(outcome,homecasualty,fe)), weights=data$weight,data)
+reg_total_casualty_control <- feols(as.formula(paste0(outcome,homecasualty,controls,fe)), weights=data$weight,data)
+reg_total_casualty_geo <- feols(as.formula(paste0(outcome,homecasualty,geocasualty,controls,fe)), weights=data$weight,data)
+reg_total_casualty_cul <- feols(as.formula(paste0(outcome,homecasualty,culcasualty,controls,fe)), weights=data$weight,data)
+
+twfe_total <- list(reg_total_attack_none, reg_total_attack_control, 
+                   reg_total_attack_geo, reg_total_attack_cul,
+                   reg_total_casualty_none, reg_total_casualty_control,
+                   reg_total_casualty_geo, reg_total_casualty_cul)
+for (i in 1:length(twfe_total)){
+  twfe_total[[i]]$df.residual <- parameters::degrees_of_freedom(twfe_total[[i]])
+  home <- names(coef(twfe_total[[i]]))[grepl("Home",names(coef(twfe_total[[i]])))]
+  twfe_total[[i]]$homeF <- lht(twfe_total[[i]],test='F',
+                               c(paste0(home,"=0")))
+  
+  foreign <- character()
+  foreign <- names(coef(twfe_total[[i]]))[grepl("geo|cul",names(coef(twfe_total[[i]])))]
+  if (length(foreign)>0){
+    twfe_total[[i]]$foreignF <- lht(twfe_total[[i]],test='F',
+                                    c(paste0(foreign,"=0")))
+  }
+}
+
+gen_stars <- function(p){
+  if (p<0.001){
+    return("***")
+  } else if (p<0.01){
+    return("**")
+  } else if (p<0.05){
+    return("*")
+  } else if (p<0.1){
+    return("+")
+  } else {
+    return("")
+  }
+}
+
+glance_custom.fixest <- function(x, ...) {
+  data.frame(
+    "controls" = ifelse("GrowthY1" %in% names(coef(x)),
+                        "Yes","No"),
+    'weighted'= "Yes",
+    'CountryFE' = "Yes",
+    'YearFE' = "Yes",
+    'HomeF' = paste0(round(x$homeF[2,3],2),gen_stars(x$homeF[2,4]),
+                     " [",x$homeF[2,2],",",x$homeF[2,1],"]"),
+    "ForeignF" = if(!"foreignF" %in% names(x)){
+      ""
+    } else {
+      paste0(round(x$foreignF[2,3],2),gen_stars(x$foreignF[2,4]),
+             " [",x$foreignF[2,2],",",x$foreignF[2,1],"]")
+    }
+  )
+}
+
+gof_map <- list(list("raw"="controls", clean="Controls", fmt=NULL),
+                list("raw"="weighted", clean="Weighted", fmt=NULL),
+                list("raw"="HomeF", "clean" = "$F_{home}$", "fmt"=NULL),
+                list("raw"="ForeignF", "clean" = "$F_{foreign}$", "fmt"=NULL),
+                list("raw" = "nobs", "clean" = "Obs", "fmt" = 0),
+                list("raw" = "adj.r.squared", "clean" = "$R^2$ Adj.", "fmt" = 3),
+                list("raw" = "r2.within.adjusted", "clean" = "$R^2$ Within Adj.", "fmt" = 3),
+                list("raw"="CountryFE", "clean" = "Country FE", "fmt" = NULL),
+                list("raw"="YearFE", "clean" = "Year FE", "fmt" = NULL))
+
+coef_map <- c("HomeAttackspopY1"="HomeTerrorism$_{t-1}$",
+              "HomeAttackspopY2"="HomeTerrorism$_{t-2}$",
+              "HomeAttackspopY3"="HomeTerrorism$_{t-3}$",
+              "HomeAttackspopY4"="HomeTerrorism$_{t-4}$",
+              "HomencaspopY1"="HomeTerrorism$_{t-1}$",
+              "HomencaspopY2"="HomeTerrorism$_{t-2}$",
+              "HomencaspopY3"="HomeTerrorism$_{t-3}$",
+              "HomencaspopY4"="HomeTerrorism$_{t-4}$",
+              "geoAttacksY1"="ForeignTerrorism$_{t-1}$",
+              "geoAttacksY2"="ForeignTerrorism$_{t-2}$",
+              "geoAttacksY3"="ForeignTerrorism$_{t-3}$",
+              "geoAttacksY4"="ForeignTerrorism$_{t-4}$",
+              "geoncasY1"="ForeignTerrorism$_{t-1}$",
+              "geoncasY2"="ForeignTerrorism$_{t-2}$",
+              "geoncasY3"="ForeignTerrorism$_{t-3}$",
+              "geoncasY4"="ForeignTerrorism$_{t-4}$",
+              "culAttacksY1"="ForeignTerrorism$_{t-1}$",
+              "culAttacksY2"="ForeignTerrorism$_{t-2}$",
+              "culAttacksY3"="ForeignTerrorism$_{t-3}$",
+              "culAttacksY4"="ForeignTerrorism$_{t-4}$",
+              "culncasY1"="ForeignTerrorism$_{t-1}$",
+              "culncasY2"="ForeignTerrorism$_{t-2}$",
+              "culncasY3"="ForeignTerrorism$_{t-3}$",
+              "culncasY4"="ForeignTerrorism$_{t-4}$",
+              "HomeC" = "HomeTerrorism",
+              "ForeinC" = "ForeignTerrorism")
+
+twfe_table <- msummary(twfe_total, escape=F,
+                       output="latex",
+         notes = "Note: Standard errors are clustered at the Country level ($N=33$).",
                              gof_map = gof_map,
                              coef_map=coef_map, 
                              stars=T) |>
@@ -341,25 +749,398 @@ msummary(twfe_total, escape=F,
   add_header_above(c(" "=1,"$c=0$"=2,"$c=c^{geo}$"=1,"$c=c^{cul}$",
                      "$c=0$"=2,"$c=c^{geo}$"=1,"$c=c^{cul}$"),
                    escape=F) |>
-  add_header_above(c(" "=1,"Total Attacks"=4,"Total Casualties"=4))
+  add_header_above(c(" "=1,"Total Attacks per Million Population"=4,"Total Casualties per Million Population"=4))
+
+save(twfe_total, gof_map, coef_map, glance_custom.fixest, 
+     gen_stars, twfe_table, file="output/twfe_main.RData") #save for quarto
 ```
+
+```{r twfe_main_table}
+#| label: tbl-twfe
+#| tbl-cap: "Main TWFE regression results (year-disaggregated). (Dep Var: Total populist vote share)"
+twfe_table
+```
+
 \elandscape
 
-```{r twfe_right}
-#| label: tbl-twfe-right
-#| tbl-cap: "TWFE regression result for right populist vote share. (Dep Var: Right populist vote share)"
+## Effect of Ideology-disaggregated Terrorism of on Populism {#sec-disaggregated}
+
+```{r disag-prep}
+load("twfe_total.RData")
+load("twfe_left.RData")
 load("twfe_right.RData")
-msummary(twfe_right, escape=F,
+results <- data.frame(group=rep(c("Left","Right","Islam"),4),
+                      region=rep(c(rep("Home",3),
+                                   rep("Foreign (Neighbour)",3)),2),
+                      type=c(rep("Attacks",6),rep("Casualties",6)),
+                      effect_total=c(coef(twfe_total[[2]])[1:6],
+                                     coef(twfe_total[[5]])[1:6]),
+                      conf_low = c(confint(twfe_total[[2]])[1:6,1],
+                                   confint(twfe_total[[5]])[1:6,1]),
+                      conf_high = c(confint(twfe_total[[2]])[1:6,2],
+                                    confint(twfe_total[[5]])[1:6,2]),
+                      effect_left =c(coef(twfe_left[[2]])[1:6],
+                                     coef(twfe_left[[5]])[1:6]),
+                      effect_right = c(coef(twfe_right[[2]])[1:6],
+                                       coef(twfe_right[[5]])[1:6])
+                      )
+sd_PopulistRight <- weighted_sd(data_complete$PopulistRight, w=data_complete$weight)
+sd_PopulistLeft <- weighted_sd(data_complete$PopulistLeft, w=data_complete$weight)
+
+sd_HomeIslClaim <- weighted_sd(data_complete$HomeIslClaim, w=data_complete$weight)
+sd_Homencas_right <- weighted_sd(data_complete$Homencas_right, w=data_complete$weight)
+```
+
+Results for the ideology-disaggregated estimations are presented in @tbl-twfe-total, @tbl-twfe-right and @tbl-twfe-left for total, right and left-wing populism, respectively. All of the three tables show the estimated effects of terrorism by left, right and Islamic groups separately. @fig-aggregate-plot conveniently summarises and visualises the results from the three tables for specifications (2) and (5), with 95% confidence intervals for the estimated effects on total populism.
+
+It can be seen in @fig-aggregate-plot that, home terrorist attacks from left-wing groups are estimated to increase populist voting, whereas those from Islamic and right-wing groups are estimated to *decrease* populist voting. These results apply to both left and right-wing populism and the effects on total populism are statistically significant. Counter-intuitively, the results suggest home terrorist attacks by Islamic extremists *reduce* populist voting the most. It is estimated that one additional home attack (or one standard deviation increase in terrorist attacks) by Islamic extremists per million population reduces right wing populist votes by `r -results[3,8]|>round(2)` percentage points (or `r (-results[3,8] * sd_HomeIslClaim / sd_PopulistRight) |> round(2)` standard deviations), and increases total populist votes by `r -results[3,4]|>round(2)` (or `r (-results[3,4] * sd_HomeIslClaim / sd_PopulistTotal) |> round(2)` standard deviations). This effect is moderate.
+
+The effects of home *casualties* show an opposite pattern: home casualties attributed to left-wing groups are estimated to decrease populist voting, where as those attributed to Islamic and right-wing groups are estimated to increase populist voting. Again, these results apply to both left and right-wing populism and the effects on total populism are statistically significant. The results suggest home casualties attributed to *right-wing* terrorists increase populist voting the most. It is estimated that one additional casuality (or one standard deviation increase in casualties) attributed to right-wing terrorists per million population increases right-wing populism by `r results[8,8] |> round(2)` percentage points (or `r (results[8,8] * sd_Homencas_right / sd_PopulistRight) |> round(2)` standard deviations), left-wing populism by `r results[8,7] |> round(2)` (or `r (results[8,7] * sd_Homencas_right / sd_PopulistLeft) |> round(2)` standard deviations), and total populism by `r results[8,4] |> round(2)` (or `r (results[8,4] * sd_Homencas_right / sd_PopulistTotal) |> round(2)` standard deviations). The effects are relatively small.
+
+Therefore, the previous null results of home terrorism are likely due to the effects of terrorism by different ideological groups offsetting one another. The opposite effects of home attacks and home casualties can be explained by Pape's [-@pape2003] classification of *demonstrative* and *destructive* terrorism. Our results show the former reduces populism in favour of the terrorist groups and the latter increases populism, which signals lower sympathy for the terrorist deed. The negative effects of terrorist attacks on populism echo *demonstrative terrorism*, which minimises harm and maximises publicity and sympathy. The positive effects of terrorist *casualties* echo *destructive* terrorism which seeks to maximise casualties while losing sympathy.
+
+As for terrorist attacks in *neighbouring* countries, those carried out by left-wing groups significantly increase home support for right-wing populism; those carried out by Islamic extremist groups substantively and significantly increase home support for right-wing populism. Nevertheless, those carried out by right-wing groups do not significantly affect local support for populism.
+
+As for casualties from foreign terrorist attacks, those attributed to left-wing groups significantly reduce home support for left-wing populism; those attributed to Islamic extremist groups significantly increase support for left-wing populism; those attributed to right-wing groups significantly increase support for right-wing populism. However, their effects on total populism are not statistically significant. Substantively, the estimated effects are also small.
+
+One may critique that, in the results above, the effects of attacks and casualties are estimated separately. The full results of regressions that simultaneously estimate them are given in Appendix [-@sec-combined], and visualised in @fig-combined-plot. It can be seen that the coefficients are extremely similar to our current results, while statistical significance differs due to correlations between attacks and casualties. This means our results are robust.
+
+```{r aggregate_plot}
+#| label: fig-aggregate-plot
+#| fig-cap: "Ideology-disaggregated effect of terrorist attacks and Casualties on populist vote shares (estimated in separate regressions)."
+#| fig-height: 5
+results <- results |> mutate(significant=(conf_low>0|conf_high<0))
+results_long <- results |>
+  pivot_longer(cols=c("effect_left","effect_right"),
+               names_to="ideology", values_to="effect")
+results <- results |> mutate(significant=(conf_low>0|conf_high<0))
+results_long <- results |>
+  pivot_longer(cols=c("effect_left","effect_right"),
+               names_to="ideology", values_to="effect")
+results_long <- results_long |>
+  mutate(
+    group = factor(group, levels=c("Left","Islam","Right")),
+    region = factor(region, levels=c("Home","Foreign (Neighbour)")),
+    ideology = factor(ideology, levels=c("effect_left","effect_right")),
+    type = factor(type, levels=c("Attacks","Casualties"))
+  )
+
+ggplot(results_long, aes(x=group, y=effect, fill=ideology)) +
+  geom_bar(stat="identity", width=0.5) + theme_bw() +
+  geom_errorbar(aes(ymin=conf_low, ymax=conf_high), width=.2) +
+  geom_point(aes(y=effect_total, shape=significant), show.legend=F)+
+  scale_shape_manual(values=c(1, 16)) +
+  facet_grid(vars(type), vars(region),
+             scales = "free")+
+  theme(legend.position = "bottom") +
+  labs(x="Type of Terrorism", 
+       y="Effect on Vote Share in Percentage Points") +
+  scale_fill_discrete(name = "Populism", labels =  c("Left", "Right"))+
+  geom_hline(yintercept=0, linetype="dashed", color = "black")
+  
+```
+
+```{r combined_plot}
+#| label: fig-combined-plot
+#| fig-cap: "Ideology-disaggregated effect of terrorist attacks and casualties on populist vote shares (estimated in same regressions)."
+#| fig-height: 5
+load("twfe_total_combined.RData")
+load("twfe_left_combined.RData")
+load("twfe_right_combined.RData")
+results <- data.frame(group=rep(c("Left","Right","Islam"),4),
+                      region=c(rep("Home",6),rep("Foreign (Neighbour)",6)),
+                      type=rep(c(rep("Attacks",3),rep("Casualties",3)),2),
+                      effect_total=coef(twfe_total_combined[[2]])[1:12],
+                      conf_low = confint(twfe_total_combined[[2]])[1:12,1],
+                      conf_high = confint(twfe_total_combined[[2]])[1:12,2],
+                      effect_left =coef(twfe_left_combined[[2]])[1:12],
+                      effect_right = coef(twfe_right_combined[[2]])[1:12]
+                      )
+results <- results |> mutate(significant=(conf_low>0|conf_high<0))
+results_long <- results |>
+  pivot_longer(cols=c("effect_left","effect_right"),
+               names_to="ideology", values_to="effect")
+results_long <- results_long |>
+  mutate(
+    group = factor(group, levels=c("Left","Islam","Right")),
+    region = factor(region, levels=c("Home","Foreign (Neighbour)")),
+    ideology = factor(ideology, levels=c("effect_left","effect_right")),
+    type = factor(type, levels=c("Attacks","Casualties"))
+  )
+
+ggplot(results_long, aes(x=group, y=effect, fill=ideology)) +
+  geom_bar(stat="identity", width=0.5) + theme_bw() +
+  geom_errorbar(aes(ymin=conf_low, ymax=conf_high), width=.2) +
+  geom_point(aes(y=effect_total, shape=significant), show.legend=F)+
+  scale_shape_manual(values=c(1, 16)) +
+  facet_grid(vars(type), vars(region),
+             scales = "free")+
+  theme(legend.position = "bottom") +
+  labs(x="Type of Terrorism", 
+       y="Effect on Vote Share in Percentage Points") +
+  scale_fill_discrete(name = "Populism", labels =  c("Left", "Right"))+
+  geom_hline(yintercept=0, linetype="dashed", color = "black")
+  
+```
+
+```{r twfe_total}
+#| eval: false
+outcome <- "PopulistTotal~"
+homeattacks <- "Homeleftproxy+Homerightproxy+HomeIslClaim"
+fe <- "|Country+Year"
+reg_total_attack_none <- feols(as.formula(paste0(outcome,homeattacks,fe)), weights=data$weight,data)
+controls <- "+GrowthY1+GrowthY2+GrowthY3+UnemploymentY1+UnemploymentY2+UnemploymentY3+
+Export_penetrationY1+Export_penetrationY2+Export_penetrationY3+
+Import_penetrationY1+Import_penetrationY2+Import_penetrationY3+
+Immigration_percentY1+Immigration_percentY2+Immigration_percentY3+
+Emigration_percentY1+Emigration_percentY2+Emigration_percentY3"
+reg_total_attack_control <- feols(as.formula(paste0(outcome,homeattacks,controls,fe)), weights=data$weight,data)
+geoattacks <- "+geoleftproxy+georightproxy+geoIslClaim"
+reg_total_attack_geo <- feols(as.formula(paste0(outcome,homeattacks,geoattacks,controls,fe)), weights=data$weight,data)
+culattacks <- "+culleftproxy+culrightproxy+culIslClaim"
+reg_total_attack_cul <- feols(as.formula(paste0(outcome,homeattacks,culattacks,controls,fe)), weights=data$weight,data)
+
+homecasualty <- "Homencas_left+Homencas_right+Homencas_IslCl"
+geocasualty <- "+geoncas_left+geoncas_right+geoncas_IslCl"
+culcasualty <- "+culncas_left+culncas_right+culncas_IslCl"
+reg_total_casualty_none <- feols(as.formula(paste0(outcome,homecasualty,fe)), weights=data$weight,data)
+reg_total_casualty_control <- feols(as.formula(paste0(outcome,homecasualty,controls,fe)), weights=data$weight,data)
+reg_total_casualty_geo <- feols(as.formula(paste0(outcome,homecasualty,geocasualty,controls,fe)), weights=data$weight,data)
+reg_total_casualty_cul <- feols(as.formula(paste0(outcome,homecasualty,culcasualty,controls,fe)), weights=data$weight,data)
+twfe_total <- list(reg_total_attack_control, 
+                   reg_total_attack_geo, reg_total_attack_cul,
+                   reg_total_casualty_control,
+                   reg_total_casualty_geo, reg_total_casualty_cul)
+for (i in 1:length(twfe_total)){
+  twfe_total[[i]]$df.residual <- parameters::degrees_of_freedom(twfe_total[[i]])
+  home <- names(coef(twfe_total[[i]]))[grepl("Home",names(coef(twfe_total[[i]])))]
+  twfe_total[[i]]$homeF <- lht(twfe_total[[i]],test='F',
+                               c(paste0(home,"=0")))
+  foreign <- character()
+  foreign <- names(coef(twfe_total[[i]]))[grepl("geo|cul",names(coef(twfe_total[[i]])))]
+  if (length(foreign)>0){
+    twfe_total[[i]]$foreignF <- lht(twfe_total[[i]],test='F',
+                                    c(paste0(foreign,"=0"))
+    )
+  }
+}
+coef_map <- c("Homeleftproxy"="HomeLeft",
+              "Homencas_left"="HomeLeft",
+              "Homerightproxy"="HomeRight",
+              "Homencas_right"="HomeRight",
+              "HomeIslClaim"="HomeIslam",
+              "Homencas_IslCl"="HomeIslam",
+              "geoleftproxy"="ForeignLeft",
+              "geoncas_left"="ForeignLeft",
+              "georightproxy"="ForeignRight",
+              "geoncas_right"="ForeignRight",
+              "geoIslClaim"="ForeignIslam",
+              "geoncas_IslCl"="ForeignIslam",
+              "culleftproxy"="ForeignLeft",
+              "culncas_left"="ForeignLeft",
+              "culrightproxy"="ForeignRight",
+              "culncas_right"="ForeignRight",
+              "culIslClaim"="ForeignIslam",
+              "culncas_IslCl"="ForeignIslam")
+twfe_total_table <- msummary(twfe_total, escape=F,
+                             output="latex",
+         notes = "Note: Standard errors are clustered at the Country level ($N=33$).",
                              gof_map = gof_map,
                              coef_map=coef_map, 
                              stars=T) |>
-  kable_styling(full_width = F) |>
+  kable_styling(latex_options="scale_down") |>
   add_header_above(c(" "=1,"$c=0$"=1,"$c=c^{geo}$"=1,"$c=c^{cul}$"=1,
                      "$c=0$"=1,"$c=c^{geo}$"=1,"$c=c^{cul}$"=1), escape=F) |>
-  add_header_above(c(" "=1,"Total Attacks"=3,"Total Casualties"=3), escape=F)
+  add_header_above(c(" "=1,"Total Attacks per Million Population"=3,"Total Casualties per Million Population"=3), escape=F)
+
+save(twfe_total, gof_map, coef_map, glance_custom.fixest, 
+     gen_stars, twfe_total_table, file="twfe_total.RData")
 ```
 
-# Robustness Checks
+```{r twfe_total_table}
+#| label: tbl-twfe-total
+#| tbl-cap: "TWFE regression result for Total populist vote share. (Dep Var: Total populist vote share)"
+load("twfe_total.RData")
+twfe_total_table
+```
+
+```{r twfe_right}
+#| eval: false
+outcome <- "PopulistRight~"
+homeattacks <- "Homeleftproxy+Homerightproxy+HomeIslClaim"
+fe <- "|Country+Year"
+reg_right_attack_none <- feols(as.formula(paste0(outcome,homeattacks,fe)), weights=data$weight,data)
+controls <- "+GrowthY1+GrowthY2+GrowthY3+UnemploymentY1+UnemploymentY2+UnemploymentY3+
+Export_penetrationY1+Export_penetrationY2+Export_penetrationY3+
+Import_penetrationY1+Import_penetrationY2+Import_penetrationY3+
+Immigration_percentY1+Immigration_percentY2+Immigration_percentY3+
+Emigration_percentY1+Emigration_percentY2+Emigration_percentY3"
+reg_right_attack_control <- feols(as.formula(paste0(outcome,homeattacks,controls,fe)), weights=data$weight,data)
+geoattacks <- "+geoleftproxy+georightproxy+geoIslClaim"
+reg_right_attack_geo <- feols(as.formula(paste0(outcome,homeattacks,geoattacks,controls,fe)), weights=data$weight,data)
+culattacks <- "+culleftproxy+culrightproxy+culIslClaim"
+reg_right_attack_cul <- feols(as.formula(paste0(outcome,homeattacks,culattacks,controls,fe)), weights=data$weight,data)
+
+homecasualty <- "Homencas_left+Homencas_right+Homencas_IslCl"
+geocasualty <- "+geoncas_left+geoncas_right+geoncas_IslCl"
+culcasualty <- "+culncas_left+culncas_right+culncas_IslCl"
+reg_right_casualty_none <- feols(as.formula(paste0(outcome,homecasualty,fe)), weights=data$weight,data)
+reg_right_casualty_control <- feols(as.formula(paste0(outcome,homecasualty,controls,fe)), weights=data$weight,data)
+reg_right_casualty_geo <- feols(as.formula(paste0(outcome,homecasualty,geocasualty,controls,fe)), weights=data$weight,data)
+reg_right_casualty_cul <- feols(as.formula(paste0(outcome,homecasualty,culcasualty,controls,fe)), weights=data$weight,data)
+twfe_right <- list(reg_right_attack_control, 
+                   reg_right_attack_geo, reg_right_attack_cul,
+                   reg_right_casualty_control,
+                   reg_right_casualty_geo, reg_right_casualty_cul)
+for (i in 1:length(twfe_right)){
+  twfe_right[[i]]$df.residual <- parameters::degrees_of_freedom(twfe_right[[i]])
+  home <- names(coef(twfe_right[[i]]))[grepl("Home",names(coef(twfe_right[[i]])))]
+  twfe_right[[i]]$homeF <- lht(twfe_right[[i]],test='F',
+                               c(paste0(home,"=0")))
+  foreign <- character()
+  foreign <- names(coef(twfe_right[[i]]))[grepl("geo|cul",names(coef(twfe_right[[i]])))]
+  if (length(foreign)>0){
+    twfe_right[[i]]$foreignF <- lht(twfe_right[[i]],test='F',
+                                    c(paste0(foreign,"=0"))
+    )
+  }
+}
+coef_map <- c("Homeleftproxy"="HomeLeft",
+              "Homencas_left"="HomeLeft",
+              "Homerightproxy"="HomeRight",
+              "Homencas_right"="HomeRight",
+              "HomeIslClaim"="HomeIslam",
+              "Homencas_IslCl"="HomeIslam",
+              "geoleftproxy"="ForeignLeft",
+              "geoncas_left"="ForeignLeft",
+              "georightproxy"="ForeignRight",
+              "geoncas_right"="ForeignRight",
+              "geoIslClaim"="ForeignIslam",
+              "geoncas_IslCl"="ForeignIslam",
+              "culleftproxy"="ForeignLeft",
+              "culncas_left"="ForeignLeft",
+              "culrightproxy"="ForeignRight",
+              "culncas_right"="ForeignRight",
+              "culIslClaim"="ForeignIslam",
+              "culncas_IslCl"="ForeignIslam")
+twfe_right_table <- msummary(twfe_right, escape=F,
+                             output="latex",
+         notes = "Note: Standard errors are clustered at the Country level ($N=33$).",
+                             gof_map = gof_map,
+                             coef_map=coef_map, 
+                             stars=T) |>
+  kable_styling(latex_options="scale_down") |>
+  add_header_above(c(" "=1,"$c=0$"=1,"$c=c^{geo}$"=1,"$c=c^{cul}$"=1,
+                     "$c=0$"=1,"$c=c^{geo}$"=1,"$c=c^{cul}$"=1), escape=F) |>
+  add_header_above(c(" "=1,"Total Attacks per Million Population"=3,"Total Casualties per Million Population"=3), escape=F)
+
+save(twfe_right, gof_map, coef_map, glance_custom.fixest, 
+     gen_stars, twfe_right_table, file="twfe_right.RData")
+```
+
+```{r twfe_right_table}
+#| label: tbl-twfe-right
+#| tbl-cap: "TWFE regression result for right populist vote share. (Dep Var: Right populist vote share)"
+load("twfe_right.RData")
+twfe_right_table
+```
+
+```{r twfe_left}
+#| eval: false
+outcome <- "PopulistLeft~"
+homeattacks <- "Homeleftproxy+Homerightproxy+HomeIslClaim"
+fe <- "|Country+Year"
+reg_left_attack_none <- feols(as.formula(paste0(outcome,homeattacks,fe)), weights=data$weight,data)
+controls <- "+GrowthY1+GrowthY2+GrowthY3+UnemploymentY1+UnemploymentY2+UnemploymentY3+
+Export_penetrationY1+Export_penetrationY2+Export_penetrationY3+
+Import_penetrationY1+Import_penetrationY2+Import_penetrationY3+
+Immigration_percentY1+Immigration_percentY2+Immigration_percentY3+
+Emigration_percentY1+Emigration_percentY2+Emigration_percentY3"
+reg_left_attack_control <- feols(as.formula(paste0(outcome,homeattacks,controls,fe)), weights=data$weight,data)
+geoattacks <- "+geoleftproxy+georightproxy+geoIslClaim"
+reg_left_attack_geo <- feols(as.formula(paste0(outcome,homeattacks,geoattacks,controls,fe)), weights=data$weight,data)
+culattacks <- "+culleftproxy+culrightproxy+culIslClaim"
+reg_left_attack_cul <- feols(as.formula(paste0(outcome,homeattacks,culattacks,controls,fe)), weights=data$weight,data)
+
+homecasualty <- "Homencas_left+Homencas_right+Homencas_IslCl"
+geocasualty <- "+geoncas_left+geoncas_right+geoncas_IslCl"
+culcasualty <- "+culncas_left+culncas_right+culncas_IslCl"
+reg_left_casualty_none <- feols(as.formula(paste0(outcome,homecasualty,fe)), weights=data$weight,data)
+reg_left_casualty_control <- feols(as.formula(paste0(outcome,homecasualty,controls,fe)), weights=data$weight,data)
+reg_left_casualty_geo <- feols(as.formula(paste0(outcome,homecasualty,geocasualty,controls,fe)), weights=data$weight,data)
+reg_left_casualty_cul <- feols(as.formula(paste0(outcome,homecasualty,culcasualty,controls,fe)), weights=data$weight,data)
+twfe_left <- list(reg_left_attack_control, 
+                   reg_left_attack_geo, reg_left_attack_cul,
+                   reg_left_casualty_control,
+                   reg_left_casualty_geo, reg_left_casualty_cul)
+for (i in 1:length(twfe_left)){
+  twfe_left[[i]]$df.residual <- parameters::degrees_of_freedom(twfe_left[[i]])
+  home <- names(coef(twfe_left[[i]]))[grepl("Home",names(coef(twfe_left[[i]])))]
+  twfe_left[[i]]$homeF <- lht(twfe_left[[i]],test='F',
+                               c(paste0(home,"=0")))
+  foreign <- character()
+  foreign <- names(coef(twfe_left[[i]]))[grepl("geo|cul",names(coef(twfe_left[[i]])))]
+  if (length(foreign)>0){
+    twfe_left[[i]]$foreignF <- lht(twfe_left[[i]],test='F',
+                                    c(paste0(foreign,"=0"))
+    )
+  }
+}
+coef_map <- c("Homeleftproxy"="HomeLeft",
+              "Homencas_left"="HomeLeft",
+              "Homerightproxy"="HomeRight",
+              "Homencas_right"="HomeRight",
+              "HomeIslClaim"="HomeIslam",
+              "Homencas_IslCl"="HomeIslam",
+              "geoleftproxy"="ForeignLeft",
+              "geoncas_left"="ForeignLeft",
+              "georightproxy"="ForeignRight",
+              "geoncas_right"="ForeignRight",
+              "geoIslClaim"="ForeignIslam",
+              "geoncas_IslCl"="ForeignIslam",
+              "culleftproxy"="ForeignLeft",
+              "culncas_left"="ForeignLeft",
+              "culrightproxy"="ForeignRight",
+              "culncas_right"="ForeignRight",
+              "culIslClaim"="ForeignIslam",
+              "culncas_IslCl"="ForeignIslam")
+twfe_left_table <- msummary(twfe_left, escape=F,
+                            output="latex",
+         notes = "Note: Standard errors are clustered at the Country level ($N=33$).",
+                             gof_map = gof_map,
+                             coef_map=coef_map, 
+                             stars=T) |>
+  kable_styling(latex_options="scale_down") |>
+  add_header_above(c(" "=1,"$c=0$"=1,"$c=c^{geo}$"=1,"$c=c^{cul}$"=1,
+                     "$c=0$"=1,"$c=c^{geo}$"=1,"$c=c^{cul}$"=1), escape=F) |>
+  add_header_above(c(" "=1,"Total Attacks per Million Population"=3,"Total Casualties per Million Population"=3), escape=F)
+
+save(twfe_left, gof_map, coef_map, glance_custom.fixest, 
+     gen_stars, twfe_left_table, file="twfe_left.RData")
+```
+
+```{r twfe_left_table}
+#| label: tbl-twfe-left
+#| tbl-cap: "TWFE regression result for left populist vote share. (Dep Var: Left populist vote share)"
+load("twfe_left.RData")
+twfe_left_table
+```
+
+# Limitations
+
+There are several limitations to the analyses. First, the data suffers from numerous missing values in control variables, which limits the sample size and the applicability of the results. For the regression results with control variables, the earliest observation is in `r min(data_complete$Year)`, therefore the results are only internally valid for the past 20 years in the (former) EU countries.
+
+Second, due to limited word count, this course work does not employ dynamic panel models, which would address the potential reverse causality between past populist vote shares and later terrorist attacks. This because naively adding lagged dependent variables into fixed-effects with few observations per unit (small $T$) creates bias in results [@nickell1981]. Addressing this bias requires techniques that use additional lagged dependent variables as instruments, for example, the Arellano- Bond estimator [-@arellano1991]. This further reduces the already small number of observations, hence even less statistical power.
+
+# Conclusion
+
+Overall, no significant effects of home terrorism on populist vote shares are found in EU countries over the past decades, due to neutralising effects of different terrorist ideologies. Casualties from terrorism in neighbouring countries are found to weakly increase home support for populism. Terrorist attacks in neighbouring countries substantively increase support for populism in the next year, albeit offset by earlier attacks.
+
+Interestingly, home casualties from Islamic and right-wing attacks increase support for (left and right) populism, but the numbers of attacks by them have the opposite effect. This is in line with Pape's [-@pape2003] classification of *demonstrative* and *destructive* terrorism. While destructive terrorism seek to maximise casualties at the risk to losing sympathy, demonstrative terrorism avoids inflicting real harm and seeks publicity. Our results support these claims.
+
+The results imply that, when analysing the effect of terrorism on populism, political scientists and policy-makers need to distinguish between different terrorist ideologies and the types of attacks carried out (demonstrative of destructive), as such effects are heterogeneous and sometimes even opposite.
+
+\pagebreak
 
 # References {.unnumbered}
 
@@ -367,6 +1148,228 @@ msummary(twfe_right, escape=F,
 :::
 
 
+\appendix
+# Combined Regressions {#sec-combined .appendix}
 
+```{r twfe_total_combined}
+#| eval: false
+outcome <- "PopulistTotal~"
+home <- "Homeleftproxy+Homerightproxy+HomeIslClaim+Homencas_left+Homencas_right+Homencas_IslCl"
+fe <- "|Country+Year"
+reg_total_combined_none <- feols(as.formula(paste0(outcome,home,fe)), weights=data$weight,data)
+controls <- "+GrowthY1+GrowthY2+GrowthY3+UnemploymentY1+UnemploymentY2+UnemploymentY3+
+Export_penetrationY1+Export_penetrationY2+Export_penetrationY3+
+Import_penetrationY1+Import_penetrationY2+Import_penetrationY3+
+Immigration_percentY1+Immigration_percentY2+Immigration_percentY3+
+Emigration_percentY1+Emigration_percentY2+Emigration_percentY3"
+reg_total_combined_control <- feols(as.formula(paste0(outcome,home,controls,fe)), weights=data$weight,data)
+geo <- "+geoleftproxy+georightproxy+geoIslClaim+geoncas_left+geoncas_right+geoncas_IslCl"
+reg_total_combined_geo <- feols(as.formula(paste0(outcome,home,geo,controls,fe)), weights=data$weight,data)
+cul <- "+culleftproxy+culrightproxy+culIslClaim+culncas_left+culncas_right+culncas_IslCl"
+reg_total_combined_cul <- feols(as.formula(paste0(outcome,home,cul,controls,fe)), weights=data$weight,data)
 
+twfe_total_combined <- list(reg_total_combined_control, 
+                   reg_total_combined_geo, reg_total_combined_cul)
+for (i in 1:length(twfe_total_combined)){
+  twfe_total_combined[[i]]$df.residual <- parameters::degrees_of_freedom(twfe_total_combined[[i]])
+  home <- names(coef(twfe_total_combined[[i]]))[grepl("Home",names(coef(twfe_total_combined[[i]])))]
+  twfe_total_combined[[i]]$homeF <- lht(twfe_total_combined[[i]],test='F',
+                               c(paste0(home,"=0")))
+  foreign <- character()
+  foreign <- names(coef(twfe_total_combined[[i]]))[grepl("geo|cul",names(coef(twfe_total_combined[[i]])))]
+  if (length(foreign)>0){
+    twfe_total_combined[[i]]$foreignF <- lht(twfe_total_combined[[i]],test='F',
+                                    c(paste0(foreign,"=0"))
+    )
+  }
+}
+coef_map <- c("Homeleftproxy"="HomeLeftAttacks",
+              "Homerightproxy"="HomeRightAttacks",
+              "HomeIslClaim"="HomeIslamAttacks",
+              "Homencas_left"="HomeLeftncas",
+              "Homencas_right"="HomeRightncas",
+              "Homencas_IslCl"="HomeIslamncas",
+              "geoleftproxy"="ForeignLeftAttacks",
+              "georightproxy"="ForeignRightAttacks",
+              "geoIslClaim"="ForeignIslamAttacks",
+              "geoncas_left"="ForeignLeftncas",
+              "geoncas_right"="ForeignRightncas",
+              "geoncas_IslCl"="ForeignIslamncas",
+              "culleftproxy"="ForeignLeftAttacks",
+              "culrightproxy"="ForeignRightAttacks",
+              "culIslClaim"="ForeignIslamAttacks",
+              "culncas_left"="ForeignLeftncas",
+              "culncas_right"="ForeignRightncas",
+              "culncas_IslCl"="ForeignIslamncas")
+twfe_total_combined_table <- msummary(twfe_total_combined, escape=F,
+                                      output="latex",
+         notes = "Note: Standard errors are clustered at the Country level ($N=33$).",
+                             gof_map = gof_map,
+                             coef_map=coef_map, 
+                             stars=T) |>
+  kable_styling(latex_options = c("repeat_header"),
+              repeat_header_continued = "\\textit{(Continued on Next Page...)}") |>
+  add_header_above(c(" "=1,"$c=0$"=1,"$c=c^{geo}$"=1,"$c=c^{cul}$"=1), escape=F)
 
+save(twfe_total_combined, gof_map, coef_map, glance_custom.fixest, 
+     gen_stars, twfe_total_combined_table, file="twfe_total_combined.RData")
+```
+
+```{r twfe_total_combined_table}
+#| label: tbl-twfe-total-combined
+#| tbl-cap: "Combined TWFE regression result for Total populist vote share. (Dep Var: Total populist vote share)"
+load("twfe_total_combined.RData")
+twfe_total_combined_table
+```
+
+```{r twfe_right_combined}
+#| eval: false
+outcome <- "PopulistRight~"
+home <- "Homeleftproxy+Homerightproxy+HomeIslClaim+Homencas_left+Homencas_right+Homencas_IslCl"
+fe <- "|Country+Year"
+reg_right_combined_none <- feols(as.formula(paste0(outcome,home,fe)), weights=data$weight,data)
+controls <- "+GrowthY1+GrowthY2+GrowthY3+UnemploymentY1+UnemploymentY2+UnemploymentY3+
+Export_penetrationY1+Export_penetrationY2+Export_penetrationY3+
+Import_penetrationY1+Import_penetrationY2+Import_penetrationY3+
+Immigration_percentY1+Immigration_percentY2+Immigration_percentY3+
+Emigration_percentY1+Emigration_percentY2+Emigration_percentY3"
+reg_right_combined_control <- feols(as.formula(paste0(outcome,home,controls,fe)), weights=data$weight,data)
+geo <- "+geoleftproxy+georightproxy+geoIslClaim+geoncas_left+geoncas_right+geoncas_IslCl"
+reg_right_combined_geo <- feols(as.formula(paste0(outcome,home,geo,controls,fe)), weights=data$weight,data)
+cul <- "+culleftproxy+culrightproxy+culIslClaim+culncas_left+culncas_right+culncas_IslCl"
+reg_right_combined_cul <- feols(as.formula(paste0(outcome,home,cul,controls,fe)), weights=data$weight,data)
+
+twfe_right_combined <- list(reg_right_combined_control, 
+                   reg_right_combined_geo, reg_right_combined_cul)
+for (i in 1:length(twfe_right_combined)){
+  twfe_right_combined[[i]]$df.residual <- parameters::degrees_of_freedom(twfe_right_combined[[i]])
+  home <- names(coef(twfe_right_combined[[i]]))[grepl("Home",names(coef(twfe_right_combined[[i]])))]
+  twfe_right_combined[[i]]$homeF <- lht(twfe_right_combined[[i]],test='F',
+                               c(paste0(home,"=0")))
+  foreign <- character()
+  foreign <- names(coef(twfe_right_combined[[i]]))[grepl("geo|cul",names(coef(twfe_right_combined[[i]])))]
+  if (length(foreign)>0){
+    twfe_right_combined[[i]]$foreignF <- lht(twfe_right_combined[[i]],test='F',
+                                    c(paste0(foreign,"=0"))
+    )
+  }
+}
+coef_map <- c("Homeleftproxy"="HomeLeftAttacks",
+              "Homerightproxy"="HomeRightAttacks",
+              "HomeIslClaim"="HomeIslamAttacks",
+              "Homencas_left"="HomeLeftncas",
+              "Homencas_right"="HomeRightncas",
+              "Homencas_IslCl"="HomeIslamncas",
+              "geoleftproxy"="ForeignLeftAttacks",
+              "georightproxy"="ForeignRightAttacks",
+              "geoIslClaim"="ForeignIslamAttacks",
+              "geoncas_left"="ForeignLeftncas",
+              "geoncas_right"="ForeignRightncas",
+              "geoncas_IslCl"="ForeignIslamncas",
+              "culleftproxy"="ForeignLeftAttacks",
+              "culrightproxy"="ForeignRightAttacks",
+              "culIslClaim"="ForeignIslamAttacks",
+              "culncas_left"="ForeignLeftncas",
+              "culncas_right"="ForeignRightncas",
+              "culncas_IslCl"="ForeignIslamncas")
+twfe_right_combined_table <- msummary(twfe_right_combined, escape=F,
+                                      output="latex",
+         notes = "Note: Standard errors are clustered at the Country level ($N=33$).",
+                             gof_map = gof_map,
+                             coef_map=coef_map, 
+                             stars=T) |>
+  kable_styling(latex_options = c("repeat_header"),
+              repeat_header_continued = "\\textit{(Continued on Next Page...)}") |>
+  add_header_above(c(" "=1,"$c=0$"=1,"$c=c^{geo}$"=1,"$c=c^{cul}$"=1), escape=F)
+
+save(twfe_right_combined, gof_map, coef_map, glance_custom.fixest, 
+     gen_stars, twfe_right_combined_table, file="twfe_right_combined.RData")
+```
+
+```{r twfe_right_combined_table}
+#| label: tbl-twfe-right-combined
+#| tbl-cap: "Combined TWFE regression result for Right populist vote share. (Dep Var: Right populist vote share)"
+load("twfe_right_combined.RData")
+twfe_right_combined_table
+```
+
+```{r twfe_left_combined}
+#| eval: false
+outcome <- "PopulistLeft~"
+home <- "Homeleftproxy+Homerightproxy+HomeIslClaim+Homencas_left+Homencas_right+Homencas_IslCl"
+fe <- "|Country+Year"
+reg_left_combined_none <- feols(as.formula(paste0(outcome,home,fe)), weights=data$weight,data)
+controls <- "+GrowthY1+GrowthY2+GrowthY3+UnemploymentY1+UnemploymentY2+UnemploymentY3+
+Export_penetrationY1+Export_penetrationY2+Export_penetrationY3+
+Import_penetrationY1+Import_penetrationY2+Import_penetrationY3+
+Immigration_percentY1+Immigration_percentY2+Immigration_percentY3+
+Emigration_percentY1+Emigration_percentY2+Emigration_percentY3"
+reg_left_combined_control <- feols(as.formula(paste0(outcome,home,controls,fe)), weights=data$weight,data)
+geo <- "+geoleftproxy+georightproxy+geoIslClaim+geoncas_left+geoncas_right+geoncas_IslCl"
+reg_left_combined_geo <- feols(as.formula(paste0(outcome,home,geo,controls,fe)), weights=data$weight,data)
+cul <- "+culleftproxy+culrightproxy+culIslClaim+culncas_left+culncas_right+culncas_IslCl"
+reg_left_combined_cul <- feols(as.formula(paste0(outcome,home,cul,controls,fe)), weights=data$weight,data)
+
+twfe_left_combined <- list(reg_left_combined_control, 
+                   reg_left_combined_geo, reg_left_combined_cul)
+for (i in 1:length(twfe_left_combined)){
+  twfe_left_combined[[i]]$df.residual <- parameters::degrees_of_freedom(twfe_left_combined[[i]])
+  home <- names(coef(twfe_left_combined[[i]]))[grepl("Home",names(coef(twfe_left_combined[[i]])))]
+  twfe_left_combined[[i]]$homeF <- lht(twfe_left_combined[[i]],test='F',
+                               c(paste0(home,"=0")))
+  foreign <- character()
+  foreign <- names(coef(twfe_left_combined[[i]]))[grepl("geo|cul",names(coef(twfe_left_combined[[i]])))]
+  if (length(foreign)>0){
+    twfe_left_combined[[i]]$foreignF <- lht(twfe_left_combined[[i]],test='F',
+                                    c(paste0(foreign,"=0"))
+    )
+  }
+}
+coef_map <- c("Homeleftproxy"="HomeLeftAttacks",
+              "Homerightproxy"="HomeRightAttacks",
+              "HomeIslClaim"="HomeIslamAttacks",
+              "Homencas_left"="HomeLeftncas",
+              "Homencas_right"="HomeRightncas",
+              "Homencas_IslCl"="HomeIslamncas",
+              "geoleftproxy"="ForeignLeftAttacks",
+              "georightproxy"="ForeignRightAttacks",
+              "geoIslClaim"="ForeignIslamAttacks",
+              "geoncas_left"="ForeignLeftncas",
+              "geoncas_right"="ForeignRightncas",
+              "geoncas_IslCl"="ForeignIslamncas",
+              "culleftproxy"="ForeignLeftAttacks",
+              "culrightproxy"="ForeignRightAttacks",
+              "culIslClaim"="ForeignIslamAttacks",
+              "culncas_left"="ForeignLeftncas",
+              "culncas_right"="ForeignRightncas",
+              "culncas_IslCl"="ForeignIslamncas")
+twfe_left_combined_table <- msummary(twfe_left_combined, escape=F,
+                                     output="latex",
+         notes = "Note: Standard errors are clustered at the Country level ($N=33$).",
+                             gof_map = gof_map,
+                             coef_map=coef_map, 
+                             stars=T) |>
+  kable_styling(latex_options = c("repeat_header"),
+              repeat_header_continued = "\\textit{(Continued on Next Page...)}") |>
+  add_header_above(c(" "=1,"$c=0$"=1,"$c=c^{geo}$"=1,"$c=c^{cul}$"=1), escape=F)
+
+save(twfe_left_combined, gof_map, coef_map, glance_custom.fixest, 
+     gen_stars, twfe_left_combined_table, file="twfe_left_combined.RData")
+```
+
+```{r twfe_left_combined_table}
+#| label: tbl-twfe-left-combined
+#| tbl-cap: "Combined TWFE regression result for Left populist vote share. (Dep Var: Left populist vote share)"
+load("twfe_left_combined.RData")
+twfe_left_combined_table
+```
+
+\newpage
+
+# External Data Source for Population {#sec-population-data .appendix}
+
+To measure foreign terrorism with respect to the population of the foreign country, the existing population data in the dataset are insufficient and external population data are needed. To maximise the cohenrence of existing data and external data, the same source of data is used (Eurostat). 
+
+Specifically, the Population on 1 January by age and sex data (code: demo_pjan) is used [@Eurostat2022]. As an option, the data of both sexes are aggregated on the Eurostat website before they are downloaded. In general, the external data aligns well with existing data, but minor discrepancies existed (up to 2 people per observation). In this case, the existing data are used first, and the missing values are filled with external data.
+
+Nevertheless, population data for France before 1990 are not available. As an substitute, population data for France from 1977 to 1990 are sourced from Macrotrends. They can be accessed from <https://www.macrotrends.net/global-metrics/countries/FRA/france/population>.

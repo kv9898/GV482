@@ -1,0 +1,686 @@
+---
+title: "GV482: Mock exam"
+date: last-modified
+date-format: |
+    | DD/MM/YYYY
+    | [Word Count]: `r wordcountaddin:::word_count('mock.qmd')`
+authors:
+  - name: "Dianyi Yang"
+execute:
+  echo: false
+  warning: false
+  error: false
+engine: knitr
+#csl: extra/apa.csl
+#bibliography: references.bib
+format:
+  orcid-pdf:
+    number-sections: false
+    fig-pos: 'H'
+    include-in-header:
+        text: |
+           \usepackage{pdflscape}
+            \newcommand{\blandscape}{\begin{landscape}}
+            \newcommand{\elandscape}{\end{landscape}}
+---
+
+\pagebreak
+
+```{r setup}
+need <- c('tidyverse') # list packages needed
+have <- need %in% rownames(installed.packages()) # checks packages you have
+if(any(!have)) install.packages(need[!have]) # install missing packages
+invisible(lapply(need, library, character.only=T))
+```
+
+# Part A - Problem Set (50 points)
+
+## Question 1
+
+**Direct Democracy**: We first consider the case of direct democracy in which the voter makes a policy choice in both periods. In this case, the timing of the game is:
+
+a.  What is the voter’s policy choice?
+
+    \color{blue}
+
+    For each period $t$,
+
+    The voter directly determines the policy outcome. However, she does not know exactly the state of the world ($\omega_t$). Hence, her expected payoffs from choosing policy $x_t$ is:
+
+    ```{=tex}
+    \begin{align*}
+    EU_{vt}(0)&=1\Pr(\omega_{t}=0)+0\Pr(\omega_t=1) \\ &=\Pr(\omega_t=0)\\ &=p>1/2 \\
+    EU_{vt}(1)&=1\Pr(\omega_{t}=1)+0\Pr(\omega_t=0) \\
+    &=\Pr(\omega_t=1)=1-\Pr(\omega_t=0)\\
+    &=1-p<1/2 \\
+    EU_{vt}(0)&>EU_{vt}(1)
+    \end{align*}
+    ```
+    Therefore, the voter chooses policy $x_t=0$ since she has a prior belief that the state of the world $\omega$ is more likely to be 0.
+
+    \color{black}
+
+b.  Explain briefly why the voter’s expected welfare (i.e., the same of each period expected payoff) is $V^{DD}=2p$ ($DD$ stands for direct democracy).
+
+    \color{blue}
+
+    ```{=tex}
+    \begin{align*}
+    V^{DD}&=EU_{v1}(0)+EU_{v2}(0) \\
+    &=p+p \\
+    &=2p
+    \end{align*}
+    ```
+    Since in each period, the voter has probability $p$ of getting the preferred policy, the voter's expected welfare is $2p$.
+
+    \color{black}
+
+**Autocracy**: We now assume that the incumbent is an autocrat, which does not face reelection.
+
+c.  In each period, what is the policy chosen by a Machiavellian incumbent?
+
+    \color{blue}
+
+    For a Machiavellian incumbent ($\tau=m$), she chooses the opposite policy to the voter's preference in each period: $x_t\neq\omega_t$.
+
+    \color{black}
+
+d.  Explain briefly why the voter’s expected welfare is $V_A = 2\pi$.
+
+    \color{blue}
+
+    Therefore, in each period, the voter gets her preferred policy $x_t=\omega_t$ and payoff of 1 with a benevolent office holder ($\tau=b$), and does not get her preferred policy $x_t\neq\omega_t$ with payoff of 0 under a Machiavellian office holder ($\tau=m$).
+
+    Therefore the voter's expected welfare is proportional to the probability that a benevolent office holder is in power:
+
+    ```{=tex}
+    \begin{align*}
+    V_A&=2\Pr(\tau=b)+0\Pr(\tau=m) \\
+    &=2\Pr(\tau=b)=2\pi
+    \end{align*}
+    ```
+    \color{black}
+
+**Representative Democracy**: We now consider the case of representative democracy when an election is held at the end of the first period.
+
+e.  Denote $\hat\pi(x_1)$ the voter’s posterior that the incumbent is benevolent after his first-period policy choice: $\Pr(\tau_I=b|x_1)$. Show briefly, but carefully that the voter’s expected utility from re-electing the incumbent is: $\hat\pi(x_1)$.
+
+    \color{blue}
+
+    Since a benevolent incumbent would offer the preferred policy of the voter in period 2 and payoff of 1, while a Machiavellian would render a payoff of 0, the expected utility from re-electing the incumbent is the same as the posterior belief that the incumbent is benevolent:
+
+    ```{=tex}
+    \begin{align*}
+    EU_2(v=1)&=1\Pr(\tau_I=b|x_1)+0\Pr(\tau_I=m|x_1) \\
+    &=\Pr(\tau_I=b|x_1) \\
+    &=\hat\pi(x_1)
+    \end{align*}
+    ```
+    \color{black}
+
+f.  Explain why the voter always reelects the incumbent when $\hat\pi(x_1) > \pi$ and always elects the challenger when $\pi>\hat\pi(x_1)$.
+
+    \color{blue}
+
+    The expected utility from electing the challenger is:
+
+    ```{=tex}
+    \begin{align*}
+    EU_2(v=0)&=1\Pr(\tau_C=b)+0\Pr(\tau_C=m) \\
+    &=\Pr(\tau_C=b)=\pi
+    \end{align*}
+    ```
+    Therefore, when $\hat\pi(x_1) > \pi$, the the expected payoff from reelecting the incumbent is greater than that from electing the challenger ($EU_2(v=1)>EU_2(v=0)$), hence the voter reelects the incumbent.
+
+    When $\hat\pi(x_1) < \pi$, the the expected payoff from reelecting the incumbent is less than that from electing the challenger ($EU_2(v=1)<EU_2(v=0)$), hence the voter elects the challenger.
+
+    \color{black}
+
+g.  Suppose that in the first period, a Machiavellian incumbent chooses his preferred policy (which, recall, is to pick a policy that does not match the state ω1). Show that anticipating this strategy, the voter’s posteriors after observing $x_1 = 0$ and $x_1 = 1$ satisfy, respectively:
+
+    ```{=tex}
+    \begin{align*}
+    \hat\pi(0)&=\frac{\pi p}{\pi p+(1-\pi)(1-p)} \\
+    \hat\pi(1)&=\frac{\pi(1-p)}{\pi(1-p)+(1-\pi)p}
+    \end{align*}
+    ```
+    \color{blue}
+
+    The posterior belief that the incumbent is benevolent after observing $x_1=0$ is:
+
+    ```{=tex}
+    \begin{align*}
+    \hat\pi(0)&=\frac{\Pr(\tau_I=b)\Pr(x_1=0|\tau_I=b)}{\Pr(\tau_I=b)\Pr(x_1=0|\tau_I=b)+\Pr(\tau_I=m)\Pr(x_1=0|\tau_I=m)} \\
+    &=\frac{\pi\Pr(\omega_1=0|\tau_I=b)}{\pi\Pr(\omega_1=0|\tau_I=b)+(1-\pi)\Pr(\omega_1=1|\tau_I=m)} \\
+    &=\frac{\pi\Pr(\omega_1=0)}{\pi\Pr(\omega_1=0)+(1-\pi)\Pr(\omega_1=1)}\\
+    &=\frac{\pi p}{\pi p+(1-\pi)(1-p)} \\
+    \hat\pi(1)&=\frac{\Pr(\tau_I=b)\Pr(x_1=1|\tau_I=b)}{\Pr(\tau_I=b)\Pr(x_1=1|\tau_I=b)+\Pr(\tau_I=m)\Pr(x_1=1|\tau_I=m)} \\ &=\frac{\pi\Pr(\omega_1=1|\tau_I=b)}{\pi\Pr(\omega_1=1|\tau_I=b)+(1-\pi)\Pr(\omega_1=0|\tau_I=m)} \\ &=\frac{\pi\Pr(\omega_1=1)}{\pi\Pr(\omega_1=1)+(1-\pi)\Pr(\omega_1=0)}\\ &=\frac{\pi(1-p)}{\pi(1-p)+(1-\pi)p}
+    \end{align*}
+    ```
+    \color{black}
+
+h.  Suppose that in the first period, the incumbent politician chooses his preferred policy. Using your answers to (f) and (g), show that the incumbent is always reelected after $x_1 = 0$ and never reelected after $x_1 = 1$. Provide some intuition for this result.
+
+    \color{blue}
+
+    To show the incumbent is always reelected after $x_1=0$, we need to show that $\hat\pi(0)>\pi$:
+
+    ```{=tex}
+    \begin{align*}
+    \hat\pi(0)-\pi&=\frac{\pi p-\pi[\pi p+(1-\pi)(1-p)]}{\pi p+(1-\pi)(1-p)} \\
+    &=\frac{\pi p -\pi^2p-(1-\pi)\pi(1-p)}{\pi p+(1-\pi)(1-p)} \\
+    &=\frac{(1-\pi)\pi p-(1-\pi)\pi(1-p)}{\pi p+(1-\pi)(1-p)} \\
+    &=\frac{(1-\pi)\pi(2p-1)}{\pi p+(1-\pi)(1-p)}
+    \end{align*}
+    ```
+    Since $1/2<\pi<1$ and $1/2<p<1$, $2p-1>0$ and $(1-\pi)\pi(2p-1)>0$. Also, the denominator is greater than zero. Therefore, $\hat\pi(0)-\pi>0$ and $\hat\pi(0)>\pi$.
+
+    To show that the incumbent is never reelected after $x_1=1$, we need to show that $\hat\pi(1)<\pi$:
+
+    ```{=tex}
+    \begin{align*}
+    \hat\pi(1)-\pi&=\frac{\pi(1-p)-\pi[\pi(1-p)+(1-\pi)p]}{\pi(1-p)+(1-\pi)p} \\
+    &=\frac{\pi(1-p)-\pi^2(1-p)-\pi(1-\pi)p}{\pi(1-p)+(1-\pi)p} \\
+    &=\frac{\pi(1-p)(1-\pi)-\pi(1-\pi)p}{\pi(1-p)+(1-\pi)p} \\
+    &=\frac{\pi(1-\pi)(1-2p)}{\pi(1-p)+(1-\pi)p}
+    \end{align*}
+    ```
+    Since $1/2<\pi<1$ and $1/2<p<1$, $1-2p<0$ and $\pi(1-\pi)(1-2p)<0$. Also, the denominator is greater than zero. Therefore, $\hat\pi(1)-\pi<0$ and $\hat\pi(0)<\pi$.
+
+    The intuition is that, the voter has no information about whether the incumbent implements the right policy, except the prior belief that the state is more likely to be 0. Hence, assuming the incumbent always implements the incumbent's preferred policy, the voter only reelects if the policy aligns with the more likely state of the world.
+
+    \color{black}
+
+i.  Show that there is no equilibrium in which a Machiavellian incumbent politician chooses his preferred policy in the first period.
+
+    \color{blue}
+
+    Assuming there is such equilibrium, a Machiavellian incumbent politician has an incentive not to choose his preferred policy in the first period when $\omega_1=0$ :
+
+    The expected utility from choosing his preferred policy ($x_1=1$) in the first period is:
+
+    ```{=tex}
+    \begin{align*}
+    EU_{I}(x_1=1,\tau=m,\omega_1=0)&=R+G+\Pr(\text{Reelection}) \\
+    &=R+G+0=R+G
+    \end{align*}
+    ```
+    The expected utility from not choosing his preferred policy ($x_1=0$) in the first period and choosing her preferred policy in the second period is:
+
+    ```{=tex}
+    \begin{align*}
+    EU_I(x_1=0,\tau=m,\omega_1=0)&=R+\Pr(Reelection)(R+G) \\
+    &=R+R+G=2R+G
+    \end{align*}
+    ```
+    By not choosing $x_1=0$ in the first period and choosing her preferred policy in the second period, the Machiavellian incumbent gets $EU_I(x_1=0,\tau=m,\omega_1=0)=2R+G>R+G=EU_I(x_1=1,\tau=m,\omega_1=0)$.
+
+    Therefore, he has an incentive to do so rather than choosing her preferred policy in the first period.
+
+    \color{black}
+
+j.  We now consider the following strategies. A Machiavellian incumbent chooses $x_1 = 0$ with probability $\alpha=\frac{2p−1}{p}$ in state $\omega_1 = 0$ and with probability 1 in state $\omega_1 = 1$. The voter, in turn, re-elects the incumbent with probability $\delta = \frac{G}{G+R}$ if and only if he chooses $x_1 = 0$ and with probability 0 if he chooses $x_1 = 1$.
+
+    Show that this set of strategies constitute an equilibrium.
+
+    \color{blue}
+
+    Let's first prove the Machiavellian incumbent has no incentive to deviate in this case:
+
+    ```{=tex}
+    \begin{align*}
+    EU^{RD}_m(\alpha)&=R+\Pr(\omega_1=0)[\alpha\delta(G+R)+(1-\alpha)(G)]+\Pr(\omega_1=1)[G+\delta(G+R)] \\
+    &=R+p[\alpha G+(1-\alpha)G]+(1-p)(2G) \\
+    &=R+pG+2G(1-p)
+    \end{align*}
+    ```
+    It can be seen that, when $\delta=\frac{G}{G+R}$, the expected welfare of the Machiavellian incumbent is not a function of $\alpha$. Therefore, he cannot improve his welfare by changing $\alpha$. Hence, there is no incentive to deviate.
+
+    Let's next prove the voter has no incentive to deviate in this case:
+
+    ```{=tex}
+    \begin{align*}
+    &V^{RD}(\delta) \\
+    =&\Pr(\tau_I=m)\Pr(\omega_1=0)[\alpha(1+0\delta+(1-\delta)\pi))+(1-\alpha)(0+\pi)]+\Pr(\tau_I=m)\Pr(\omega_1=1)\\
+    &[0+0\delta+(1-\delta)\pi]+\Pr(\tau_I=b)\Pr(\omega_1=0)(1+\delta+(1-\delta)\pi)+\Pr(\tau_I=b)\Pr(\omega_1=1)(1+\pi)\\
+    =&(1-\pi)p[\alpha(1+\pi-\delta\pi)+\pi-\alpha\pi]+(1-\pi)(1-p)(1-\delta)\pi+\pi p(1+\delta+\pi-\delta\pi)+\pi(1-p)(1+\pi)\\
+    =&(1-\pi)p\alpha(1-\delta\pi)+\pi(1-\pi)p+\pi(1-\pi)(1-p)(1-\delta)+\pi(1-\pi)p\delta+\pi(1+\pi)p+\pi(1+\pi)(1-p)\\
+    =&(1-\pi)(2p-1)(1-\delta\pi)+\pi(1-\pi)p+\pi(1-\pi)(1-p)+\pi(1-\pi)(p-1)\delta+\pi(1-\pi)p\delta+\pi(1+\pi)\\
+    =&(1-\pi)(2p-1)+\pi(1-\pi)(1-2p)\delta+\pi(1-\pi)p+\pi(1-\pi)(1-p)+\pi(1-\pi)(2p-1)\delta+\pi(1+\pi)\\
+    =&\pi(1-\pi)(1-2p)\delta+\pi(1-\pi)(2p-1)\delta+(1-\pi)(2p-1)+\pi(1-\pi)p+\pi(1-\pi)(1-p)+\pi(1+\pi)\\
+    =&\pi(1-\pi)(1-2p+2p-1)\delta+(1-\pi)(2p-1)+\pi(1-\pi)+\pi(1+\pi)\\
+    =&(1-\pi)(2p-1)+2\pi
+    \end{align*}
+    ```
+    It can be seen that, when $\alpha=\frac{2p-1}{p}$, the expected welfare of the voter is not a function of $\delta$. Therefore, she cannot improve her welfare by changing $\delta$. Hence, there is no incentive to deviate.
+
+    Therefore, this set of strategies constitute an equilibrium.
+
+    \color{black}
+
+k.  Consider the equilibrium described in question (j). Show that the voter welfare is $V^{RD}=2\pi + (1 − \pi)(2p − 1)$.
+
+    \color{blue}
+
+    We have already shown this in part (j):
+
+    ```{=tex}
+    \begin{align*}
+    V^{RD}&=V^{RD}(\delta)\\
+    &=(1-\pi)(2p-1)+2\pi\\
+    &=2\pi+(1-\pi)(2p-1)
+    \end{align*}
+    ```
+    \color{black}
+
+l.  Still using the equilibrium described in (j) and your answer to (k), show that the voter is always better off in representative democracy than in autocracy. Show that direct democracy dominates representative democracy for $p\geq\frac{3\pi-1}{2\pi}$. Provide some intuition for both the superiority of representative democracy over autocracy and the possible superiority of direct democracy over representative democracy with reference to the lectures and materials from GV482.
+
+    \color{blue}
+
+    Recall the voter's welfare under different political systems:
+
+    ```{=tex}
+    \begin{align*}
+    V^{RD}&=2\pi+(1-\pi)(2p-1) \\
+    V^A&=2\pi \\
+    V^{DD}&=2p
+    \end{align*}
+    ```
+    As $\pi<1$, $1-\pi>0$. Also, because $p>1/2$, $2p-1>0$. Therefore, $(1-\pi)(2p-1)>0$ and the voter is always better of in representative democracy than in autocracy:
+
+    $$
+    V^{RD}=2\pi+(1-\pi)(2p-1)>2\pi=V^A
+    $$
+
+    Intuition: where as in autocracy, the welfare of the voter is entirely tied to the probability of a benevolent incumbent, the voter under representative democracy has a chance to learn from the policy and imperfectly screen out a Machiavellian incumbent. This also forces even a Machiavellian incumbent to occasionally cater to the voter's preference, at least in some state of the world. This corresponds to the conclusion in GV482 that the representative regimes are of the elite, by the elite, but sometimes for the people.
+
+    Now we derive the condition under which direct democracy dominates representative democracy:
+
+    ```{=tex}
+    \begin{align*}
+    V^{DD}&\geq V^{RD} \\
+    2p&\geq2\pi+(1-\pi)(2p-1) \\
+    2p&>2\pi+2p-1-2p\pi+\pi \\
+    2p\pi&\geq3\pi-1 \\
+    p&\geq\frac{3\pi-1}{2\pi}
+    \end{align*}
+    ```
+    Intuition: when the voter knows their preference well (high $p$) or when benevolent politicians are rare (low $\pi$), direct democracy is more favourable than representative democracy. The former corresponds to the anti-democratic critique that voters may be so misinformed that they are unsuitable to make direct decision. The latter corresponds to the democratic critique that the dominance of the elite (proxied by Machiavellian politicians who have opposite preferences to the people) implies that some direct democracy is sometimes more favourable.
+
+    \color{black}
+
+# Part B - Essay (50 points)
+
+## Question 2
+
+\textcolor{blue}{The final AI essay (in red):}
+
+\color{red}
+
+Title: Economic Disparities and Representation: A Critical Examination of U.S. Congress
+
+Introduction
+
+The disparity in median net worth between Members of Congress and the average American family, highlighted by the figures from 2018, raises fundamental questions about the representational effectiveness of the U.S. legislative system. With Congress members possessing an average net worth nearly four times that of their constituents, this essay examines the impact such disparities have on democratic representation, policy formulation, and political engagement, integrating concepts from political theory and empirical research.
+
+Economic Disparities and Their Influence on Policy Preferences
+
+The significant economic gulf between legislators and the general populace can lead to a divergence in policy preferences. Studies like those by Carnes and Lupu (2015) and further explored by Lupu and Warner (2022) show that wealthier politicians often have different priorities than their less affluent constituents. These differences can manifest in legislative agendas that are more aligned with the interests of the affluent, potentially at the expense of broader public needs.
+
+This point is further substantiated by research from Eggers & Klasnja (2019), which suggests that wealthier legislators tend to vote more conservatively, particularly on economic issues that affect wealth distribution and social welfare programs. The consequence is a legislative body that may be less responsive to the needs of lower-income voters, whose immediate concerns include healthcare, education, and economic security.
+
+Impact of Background Diversity in Political Representation
+
+The composition of legislative bodies not only influences policy but also affects constituent relations and legislative empathy. The study by Desai and Frey (2023) indicates that a politician's background significantly impacts their legislative behavior, suggesting that personal experience influences policy decisions. Additionally, Lowande et al. (2019) highlight that female, minority, and veteran lawmakers are more likely to assist constituents who share their background. This trend underscores the importance of a diverse legislative body capable of understanding and responding to a spectrum of social and economic issues.
+
+Moreover, the presence of economic barriers to entering politics, which the U.S. has historically mitigated by removing wealth requirements for candidacy (Corvalan et al., 2020), suggests that while some progress has been made, substantial economic disparities remain. This situation points to a need for continued reforms in campaign financing and candidate support systems to ensure broader representation.
+
+Substantive vs. Descriptive Representation: Balancing the Scales
+
+While U.S. legislators may not always mirror the economic demographics of their constituents (descriptive representation), there is evidence to suggest they can still effectively represent their interests (substantive representation). Rhodes and Schaffner (2017) present a nuanced view where legislators, despite their wealth, align with poorer constituents on certain issues. This indicates that representatives may still act in the broader public interest, even if their economic status differs from that of their voters.
+
+However, the efficacy of this substantive representation can be compromised by information asymmetries. Wealthier legislators may lack firsthand understanding of the challenges faced by lower-income constituents, and there is a risk that constituents may feel alienated or less inclined to engage with representatives whom they perceive as dissimilar. This scenario can lead to a feedback loop where underrepresented groups become less politically active, further diminishing their influence on policy.
+
+Conclusion
+
+The disparity in net worth between Members of Congress and the average American highlights significant challenges for representative democracy. While economic disparities can influence legislative priorities and potentially alienate lower-income constituents, mechanisms within the democratic system allow for some level of effective representation across economic lines. To enhance this capacity, efforts must be focused on reducing barriers to political entry and increasing the diversity of political representatives. By doing so, the U.S. can move closer to a representative regime that more accurately and empathetically reflects the economic realities of its citizens, thereby reinforcing the foundational democratic principle that governance should be of the people, by the people, and for the people.
+
+\color{blue}
+
+Explanation:
+
+To start with, I only include the original prompt and the word limit of 750 words as my first prompt. This is to test the baseline performance of the AI tool and find out potential ways to improve the answer. The AI tool generates an essay that conforms to the word limit (692 words). The essay is well-structured, with a clear introduction, theoretical framework, impact, obstacles, and implications of the wealth gap in Congress, as well as potential reforms and a conclusion.
+
+The AI tool correctly captures the central concepts - descriptive and substantive representation, on which the debate is centred. It also correctly points out that descriptive unpresentativeness can lead to substantive unpresentativeness, which was a key point in the GV482 lecture. Moreover, it suggests descriptive unrepresentativeness causes erosion of trust, which may lead to decreased political engagement and voter turnout, which adds to the democratic critique.
+
+Despite the coverage of key GV482 themes without any course content information given in the prompt, the initial essay has one fatal shortcoming as an academic essay - it lacks academic evidence. For example, the essay contends that "Wealthier legislators might be less aware or empathetic towards the challenges faced by lower-income constituents, potentially leading to a bias in policymaking." Although this is a plausible argument, it lacks empirical evidence to support it. This makes the essay less convincing. This problem can be addressed through explicitly providing academic references, especially those from GV482 lectures, in the prompt and requesting the AI tool to incorporate them in the essay.
+
+Hence, the second prompt includes 5 academic references from the second GV482 lecture on top of the first prompt, namely, Thompson et al. (2019), Kirkland (2022), Carnes and Lupu (2015), Rhodes and Schaffner (2017), as well as Lupu and Warner (2022). The AI tool successfully incorporates these references into the essay, making it more academically rigorous. The second essay correctly summarizes the key findings of these references and uses them to support its arguments. For example, it describes that Thompson et al. (2019) "used de-anonymized census data, the socio-economic background of a majority of Congress members significantly exceeds that of the average American" without any factual errors. This significantly improves the quality of the essay and exceeded my expectations.
+
+Nevertheless, the second essay still has room for improvement. For instance, it could have provided a more balanced argument by acknowledging the complexities in the relationship between legislators' wealth and their legislative behavior. This could be achieved by including a counterpoint from the GV482 lecture, which suggests that wealthier legislators might represent the interests of poorer constituents on less critical issues. This would have made the essay more nuanced and reflective of the complexities of the issue. 
+
+As such, the third prompt includes a request for the AI tool to incorporate counter-arguments. In the prompt, I explicitly made an example: "Rhodes and Schnaffer (2017) shows legislators align more with poorer constituents, albeit on unimportant votes. "
+
+As a result, the third essay successfully incorporates a counterpoint from Rhodes and Schnaffer (2017), suggesting that wealthier legislators might align with their economic peers on significant economic policies but represent the interests of poorer constituents on less critical issues. The third essay even draws another important insight from the article without explicitly mentioning it in the prompt - "Moreover, legislative effectiveness and responsiveness can sometimes transcend economic backgrounds. Legislators, regardless of wealth, may be driven by ideological commitments, party pressures, and the strategic need to maintain a broad voter base, which can lead to policies that benefit a wider array of constituents." This adds nuance to the essay and provides a more balanced perspective on the issue. This demonstrates that the AI tool can effectively incorporate counter-arguments when explicitly requested to do so.
+
+However, the way the third essay presents the counterarguments is too intentional and lacks a natural flow. The counterarguments are explicitly written under a subtitle of "Counterarguments and Balancing Perspectives", which makes the essay less coherent. Moreover, the tone of the essay could have been more formal and academic. To improve this, the fourth prompt includes the following line: "You are a MSc Political Science and Political Economy student from LSE." This is 
+"adopt a persona" approach is recommended by the AI tool's developers to improve the quality of the generated text. Moreover, the fourth prompt changes the "counterargument" request to "balanced argument" to make the essay more coherent.
+
+At this stage, the essay is very close to the quality of a well-written academic essay. To fine-tune it to the need of GV482, I add bullet points from the slides with additional references and ask the AI tool to include them in the essay. The fifth prompt includes the following two main points: "1) Descriptively unrepresentative politicians have different
+preferences than their constituents (Carnes and Lupu, 2015; Lupu and Warner, 2021)". "2) Descriptively unrepresentative politicians may know less about their constituents".
+
+At the end, the AI tool successfully incorporates these bullet points into the essay, making it more relevant to the GV482 course content. The essay now includes a thorough, well-supported and balanced discussion on how descriptive representation and substantive representation.
+
+Information about the AI tool used for this assignment, with all prompts and AI answers are presented in [Appendix](#sec-appendix), which is at the very end of this assignment (after Question 3).
+
+\color{black}
+
+## Question 3
+
+\color{blue}
+
+Despite the overall good quality of the AI generated essay and the relatively comprehensive understanding of the references provided, there are still some minor mistakes that need to be corrected and complements that can be added.
+
+Firstly, the essay states that "Studies like those by Carnes and Lupu (2015) and further explored by Lupu and Warner (2022) show that wealthier politicians often have different priorities than their less affluent constituents." This is not entirely accurate and misses some important information. Carnes and Lupu (2015) compare the *previous profession* of Latin American legislators with professions of the general population. Although the legislators in their study tend to work in higher-income professions such as law, business and military, they do not directly compare the wealth of politicians with their constituents. This is an important distinction that should be made to avoid misinterpretation. On top of the difference in the *economic* status, the different distribution of professions among politicians and the general population highlights the difference in the *social* status of politicians and their constituents. The latter implies different sources of information, different capabilities of processing information. Such latent variables are correlated with but not fully reflected in income or wealth. This is an important nuance that should be included in the essay. Different ability to process information is often used as an argument *against* direct democracy and the descriptive representation of politicians. Legislators with the average level of such abilities may not be rational or informed enough to make legislative decisions, which tend to be more complex and technical than the decisions made by the general population.
+
+Secondly, the essay misses one important insight from the Rhodes and Schaffner (2017) study - partisan heterogeneity. Although the essay correctly summarises that "legislators, despite their wealth, align with poorer constituents on certain issues," it does not mention that this is almost entirely drive by *Democrats* in US Congress. According to Rhodes and Schaffner (2017), the correlation between *Republican* legislators' votes and the preferences of their constituents increases with the constituents' income, in line with the hypothesis that legislators behave in favour of the rich. Nevertheless, the behaviour of the *Democratic* legislators alone is intriguing, in light of the facts that the US is generally more conservative than other developed countries and that US congresspeople are generally wealthier than legislators in other countries, due to the high personal cost of running for office. This implies that in other democratic countries where legislators are less wealthy and the overton windows is further to the left, the alignment between legislators and their constituents might be even stronger, albeit mainly for left-wing legislators.
+
+Thirdly, the essay does not elaborate on which exact issues the legislators align with their poor constituents when it refers to Rhodes and Schaffner (2017). In fact, it has been documented by Lupu and Warner (2022) that legislators align more with poorer constituents on cultural issues such as same-sex marriage, and less on economic policy. This implies that the counterargument is not as strong as it might seem at first glance. The issues on which the affluent legislators align with poorer constituents, for example, cultural and social issues, are often less critical and less influential to the legislators' themselves, whereas the economic issues directly affect their wealth and income. This implies that the legislators only align with poorer constituents on issues that do not affect their own interests, which reaffirms the initial argument that descriptive representation is important for substantive representation. Without zooming into the specific issues, the counterargument might mislead the reader into thinking that the multitude poor voters can overcome the legislator's personal backgrounds in all policy areas or descriptive representation is not important. Nevertheless, one caveat is that Lupu and Warner (2021) only focus on one cultural isues - same sex marriage. It is not clear whether the same pattern holds for other cultural issues.
+
+Fourthly, the essay merely touches upon the removal of wealth requirements on candidates by citing Corvalen et al. (2020), but does not discuss the policy's impacts and implications. Corvalen et al. (2020) document that Higher government spending in the US after removal of wealth requirements on who can run, but *not after extension of the franchise*. The former finding implies that by introducing poorer candidates, the government is more likely to cater to the poorer constituents by increasing government spending; the latter finding implies that introducing poorer voters does not necessarily have the same impact. Together this suggests that improving the descriptive representation of politicians has higher priority than, for example, increasing the voter turnout among the disadvantaged groups. This could imply that further policies that remove campaign financing constraints (e.g. state funding) and improve descriptive representation may be more effective in improving substantive representation than currents attempts by introducing compulsory voting, which is effective (Bechtel et al., 2016) but unfairly imposes extra cost of voting on the poor.
+
+\color{black}
+
+\appendix
+
+# Appendix: Prompts for and Answers by GPT-4 {#sec-appendix .appendix}
+
+Prompt: Please can you write me a 750-word essay with the following prompt:
+
+The average median net worth of U.S. Members of Congress was $490k in 2018 compared
+to a median net worth of $122k for American families, this is a severe problem for
+representative regimes. Using the concepts seen in the lecture and seminars as well as
+from other courses, critically discuss this statement.
+
+Answer: 
+
+Title: The Wealth Gap in U.S. Congress and Its Impact on Representative Government
+
+Introduction
+
+In 2018, the median net worth of U.S. Members of Congress was recorded at approximately $490,000, in stark contrast to the $122,000 median net worth of American families. This significant disparity raises concerns about the efficacy and fairness of representative governance. This essay will critically examine how the wealth gap between elected officials and the general populace might affect legislative outcomes, representation, and public trust. By integrating concepts from political science lectures, seminars, and related interdisciplinary courses, the implications of this economic divide will be explored in the context of democratic ideals and practices.
+
+Theoretical Framework
+
+The principle of representational fairness in democratic regimes posits that elected officials should reflect the demographic and socio-economic composition of their constituents. This principle is rooted in theories of democratic representation, including the descriptive and substantive representation models. Descriptive representation suggests that elected bodies should mirror the demographics of the population they represent, enhancing legitimacy and potentially leading to more equitable policy outcomes. Substantive representation, on the other hand, emphasizes the alignment of elected officials' actions and the interests and needs of their constituents, regardless of their personal backgrounds.
+
+Impact of Wealth Disparity on Legislative Behavior
+
+The wealth disparity between members of Congress and the general American populace may influence legislative priorities and decisions. Wealthier legislators might be less aware or empathetic towards the challenges faced by lower-income constituents, potentially leading to a bias in policymaking. This bias can manifest in various ways, such as prioritizing tax reforms that disproportionately benefit the wealthy or neglecting issues critical to lower-income families, such as affordable housing, healthcare, and education.
+
+Empirical studies have suggested that legislators’ personal economic interests can affect their voting behavior, with wealthier legislators more likely to support policies that protect or enhance their financial status. This phenomenon can undermine substantive representation, as the needs of the less affluent majority may be sidelined.
+
+Barriers to Entry and Political Participation
+
+The high cost of political campaigns in the United States serves as a significant barrier to entry for potential candidates from less affluent backgrounds. This financial gatekeeping not only limits the diversity of candidates but also skews political power towards those with substantial economic resources or those who are supported by wealthy donors and special interests. As a result, the political landscape may become increasingly disconnected from the experiences and needs of the average citizen.
+
+Implications for Public Trust and Engagement
+
+Public perception of government is deeply influenced by the degree to which citizens feel represented. The wealth gap in Congress can lead to perceptions of elitism and detachment, eroding trust in political institutions. This erosion of trust can lead to decreased political engagement and voter turnout, further undermining the democratic process and leading to a cycle of disenfranchisement and apathy among citizens who feel their interests are persistently overlooked.
+
+Potential Solutions and Reforms
+
+Addressing the wealth gap in Congress requires comprehensive reforms aimed at both reducing barriers to political entry and ensuring that elected officials remain responsive to all constituents, not just the affluent. Campaign finance reform is critical, as it could help level the playing field for candidates of varying economic backgrounds. Public financing of campaigns, stricter limits on campaign contributions, and greater transparency in funding sources could mitigate the influence of wealth on political power.
+
+Additionally, mechanisms such as term limits might prevent the entrenchment of wealthy legislators and encourage a more dynamic and diverse candidate pool. Educational initiatives that promote civic engagement and political participation can also empower more citizens to seek office or demand accountability from their representatives.
+
+Conclusion
+
+The wealth gap between U.S. Members of Congress and the general population poses significant challenges to the ideals of representative democracy. This disparity can skew legislative priorities, restrict political participation, and diminish public trust in government. By implementing reforms aimed at increasing transparency, reducing financial barriers to entry, and enhancing public engagement, it is possible to foster a more equitable and representative political system. In doing so, the foundational democratic principle that government should reflect the governed can be more fully realized, ensuring a healthier, more inclusive democratic society.
+
+Prompt: Here's some references from the lecture which you should cite and draw insights from, and feel free to cite other sources:
+
+Daniel M. Thompson & James J. Feigenbaum & Andrew B. Hall & Jesse Yoder, 2019. "Who Becomes a Member of Congress? Evidence From De-Anonymized Census Data," NBER Working Papers 26156, National Bureau of Economic Research, Inc.
+
+Kirkland, P. A. (2022). Representation in American Cities: Who Runs for Mayor and Who Wins? Urban Affairs Review, 58(3), 635-670. https://doi.org/10.1177/10780874211021688
+
+Carnes, Nicholas, and Noam Lupu. “Rethinking the Comparative Perspective on Class and Representation: Evidence from Latin America.” American Journal of Political Science, vol. 59, no. 1, 2015, pp. 1–18. JSTOR, http://www.jstor.org/stable/24363593. Accessed 29 Apr. 2024.
+
+Jesse H. Rhodes and Brian F. Schaffner (2017), "Testing Models of Unequal Representation: Democratic Populists and Republican Oligarchs?", Quarterly Journal of Political Science: Vol. 12: No. 2, pp 185-204. http://dx.doi.org/10.1561/100.00016077
+
+Lupu, N., & Warner, Z. (2022). Affluence and congruence: Unequal representation around the world. The Journal of Politics, 84(1), 276–290. https://doi.org/10.1086/714930 
+
+Please can you write me a 750-word essay with the following prompt:
+
+The average median net worth of U.S. Members of Congress was $490k in 2018 compared
+to a median net worth of $122k for American families, this is a severe problem for
+representative regimes. Using the concepts seen in the lecture and seminars as well as
+from other courses, critically discuss this statement.
+
+Answer:
+
+Title: Economic Disparity in U.S. Congress and Its Implications for Representative Democracy
+
+Introduction
+
+The notable disparity in wealth between U.S. Members of Congress and the general American populace, with a median net worth of $490,000 compared to $122,000 respectively in 2018, underscores a critical challenge in representative democracy. This essay examines how such economic disparities within legislative bodies may hinder effective representation and explores potential impacts on policy making and public trust.
+
+Economic Background of Legislators and Representation
+
+According to Thompson et al. (2019), who used de-anonymized census data, the socio-economic background of a majority of Congress members significantly exceeds that of the average American. This wealth discrepancy not only reflects an uneven playing field in political candidacy but also raises questions about the substantive representation that Congress offers. Wealthy legislators, arguably, may have different priorities, experiences, and understandings of public needs, particularly those of lower-income constituents (Carnes & Lupu, 2015).
+
+The Impact on Policy Preferences and Legislative Outcomes
+
+The question of whether representatives' socio-economic status influences their legislative behavior has been extensively studied. Kirkland (2022) highlights that in American cities, mayoral candidates often come from wealthier backgrounds, with their policy agendas reflecting interests that align with their socio-economic status rather than the broader public. Similarly, in Congress, the wealthier members may be less responsive to the demands of lower-income voters, focusing instead on policies that safeguard or enhance their wealth. This notion is supported by Rhodes and Schaffner (2017), who found that Republicans often prioritize wealthier constituents' interests, while Democrats strive for broader economic representation.
+
+Comparative Perspective and Global Trends
+
+Drawing from a broader scope, Lupu and Warner (2022) discuss the global trend of affluent individuals being more likely to have their interests represented in government. This affluence bias is not unique to the United States but is evident in several democratic systems worldwide, suggesting a systemic challenge in achieving true socio-economic representation in democracies.
+
+Barriers to Entry for Political Aspirants
+
+The high cost of electoral campaigns in the U.S. disproportionately affects individuals from middle or lower economic backgrounds, creating a significant barrier to entry (Thompson et al., 2019). Wealthy candidates or those with affluent backers tend to have a competitive advantage. This economic filter decreases the diversity of perspectives within legislative bodies, potentially leading to legislation that favors the elite.
+
+Effects on Public Trust and Democratic Engagement
+
+A Congress that does not economically represent the majority of its constituents can erode public trust and decrease civic engagement. When people feel that their representatives do not share their economic realities or interests, they may become disenchanted with the political process, leading to lower voter turnout and a weakened democratic fabric (Rhodes & Schaffner, 2017).
+
+Proposed Solutions to Bridge the Wealth Gap
+
+To address these disparities, several reforms can be considered:
+
+Campaign Finance Reform: Introducing public financing of campaigns or capping campaign spending could help level the playing field for candidates from diverse economic backgrounds.
+Recruitment and Support for Diverse Candidates: Political parties and civic organizations could actively recruit and support candidates from underrepresented economic groups.
+Enhanced Transparency: Making the financial interests of politicians transparent can help hold them accountable, ensuring that their legislative work aligns with the public interest rather than personal wealth.
+Conclusion
+
+The wealth gap in the U.S. Congress poses a significant challenge to the principles of representative democracy. This disparity influences legislative priorities and potentially alienates a significant portion of the electorate. By implementing reforms aimed at reducing the influence of wealth on political power and enhancing the representation of economically diverse Americans, the integrity and functionality of democratic governance can be bolstered. As evidenced by the provided literature, addressing these issues is crucial for sustaining a truly representative democratic regime.
+
+Prompt: Here's some references from the lecture which you should cite and draw insights from.  Please also cite other academic sources.
+
+Daniel M. Thompson & James J. Feigenbaum & Andrew B. Hall & Jesse Yoder, 2019. "Who Becomes a Member of Congress? Evidence From De-Anonymized Census Data," NBER Working Papers 26156, National Bureau of Economic Research, Inc.
+
+Kirkland, P. A. (2022). Representation in American Cities: Who Runs for Mayor and Who Wins? Urban Affairs Review, 58(3), 635-670. https://doi.org/10.1177/10780874211021688
+
+Carnes, Nicholas, and Noam Lupu. “Rethinking the Comparative Perspective on Class and Representation: Evidence from Latin America.” American Journal of Political Science, vol. 59, no. 1, 2015, pp. 1–18. JSTOR, http://www.jstor.org/stable/24363593. Accessed 29 Apr. 2024.
+
+Jesse H. Rhodes and Brian F. Schaffner (2017), "Testing Models of Unequal Representation: Democratic Populists and Republican Oligarchs?", Quarterly Journal of Political Science: Vol. 12: No. 2, pp 185-204. http://dx.doi.org/10.1561/100.00016077
+
+Lupu, N., & Warner, Z. (2022). Affluence and congruence: Unequal representation around the world. The Journal of Politics, 84(1), 276–290. https://doi.org/10.1086/714930 
+
+Please remember to make some counter-arguments. For example, Rhodes and Schnaffer (2017) shows legislators align more with poorer constituents, albeit on unimportant votes. Please come to a somewhat balanced conclusion e.g. The fact that the representatives are not descriptively representative of the constituents is a threat to democracy, but representative regimes can still sometimes represent the interests of the people
+
+Please can you write me a 750-word essay with the following prompt:
+
+The average median net worth of U.S. Members of Congress was $490k in 2018 compared
+to a median net worth of $122k for American families, this is a severe problem for
+representative regimes. Using the concepts seen in the lecture and seminars as well as
+from other courses, critically discuss this statement.
+
+Answer:
+
+Title: Economic Disparity in U.S. Congress: Challenges and Counterpoints in Representative Democracy
+
+Introduction
+
+The stark disparity between the median net worth of U.S. Members of Congress, at $490,000, and that of the average American family, at $122,000 in 2018, raises significant questions about the representativeness and effectiveness of democratic governance. This essay explores the implications of this wealth gap for representative regimes, drawing on academic research and theoretical frameworks, while also considering counterarguments that suggest the system may still effectively represent the interests of the populace.
+
+Theoretical and Empirical Insights
+
+The wealth gap in Congress may lead to a lack of descriptive representation—where representatives mirror the demographic and socio-economic attributes of their constituents—as well as potential challenges in substantive representation, where the interests of constituents are actively advanced in legislative processes. According to Thompson et al. (2019), the socio-economic status of Congress members significantly exceeds that of the general population, which can create an empathy gap and misaligned priorities. Similarly, Kirkland (2022) notes that mayoral candidates in major American cities often come from wealthier backgrounds, potentially skewing policy outcomes towards interests that benefit the affluent.
+
+Carnes and Lupu (2015) provide a comparative analysis, demonstrating how wealth disparities in political representation are not unique to the United States but are a common feature in democracies globally. They argue that such disparities often lead to policy decisions that favor the wealthy, thereby exacerbating socio-economic divides. Moreover, Lupu and Warner (2022) highlight the global trend of affluent congruence, where wealthier individuals’ preferences are more likely to be reflected in government policies.
+
+Counterarguments and Balancing Perspectives
+
+However, it is crucial to consider counterarguments that highlight the nuances of representation. Rhodes and Schaffner (2017) provide a more complex picture, suggesting that while wealthier legislators may align with their affluent constituents on critical economic votes, they also tend to represent the interests of poorer constituents on less pivotal issues. This dual approach suggests a layered representation strategy where not all legislative decisions are influenced by the wealth of the representatives.
+
+Moreover, legislative effectiveness and responsiveness can sometimes transcend economic backgrounds. Legislators, regardless of wealth, may be driven by ideological commitments, party pressures, and the strategic need to maintain a broad voter base, which can lead to policies that benefit a wider array of constituents.
+
+Implications for Democratic Engagement and Trust
+
+The perception of a Congress that does not economically represent the majority can undermine public trust and reduce civic engagement. When voters perceive their representatives as part of an elite class, disconnected from everyday struggles, it can lead to political disengagement and cynicism towards the democratic process. This erosion of trust is detrimental to the health of a democracy, as active and engaged citizenry is crucial for robust democratic governance.
+
+Potential Solutions and Policy Recommendations
+
+Addressing these disparities requires multifaceted reforms:
+
+Campaign Finance Reform: Reducing the influence of money in politics could help level the playing field, allowing more candidates from diverse economic backgrounds to compete effectively.
+Increased Transparency and Accountability: Making the financial interests and campaign contributions of politicians more transparent can help ensure they are held accountable for decisions that might be perceived as self-serving.
+Civic Education and Engagement: Promoting broader civic engagement and education can empower citizens to demand better representation and participate more fully in the political process.
+Conclusion
+
+The wealth gap between members of Congress and the general American population presents significant challenges to the principle of representative democracy. While this disparity can influence legislative priorities and potentially alienate the less affluent, it is not definitive of legislative effectiveness or the ability to represent broader interests. Systems of checks, balances, and democratic engagement mechanisms can mitigate some adverse effects of this wealth gap. Nevertheless, proactive reforms in campaign finance, transparency, and civic engagement are essential to ensure the government remains a true representative of its diverse populace. In conclusion, while economic disparities pose a threat to the descriptive representation in democratic regimes, the system’s capacity to adapt and reform can still uphold the broader interests of the people.
+
+Prompt: You are a MSc Political Science and Political Economy student from LSE. Please can you write a 750-word essay with the following prompt:
+
+"The average median net worth of U.S. Members of Congress was $490k in 2018 compared
+to a median net worth of $122k for American families, this is a severe problem for
+representative regimes. Using the concepts seen in the lecture and seminars as well as
+from other courses, critically discuss this statement."
+
+Here's some references from the lecture which you should cite and draw insights from.  Please also cite other academic sources.
+
+Daniel M. Thompson & James J. Feigenbaum & Andrew B. Hall & Jesse Yoder, 2019. "Who Becomes a Member of Congress? Evidence From De-Anonymized Census Data," NBER Working Papers 26156, National Bureau of Economic Research, Inc.
+
+Kirkland, P. A. (2022). Representation in American Cities: Who Runs for Mayor and Who Wins? Urban Affairs Review, 58(3), 635-670. https://doi.org/10.1177/10780874211021688
+
+Carnes, Nicholas, and Noam Lupu. “Rethinking the Comparative Perspective on Class and Representation: Evidence from Latin America.” American Journal of Political Science, vol. 59, no. 1, 2015, pp. 1–18. JSTOR, http://www.jstor.org/stable/24363593. Accessed 29 Apr. 2024.
+
+Jesse H. Rhodes and Brian F. Schaffner (2017), "Testing Models of Unequal Representation: Democratic Populists and Republican Oligarchs?", Quarterly Journal of Political Science: Vol. 12: No. 2, pp 185-204. http://dx.doi.org/10.1561/100.00016077
+
+Lupu, N., & Warner, Z. (2022). Affluence and congruence: Unequal representation around the world. The Journal of Politics, 84(1), 276–290. https://doi.org/10.1086/714930 
+
+Please remember to balance your arguments. For example, Rhodes and Schnaffer (2017) shows legislators align more with poorer constituents, albeit on unimportant votes. Please come to a somewhat balanced conclusion e.g. The fact that the representatives are not descriptively representative of the constituents is a threat to democracy, but representative regimes can still sometimes represent the interests of the people.
+
+Answer:
+
+Title: Economic Disparity in Congress and the Challenges to Representative Democracy
+
+Introduction
+
+The significant discrepancy between the median net worth of U.S. Members of Congress and that of the average American family highlights a potential issue in the structure of representative democracy. With Congress members averaging a net worth of $490,000 compared to the $122,000 median for American families in 2018, concerns arise about the ability of legislators to truly represent their constituents. This essay critically examines the implications of this wealth gap using insights from key literature and evaluates the extent to which it undermines or sustains the principles of representative governance.
+
+Theoretical Framework and Empirical Insights
+
+The democratic ideal posits that representation should reflect a broad spectrum of the populace, facilitating a legislature that is attuned to the diverse socio-economic realities of its constituents. However, the wealth disparity evident in Congress suggests a deviation from this ideal, potentially leading to a lack of descriptive representation, where representatives share similar socio-economic backgrounds as their constituents, and substantive representation, where the interests of constituents are effectively advocated.
+
+Research by Thompson et al. (2019) illustrates that members of Congress are disproportionately wealthy, suggesting barriers to entry for less affluent candidates which could skew legislative priorities. Similarly, Kirkland (2022) notes that wealthier candidates are more likely to win mayoral elections in major cities, reinforcing the idea that wealth influences political success and potentially policy outcomes.
+
+Carnes and Lupu (2015) and Lupu and Warner (2022) extend this analysis globally, showing a worldwide trend where affluent individuals are more likely to see their interests represented. This 'affluence and congruence' phenomenon raises questions about the equity of representation in democratic systems, including the United States.
+
+Counterpoints and Complexities in Representation
+
+Despite these concerns, it is crucial to recognize that the relationship between a legislator's wealth and their legislative behavior is complex. Rhodes and Schaffner (2017) provide a nuanced view, suggesting that while wealthier legislators might align with their economic peers on significant economic policies, they also represent the interests of poorer constituents on less critical issues. This indicates a layered approach to representation that may still address a range of constituent needs.
+
+Moreover, the structural design of democratic institutions often includes mechanisms to balance representation, such as committees and caucuses that can advocate for diverse interests. Legislators, irrespective of their personal wealth, face electoral incentives to address the needs of a broad voter base, which can lead to policies that cross economic divides.
+
+Implications for Democratic Engagement and Policy Making
+
+The perception of Congress as an elite, wealthy institution can undermine public trust and reduce civic engagement, crucial elements of a functioning democracy. If citizens believe that their representatives cannot relate to their everyday experiences or are predominantly influenced by wealthy interests, it could lead to disengagement and cynicism towards the political process.
+
+To mitigate these effects, potential reforms could include enhancing transparency in campaign finance, implementing public funding for campaigns to reduce barriers to entry, and promoting civic education to foster a more informed and engaged electorate.
+
+Conclusion
+
+While the wealth disparity in Congress presents challenges to the ideal of representative democracy, the system possesses inherent complexities and capacities that can still promote the representation of diverse interests. The empirical evidence suggests that although wealth influences legislative behavior and electoral success, representatives can and do act on behalf of constituents with different socio-economic statuses. Ensuring that these mechanisms function effectively requires ongoing vigilance, reform, and public engagement. Thus, while the current disparities pose a threat to the descriptive representation within democratic regimes, the structure of representative democracies retains the potential to uphold the broader interests of the populace through adaptive practices and reforms.
+
+Prompt: You are a MSc Political Science and Political Economy student from LSE. Please can you write a 750-word essay with the following prompt:
+
+"The average median net worth of U.S. Members of Congress was $490k in 2018 compared
+to a median net worth of $122k for American families, this is a severe problem for
+representative regimes. Using the concepts seen in the lecture and seminars as well as
+from other courses, critically discuss this statement."
+
+Here's some references from the lecture which you should cite and draw insights from.  Please also cite other academic sources.
+
+Daniel M. Thompson & James J. Feigenbaum & Andrew B. Hall & Jesse Yoder, 2019. "Who Becomes a Member of Congress? Evidence From De-Anonymized Census Data," NBER Working Papers 26156, National Bureau of Economic Research, Inc.
+
+Kirkland, P. A. (2022). Representation in American Cities: Who Runs for Mayor and Who Wins? Urban Affairs Review, 58(3), 635-670. https://doi.org/10.1177/10780874211021688
+
+Carnes, Nicholas, and Noam Lupu. “Rethinking the Comparative Perspective on Class and Representation: Evidence from Latin America.” American Journal of Political Science, vol. 59, no. 1, 2015, pp. 1–18. JSTOR, http://www.jstor.org/stable/24363593. Accessed 29 Apr. 2024.
+
+Jesse H. Rhodes and Brian F. Schaffner (2017), "Testing Models of Unequal Representation: Democratic Populists and Republican Oligarchs?", Quarterly Journal of Political Science: Vol. 12: No. 2, pp 185-204. http://dx.doi.org/10.1561/100.00016077
+
+Lupu, N., & Warner, Z. (2022). Affluence and congruence: Unequal representation around the world. The Journal of Politics, 84(1), 276–290. https://doi.org/10.1086/714930 
+
+Potential points that can be made:
+
+1) Descriptively unrepresentative politicians have different
+preferences than their constituents (Carnes and Lupu, 2015;
+Lupu and Warner, 2021)
+
+Higher government spending in the US after removal of wealth
+requirements on who can run, not after extension of the
+franchise (Corvalan et al., 2020)
+
+Politicians’ background seems to matter for politicians’ behavior
+(Desai and Frey, 2023)
+Women choose different policies than males
+Wealthier legislators vote more conservatively than poorer ones
+(Eggers & Klasnja, 2019)
+Veteran/Female/Minority representatives more likely to assist
+Veteran/Female/Minority constituents (Lowande et al., 2019)
+
+2) Descriptively unrepresentative politicians may know less about
+their constituents
+Politicians’ decisions require information about needs
+I Information comes from constituents
+I Constituents may feel less comfortable talking with
+non-similar representatives
+I Some citizens will turn out to vote only if represented by a
+similar representative
+Lack of information ⇒ Some non-congruence in substantive
+representation
+
+Please remember to balance your arguments while keeping the flow natural. Avoid words like "counterarguments" in the subtitles. For example, Rhodes and Schnaffer (2017) shows legislators align more with poorer constituents, albeit on unimportant votes. Please come to a somewhat balanced conclusion e.g. The fact that the representatives are not descriptively representative of the constituents is a threat to democracy, but representative regimes can still sometimes represent the interests of the people.
+
+Answer:
+
+Title: Economic Disparities and Representation: A Critical Examination of U.S. Congress
+
+Introduction
+
+The disparity in median net worth between Members of Congress and the average American family, highlighted by the figures from 2018, raises fundamental questions about the representational effectiveness of the U.S. legislative system. With Congress members possessing an average net worth nearly four times that of their constituents, this essay examines the impact such disparities have on democratic representation, policy formulation, and political engagement, integrating concepts from political theory and empirical research.
+
+Economic Disparities and Their Influence on Policy Preferences
+
+The significant economic gulf between legislators and the general populace can lead to a divergence in policy preferences. Studies like those by Carnes and Lupu (2015) and further explored by Lupu and Warner (2022) show that wealthier politicians often have different priorities than their less affluent constituents. These differences can manifest in legislative agendas that are more aligned with the interests of the affluent, potentially at the expense of broader public needs.
+
+This point is further substantiated by research from Eggers & Klasnja (2019), which suggests that wealthier legislators tend to vote more conservatively, particularly on economic issues that affect wealth distribution and social welfare programs. The consequence is a legislative body that may be less responsive to the needs of lower-income voters, whose immediate concerns include healthcare, education, and economic security.
+
+Impact of Background Diversity in Political Representation
+
+The composition of legislative bodies not only influences policy but also affects constituent relations and legislative empathy. The study by Desai and Frey (2023) indicates that a politician's background significantly impacts their legislative behavior, suggesting that personal experience influences policy decisions. Additionally, Lowande et al. (2019) highlight that female, minority, and veteran lawmakers are more likely to assist constituents who share their background. This trend underscores the importance of a diverse legislative body capable of understanding and responding to a spectrum of social and economic issues.
+
+Moreover, the presence of economic barriers to entering politics, which the U.S. has historically mitigated by removing wealth requirements for candidacy (Corvalan et al., 2020), suggests that while some progress has been made, substantial economic disparities remain. This situation points to a need for continued reforms in campaign financing and candidate support systems to ensure broader representation.
+
+Substantive vs. Descriptive Representation: Balancing the Scales
+
+While U.S. legislators may not always mirror the economic demographics of their constituents (descriptive representation), there is evidence to suggest they can still effectively represent their interests (substantive representation). Rhodes and Schaffner (2017) present a nuanced view where legislators, despite their wealth, align with poorer constituents on certain issues. This indicates that representatives may still act in the broader public interest, even if their economic status differs from that of their voters.
+
+However, the efficacy of this substantive representation can be compromised by information asymmetries. Wealthier legislators may lack firsthand understanding of the challenges faced by lower-income constituents, and there is a risk that constituents may feel alienated or less inclined to engage with representatives whom they perceive as dissimilar. This scenario can lead to a feedback loop where underrepresented groups become less politically active, further diminishing their influence on policy.
+
+Conclusion
+
+The disparity in net worth between Members of Congress and the average American highlights significant challenges for representative democracy. While economic disparities can influence legislative priorities and potentially alienate lower-income constituents, mechanisms within the democratic system allow for some level of effective representation across economic lines. To enhance this capacity, efforts must be focused on reducing barriers to political entry and increasing the diversity of political representatives. By doing so, the U.S. can move closer to a representative regime that more accurately and empathetically reflects the economic realities of its citizens, thereby reinforcing the foundational democratic principle that governance should be of the people, by the people, and for the people.

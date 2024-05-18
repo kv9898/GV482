@@ -1,0 +1,1139 @@
+---
+title: " "
+date: last-modified
+authors:
+  - name: "a"
+execute:
+  echo: false
+  warning: false
+  error: false
+engine: knitr
+#csl: extra/apa.csl
+#bibliography: references.bib
+format:
+  orcid-pdf:
+    number-sections: false
+    fig-pos: 'H'
+    include-in-header:
+        text: |
+           \usepackage{pdfpages}
+           \usepackage{pdflscape}
+            \newcommand{\blandscape}{\begin{landscape}}
+            \newcommand{\elandscape}{\end{landscape}}
+---
+
+\includepdf[pages=-]{cover.pdf}
+
+```{r setup}
+need <- c('tidyverse') # list packages needed
+have <- need %in% rownames(installed.packages()) # checks packages you have
+if(any(!have)) install.packages(need[!have]) # install missing packages
+invisible(lapply(need, library, character.only=T))
+```
+
+# Section A (50 points)
+
+## Question 1
+
+(a) We first look for the policy choice of a non-captured candidate $R$ with the result for a non-captured candidate $L$ following by symmetry. Remember that a non-captured candidate $R$ learns the state before making a policy decision. We denote by $p_R(\theta)$ $R$'s policy choice as a function of $\theta\in\{−1,0,1\}.$ Here, we assume that candidate $R$ can choose any of the policy available.
+
+    (i) Show that a non-captured candidate $R$ chooses $p_R(1) = 1$ (i.e., policy one when the state is one).
+
+        \color{blue}
+
+        Assume $R$ has proposed a platform of $P_R=\{-1,0,1\}$ (so she is can choose any policy available), she is not captured $C_R=1$, and she is elected by $V$ (so she is able to choose a policy to implement).
+
+        The payoffs for $R$ from choosing different policies after observing the state $\theta=1$ are:
+
+        ```{=tex}
+        \begin{align*}
+        U_R(p_R=1|\theta=1)&=-|1-(1+b_R)|=-b_R \\
+        U_R(p_R=0|\theta=1)&=-|0-(1+b_R)|=-b_R-1 \\
+        U_R(p_R=-1|\theta=1)&=-|-1-(1+b_R)|=-b_R-2
+        \end{align*}
+        ```
+        Therefore, $U_R(p_R=1|\theta=1)>U_R(p_R=0|\theta=1)>U_R(p_R=-1|\theta=1)$. It is best for candidate $R$ to choose policy 1 when the state is one ($p_R(1)=1$).
+
+        \color{black}
+
+    (ii) Show that a non-captured candidate $R$ chooses $p_R(0) = 0$ if $b_R\in[0,1/2]$ and $p_R(0)=1$ if $b_R>1/2$.
+
+         \color{blue}
+
+         The payoffs for $R$ from choosing different policies after observing the state $\theta=0$ are:
+
+         ```{=tex}
+         \begin{align*}
+         U_R(p_R=1|\theta=0)&=-|1-(0+b_R)|=-|b_R-1| \\ 
+         U_R(p_R=0|\theta=0)&=-|0-(0+b_R)|=-b_R \\ 
+         U_R(p_R=-1|\theta=0)&=-|-1-(0+b_R)|=-b_R-1
+         \end{align*}
+         ```
+         It can be seen choosing -1 is always worse than choosing 0 for $R$, therefore we remove it as an option.
+
+         When $b_R\in[0,1]$:
+
+         ```{=tex}
+         \begin{align*}
+         U_R(p_R=1|\theta=0)&=b_R-1 \\
+         U_R(p_R=0|\theta=0)&=-b_R
+         \end{align*}
+         ```
+         Between 1 and 0, choosing policy 0 is more preferable when:
+
+         ```{=tex}
+         \begin{align*}
+         -b_R&\geq b_R-1\\
+         2b_R&\leq1\\
+         b&\leq1/2
+         \end{align*}
+         ```
+         Therefore, when $b_R\in[0,1/2]$, R chooses $p_R(0)=0$. Conversely, when $1/2<b_R\leq1$, $R$ chooses $p_R(0)=1$.
+
+         When $b_R>1$:
+
+         $$
+         U_R(p_R=1|\theta=0)=-b_R+1>-b_R=U_R(p_R=0|\theta=0)
+         $$
+
+         Therefore, when $b_R>=1$, $R$ also chooses $p_R(0)=1$.
+
+         In sum, when $b_R\in[0,1/2]$, R chooses $p_R(0)=0$. Conversely, when $b_R>1/2$, $R$ chooses $p_R(0)=1$.
+
+         \color{black}
+
+    (iii) Show that a non-captured candidate $R$ chooses $p_R(−1) = −1$ if $b_R\in[0, 1/2]$, $p_R(−1) = 0$ if $b_R \in(1/2, 3/2]$, and $p_R(−1) = 1$ if $b_R > 3/2$.
+
+          \color{blue}
+
+          The payoffs for $R$ from choosing different policies after observing the state $\theta=-1$ are:
+
+          ```{=tex}
+          \begin{align*}
+          U_R(p_R=1|\theta=-1)&=-|1-(-1+b_R)|=-|b_R-2| \\
+          U_R(p_R=0|\theta=-1)&=-|0-(-1+b_R)|= -|b_R-1|\\
+          U_R(p_R=-1|\theta=-1)&=-|-1-(-1+b_R)|=-b_R
+          \end{align*}
+          ```
+          When $0<b_R\leq1$:
+
+          ```{=tex}
+          \begin{align*} 
+          U_R(p_R=1|\theta=-1)&=b_R-2 \\ 
+          U_R(p_R=0|\theta=-1)&=b_R-1\\ 
+          U_R(p_R=-1|\theta=-1)&=-b_R 
+          \end{align*}
+          ```
+          In this case, choosing 0 is more preferable than choosing 1. Now we only compare between -1 and 0. Choosing -1 over 0 requires:
+
+          ```{=tex}
+          \begin{align*}
+          -b_R&\geq b_R-1 \\
+          2b_R&\leq 1 \\
+          b_R&\leq1/2
+          \end{align*}
+          ```
+          Therefore, when $b_R\in[0,1/2]$, $R$ chooses $p_R(-1)=-1$; when $b_R\in(1/2,1]$, $R$ chooses $p_R(-1)=0$.
+
+          When $1<b_R\leq2$:
+
+          ```{=tex}
+          \begin{align*}
+          U_R(p_R=1|\theta=-1)&=b_R-2 \\  
+          U_R(p_R=0|\theta=-1)&=-b_R+1\\  
+          U_R(p_R=-1|\theta=-1)&=-b_R
+          \end{align*}
+          ```
+          In this case, choosing 0 is always more preferable than choosing -1. Now we only compare between 0 and 1. Choosing 0 over 1 requires:
+
+          ```{=tex}
+          \begin{align*}
+          -b_R+1&\geq b_R-2 \\
+          2b_R&\leq3 \\
+          b_R&\leq3/2
+          \end{align*}
+          ```
+          Therefore, when $b_R\in(1,3/2]$, $R$ chooses $p_R(-1)=0$; when $b_R\in(3/2,2]$, $R$ chooses $p_R(-1)=1$.
+
+          When $b_R>2$:
+
+          ```{=tex}
+          \begin{align*}
+          U_R(p_R=1|\theta=-1)&=-b_R+2 \\   
+          U_R(p_R=0|\theta=-1)&=-b_R+1\\   
+          U_R(p_R=-1|\theta=-1)&=-b_R
+          \end{align*}
+          ```
+          In this case ($b_R>2$), choosing 1 is always the most preferable.
+
+          In sum, when $b_R[0,1/2]$, $R$ chooses $p_R(-1)=-1$; when $b_R[1/2,3/2]$, $R$ chooses $p_R(-1)=0$; when $b_R>3/2$, $R$ chooses $p_R(-1)=1$.
+
+          \color{black}
+
+(b) We now look at the electoral equilibrium. Recall that candidates commit to a platform that constrains the policy they can implement if they win: $p_J\in P_J$. To gain some intuition, we first compute a few expected utilities for the voter as a function of different ambiguous platforms.
+
+    (i) Suppose that $R$ is captured and remember that policy one always belongs to $P_R$. Show that the voter's expected payoff from a candidate $R$ being captured is −1.
+
+        \color{blue}
+
+        Suppose $R$ is elected by $V$. In this case, a captured $R$ will always implement policy $p_R(C_R=1)=1$:
+
+        $$
+        U_R(p_R=1|C_R=1)=0>-\infty=U_R(p_R\neq1|C_R=1)
+        $$
+
+        In this case, the expected payoff of the voter from electing $R$ is the weighted sum of payoffs in different states of the world:
+
+        ```{=tex}
+        \begin{align*}
+        EU_V(C_R=1)&=\Pr(\theta=-1)(-|1-(-1)|)+\Pr(\theta=0)(-|1-0|)+\Pr(\theta=1)(-|1-1|) \\
+        &=\lambda(-2)+(1-2\lambda)(-1)+\lambda(0) \\
+        &=-2\lambda-1+2\lambda \\
+        &=-1
+        \end{align*}
+        ```
+        Therefore, voter's expected payoff from a candidate $R$ being captured is -1.
+
+        \color{black}
+
+    (ii) Suppose that $b_R\in[0, 1/2]$ and $P_R = \{0, 1\}$. Show that the voter's expected utility if $R$ is elected is $−(1 − q)\lambda − q$.
+
+         \color{blue}
+
+         Note from (a) (iii) that, when $R$ is not captured and $b_R\in(0,1]$ in the state of -1, $R$ always chooses 0 over 1, when -1 is not an option. Also from (a), when $b_R\in[0,1/2]$ , $R$ chooses 1 in the state of 1 and 0 in the state of 0.
+
+         In this case, the voter's expected utility is the weighted sum of payoffs from possibilities that $R$ is captured and not captured:
+
+         ```{=tex}
+         \begin{align*}
+          EU_V(R)=&\Pr(C_R=1)EU_V(C_R=1)+\Pr(C_R=0)EU_V(C_R=0) \\
+          =&q(-1)+(1-q)(\Pr(\theta=-1)U_V(p=0|\theta=-1)+\Pr(\theta=0)U_V(p=0|\theta=0)+\\
+          &\Pr(\theta=1)U_V(p=1|\theta=1)) \\
+          =&-q+(1-q)(\lambda(-|0-(-1)|)+(1-2\lambda)(-|0-0|)+\lambda(-|1-1|))\\
+          =&-q+(1-q)(-\lambda+(1-2\lambda)0+\lambda(0)) \\
+          =&-q+(1-q)(-\lambda) \\
+          =&-(1-q)\lambda-q
+          \end{align*}
+         ```
+         \color{black}
+
+    (iii) Suppose that $b_R > 3/2$ and $P_R = \{−1, 0, 1\}$. Show that the voter's expected utility if $R$ is elected is −1.
+
+          \color{blue}
+
+          From (a), when $b_R>3/2$, $R$ chooses 1 in all states. Therefore, $R$ chooses $p_R=1$ when she is captured *and* when she is not captured.
+
+          The voter's expected utility is calculated as follows:
+
+          ```{=tex}
+          \begin{align*}
+          EU_V(R)=&\Pr(C_R=1)EU_V(C_R=1)+\Pr(C_R=0)EU_V(C_R=0) \\
+          =&q(-1)+(1-q)EU_V(p=1) \\
+          =&-q+(1-q)(\Pr(\theta=-1)U_V(p=1|\theta=-1)+\Pr(\theta=0)U_V(p=1|\theta=0)+\\
+          &\Pr(\theta=1)U_V(p=1|\theta=1))
+          \\
+          =&-q+(1-q)(\lambda(-|1-(-1)|)+(1-2\lambda)(-|1-0|)+\lambda(-|1-1|)) \\
+          =&-q+(1-q)(\lambda(-2)+(1-2\lambda)(-1)+\lambda(0))\\
+          =&-q+(1-q)(-2\lambda-1+2\lambda) \\
+          =&-q+(1-q)(-1) \\
+          =&-q-1+q \\
+          =&-1
+          \end{align*}
+          ```
+          \color{black}
+
+(c) With the result from (b) in mind, we can determine the electoral equilibria as a function of $b_R$ (recall that $b_L = −b_R$). In this question, we suppose that $b_R ∈ [0, 1/2]$.
+
+    (i) Suppose that $P_L = \{−1, 0\}$ (i.e., candidate $L$ commits to implement 0 or −1) and $P_R = \{−1, 0, 1\}$ (i.e., candidate $R$ does not restrict his policy choice). Show that candidate $R$ wins the election with probability one.
+
+        \color{blue}
+
+        Since $-b_L=b_R\in[0,1/2]$, and $L$ mirrors $R$, the expected utility if $L$ is elected with platform $P_L\in\{-1,0\}$ mirrors that of (b) (ii), therefore the voter's expected utility from electing $L$ is:
+
+        $$
+        EU_V(L)=-(1-q)\lambda-q
+        $$
+
+        Since $R$ does not restrict her policy choice and $b_R\in[0,1/2]$ , she always chooses a policy that matches the state ($p=\theta$) if she is not captured, which is a conclusion from (a). Also, recall from (b) (i) that when $R$ is captured, the voter's expected payoff is -1. Therefore, the voter's expected utility from electing $R$ is:
+
+        ```{=tex}
+        \begin{align*}
+        EU_V(R)&=\Pr(C_R=1)(-1)+\Pr(C_R=0)(-|\theta-\theta|) \\
+        &=q(-1)+(1-q)(0))\\
+        &=-q
+        \end{align*}
+        ```
+        Since $\lambda\geq0$ and $q\leq1$,
+
+        $$
+        EU_V(R)=-q>-(1-q)\lambda-q=EU_V(L)
+        $$
+
+        Hence, $V$ always elects candidate $R$ and $R$ wins the election with probability one.
+
+        \color{black}
+
+    (ii) Explain briefly why in any equilibrium, candidate $R$ proposes $P_R = \{−1, 0, 1\}$ if $b_R \in [0, 1/2]$.
+
+         \color{blue}
+
+         The candidate $J$'s expected utility is given by:
+
+         $$
+         U_J(P)=\Pr(C_J=1)U_J(P|C_J=1)+\Pr(C_J=0)+U_J(P|C_J=0)
+         $$
+
+         In any equilibrium, candidate $J$ seeks to maximises her expected payoff. The first part of the equation (when $J$ is captured) is maximised by including the preferred policy (-1 for $L$, 1 for $R$) in $P$. The second part (when $J$ is not captured) is maximised by *winning the election*. This is because, by winning the election and choosing $J$'s own preferred policy always the same or higher payoff than letting the opposing candidate choose her preferred policy.
+
+         Therefore, we discussed the platform $P$ which offers the highest chances of being elected. We only discuss platforms that include the preferred policy (-1 for $L$, 1 for $R$) as this is required to maximise the expected payoff when $J$ is captured, and this is stated as an assumption.
+
+         From (c) (i) we know the expected utility from electing a candidate that proposes $P_J=\{-1,0,1\}$ is:
+
+         $$
+         EU_V(J|P_J=\{-1,0,1\})=-q
+         $$
+
+         We know the expected utility from electing a candidate that proposes only the preferred policy (-1 for $L$, 1 for $R$) and 0 is:
+
+         $$
+         EU_V(L|P_L=\{-1,0\})=EU_V(R|P_R=\{0,1\})=-1(1-q)\lambda-q
+         $$
+
+         From (b) (i) and (b) (iii) we know the expected utility from electing a candidate that proposes only the preferred policy (-1 for $L$, 1 for $R$) is:
+
+         $$
+         EU_V(L|P_L=\{-1\})=EU_V(R|P_R=\{1\})=-1
+         $$
+
+         From (c) (i), we know that the voter chooses the candidate that proposes all policies over the candidate that proposes 2 policies only. 
+         
+         Also, ince $q<1$, $-q>-1$ and the voter always chooses the candidate that proposes all policies over the candidate that proposes the preferred policy only.
+
+         We also know that the voter chooses a candidate with platform $\{-1,0,1\}$ over one with $\{-1,1\}$ as, if the candidate is captured, the voter is indifferent between two platforms (-1 or 1 is always chosen); if the candidate is not captured, {-1,1} offers a lower payoff to the voter (and candidate) when the state is 0, because 0 is no longer a policy option.
+
+         Therefore for either candidate $J$, all policies are proposed in the platform $P_J=\{-1,0,1\}$.
+
+         Hence, candidate $R$ proposes $P_R=\{-1,0,1\}$.
+
+         \color{black}
+
+(d) In this question, we assume that $b_R\in(1/2, 1]$ ($b_L\in[−1, −1/2))$. We show that there exist equilibria with the following features:
+
+    -   Candidate $R$ is elected with probability 1/2;
+
+    -   $P^*_L=\{-1,1\}=P^*_R$.
+
+    (i) Suppose that $P_L = \{−1, 1\} = P_R$, show that the voter's expected utility from electing candidate $J \in \{L, R\}$ is $−(1 − q)(1 − 2\lambda) − q$.
+
+        \color{blue}
+
+        When $P_R=\{-1,1\}$ and $b_R\in(1/2,1]$, we know from (a) that $R$ chooses 1 when the state is 1 or 0:
+
+        \begin{align*}
+        p_R(1)&=1 \\
+        p_R(0)&=1
+        \end{align*} Recall from (a) (iii) that when the state is -1 and $b_R\leq1$:
+
+        ```{=tex}
+        \begin{align*}
+        U_R(p_R=1|\theta=-1)&=b_R-2 \\
+        U_R(p_R=-1|\theta=-1)&=-b_R
+        \end{align*}
+        ```
+        We can show that, when the state is -1, $R$ chooses policy -1 :
+
+        ```{=tex}
+        \begin{align*}
+        b_R&<1\\
+        2b_R&<2\\
+        2b_R-b_R-2&<2-b_R-2\\
+        b_R-2&<-b_R \\
+        \end{align*}
+        ```
+        Therefore, the expected utility of the voter to elect $R$ in this case is:
+
+        ```{=tex}
+        \begin{align*}
+        EU_V(R)=&\Pr(C_R=1)(-1)+\Pr(C_R=0)(\Pr(\theta=-1)(-|-1-(-1)|)+\\
+        &\Pr(\theta=0)(-|1-0|)+\Pr(\theta=1)(-|1-1|)) \\
+        =&-q+(1-q)(\lambda(0)+(1-2\lambda)(-1)+\lambda(0))\\
+        =&-q-(1-q)(1-2\lambda) \\
+        =&-(1-q)(1-2\lambda)-q
+        \end{align*}
+        ```
+        Since $L$ mirrors $R$, the result holds for both candidate:
+
+        $$
+        EU_V(J\in\{L,R\})=-(1-q)(1-2\lambda)
+        $$
+
+        \color{black}
+
+    (ii) Suppose that $P_L = \{−1, 1\} = P_R$, show that $R$'s expected payoff is:
+
+         ```{=tex}
+         \begin{align*}
+         V_R=&(1-q)(\frac{1}{2}(\lambda(-b_R)+(1-2\lambda)(-(1-b_R))+\lambda(-b_R))\\
+         &+\frac{1-q}{2}(\lambda(-b_R)+(1-2\lambda)(-(1+b_R))+\lambda(-b_R))\\
+         &+\frac{q}{2}(\lambda(-(2+b_R))+(1-2\lambda)(-(1+b_R))+\lambda(-b_R)))
+         \end{align*}
+         ```
+         \color{blue}
+
+         Firstly, in this case, if $R$ is captured, the expected payoff of $R$ is always 0. This is because, if she is not elected, including 1 in $P_L$ alone gives a payoff of 0; if she is elected, she will definitely implement $p=1$ as this offers a higher payoff (0) than otherwise ($-\infty$).
+
+         Secondly, if $R$ is not captured, we know from (i) that she implements policy 1 when the state is 1 or 0, and -1 when the state is -1. Therefore, when $R$ is not captured and elected (with probability 1/2), her expected payoff is
+
+         ```{=tex}
+         \begin{align*}
+         &V_R(C_R=0,\text{elected}) \\
+         =&\Pr(\theta=-1)(-|-1-(-1+b_R)|)\\ 
+         &+\Pr(\theta=0)(-|1-(0+b_R)|)+\Pr(\theta=1)(-|1-(1+b_R)|) \\
+         =&\lambda(-b_R)+(1-2\lambda)(-(1-b_R))+\lambda(-b_R)
+         \end{align*}
+         ```
+         Thirdly, if $R$ is not captured, $L$ is elected and not captured, we know in a mirroring way that she implements policy -1 when the state is -1 or 0, and 1 when the state is 1. Therefore, in this case, $R$'s expected payoff is:
+
+         ```{=tex}
+         \begin{align*} 
+         &V_R(C_R=0,C_L=0,\text{not elected}) \\ 
+         =&\Pr(\theta=-1)(-|-1-(-1+b_R)|)\\  
+         &+\Pr(\theta=0)(-|-1-(0+b_R)|)+\Pr(\theta=1)(-|1-(1+b_R)|) \\ 
+         =&\lambda(-b_R)+(1-2\lambda)(-(1+b_R))+\lambda(-b_R) 
+         \end{align*}
+         ```
+         Fourthly, if $R$ is not captured, $L$ is elected and captured, we know that she always implements policy -1. In thiscase, $R$'s expected payoff is:
+
+         ```{=tex}
+         \begin{align*} 
+         &V_R(C_R=0,C_L=1,\text{not elected}) \\ 
+         =&\Pr(\theta=-1)(-|-1-(-1+b_R)|)\\  
+         &+\Pr(\theta=0)(-|-1-(0+b_R)|)+\Pr(\theta=1)(-|-1-(1+b_R)|) \\ 
+         =&\lambda(-b_R)+(1-2\lambda)(-(1+b_R))+\lambda(-(2+b_R))  \\
+         =&\lambda(-(2+b_R))+(1-2\lambda)(-(1+b_R))+\lambda(-b_R)
+         \end{align*}
+         ```
+         Then, we can derive $R$'s expected payoff as a weighted sum of the payoffs above:
+
+         ```{=tex}
+         \begin{align*}
+         V_R=&\Pr(C_R=1)0\\
+         &+\Pr(C_R=0)\Pr(\text{elected})V_R(C_R=0,\text{elected})\\
+         &+\Pr(C_R=0)\Pr(C_L=0)(1-\Pr(\text{elected}))V_R(C_R=0,C_L=0,\text{not elected})\\
+         &+\Pr(C_R=0)\Pr(C_L=1)(1-\Pr(\text{elected}))V_R(C_R=0,C_L=1,\text{not elected}) \\
+         =&0+(1-q)(1/2)(\lambda(-b_R)+(1-2\lambda)(-(1-b_R))+\lambda(-b_R)) \\
+         &+(1-q)(1-q)(1/2)(\lambda(-b_R)+(1-2\lambda)(-(1+b_R))+\lambda(-b_R))\\
+         &+(1-q)(q)(1/2)(\lambda(-(2+b_R))+(1-2\lambda)(-(1+b_R))+\lambda(-b_R)) \\
+         =&(1-q)(\frac{1}{2}(\lambda(-b_R)+(1-2\lambda)(-(1-b_R))+\lambda(-b_R)) \\ 
+         &+\frac{1-q}{2}(\lambda(-b_R)+(1-2\lambda)(-(1+b_R))+\lambda(-b_R))\\ 
+         &+\frac{q}{2}(\lambda(-(2+b_R))+(1-2\lambda)(-(1+b_R))+\lambda(-b_R)))
+         \end{align*}
+         ```
+         \color{black}
+
+    (iii) Explain why $\hat{P}_R = \{0, 1\}$ is not a profitable deviation for candidate $R$ (recall that we assume that $L$ offers $P_L = \{−1, 1\}$).
+
+          \color{blue}
+
+          If $R$ proposes platform $\hat{P}_R=\{0,1\}$ and $R$ is elected, from part (a), $R$'s policy choices would be:
+
+          \begin{align*}
+          \hat{p}_R(1)&=1 \\
+          \hat{p}_R(0)&=1 \\
+          \hat{p}_R(-1)&=0 \\
+          \end{align*}
+
+          The voter's expected payoff from voting $R$ would become:
+
+          \begin{align*}
+          \hat{EU}_V(R)=&\Pr(C_R=1)(-1)+\Pr(C_R=0)(\Pr(\theta=-1)(-|0-(-1)|) \\
+          &+\Pr(\theta=0)(-|1-0|)+\Pr(\theta=1)(-|1-1|)) \\
+          =&-q+(1-q)(\lambda(-1)+(1-2\lambda)(-1)+\lambda(0)) \\
+          =&-q-(1-q)(1-\lambda) \\
+          =&-(1-q)(1-\lambda)-q
+          \end{align*}
+
+          $1-\lambda\geq1-2\lambda$, therefore:
+
+          $$
+          \hat{EU}_V(R)=-(1-q)(1-\lambda)-q\leq-(1-q)(1-2\lambda)-q=EU_V(R)=EU_V(L)
+          $$
+
+          Therefore, if $R$ deviates by proposing $\hat{P}_R=\{0,1\}$, the voter would elect $L$, who proposes $P_L=\{-1,1\}$ and offers a higher expected utility for the voter.
+
+          In this case, $R$'s expected payoff is:
+
+          \begin{align*}
+          \hat{V}_R=&\Pr(C_R=1)0+\Pr(C_R=0)\Pr(C_L=0)V_R(C_R=0,C_L=0,\text{not elected})\\
+          &+\Pr(C_R=0)\Pr(C_L=1)V_R(C_R=0,C_L=1,\text{not elected})\\
+          =&(1-q)(1-q)(\lambda(-b_R)+(1-2\lambda)(-(1+b_R))+\lambda(-b_R)) \\
+          &+(1-q)q(\lambda(-(2+b_R))+(1-2\lambda)(-(1+b_R))+\lambda(-b_R))
+          \end{align*}
+
+          Therefore,
+
+          \begin{align*}
+          &\hat{V}_R-V_R \\
+          =&(1-q)(1-q)(\lambda(-b_R)+(1-2\lambda)(-(1+b_R))+\lambda(-b_R)) \\ 
+          &+(1-q)q(\lambda(-(2+b_R))+(1-2\lambda)(-(1+b_R))+\lambda(-b_R)) \\
+          &-(1-q)(\frac{1}{2}(\lambda(-b_R)+(1-2\lambda)(-(1-b_R))+\lambda(-b_R)) \\ &+\frac{1-q}{2}(\lambda(-b_R)+(1-2\lambda)(-(1+b_R))+\lambda(-b_R))\\ &+\frac{q}{2}(\lambda(-(2+b_R))+(1-2\lambda)(-(1+b_R))+\lambda(-b_R))) \\
+          =&(1-q)[\frac{1-q}{2}(\lambda(-b_R)+(1-2\lambda)(-(1+b_R))+\lambda(-b_R))\\
+          &+\frac{q}{2}(\lambda(-(\textcolor{red}{2}+b_R))+(1-2\lambda)(-(1+b_R))+\lambda(-b_R))]\\
+          &-(1-q)\frac{1}{2}(\lambda(-b_R)+(1-2\lambda)(-(1-b_R))+\lambda(-b_R)) \\
+          =&(1-q)[\frac{1-q}{2}(\lambda(-b_R)+(1-2\lambda)(-(1+b_R))+\lambda(-b_R))\\ &+\frac{q}{2}(\lambda(-(b_R))+(1-2\lambda)(-(1+b_R))+\lambda(-b_R))\textcolor{red}{-\lambda q}]\\ 
+          &-(1-q)\frac{1}{2}(\lambda(-b_R)+(1-2\lambda)(-(1+b_R\textcolor{red}{-2b_R}))+\lambda(-b_R)) \\
+          =&(1-q)\frac{1}{2}(\lambda(-b_R)+(1-2\lambda)(-(1+b_R))+\lambda(-b_R))\\
+          &\textcolor{red}{-\lambda q(1-q)-(1-q)(1-2\lambda)2b_R}-(1-q)\frac{1}{2}(\lambda(-b_R)+(1-2\lambda)(-(1+b_R))+\lambda(-b_R)) \\
+          =&-\lambda q(1-q)-(1-q)(1-2\lambda)2b_R\leq0
+          \end{align*}
+
+          Therefore, $\hat{P}_R=\{0,1\}$ is not a profitable deviation for candidate $R$. Intuitively, such deviation would lead to a electoral defeat. When $R$ is captured, $R$ is indifferent between the two strategies; when $R$ is not captured, $P_R=\{-1,1\}$ weakly dominates $\hat{P}_R=\{0,1\}$ as being able to choose one's own preferred policy is at least as good as letting one's enemy choose their policy.
+
+          \color{black}
+
+    (iv) Show that there exists an equilibrium in which $P^*_L=\{-1,1\}=P^*_R$.
+
+         \color{blue}
+
+         When $P^*_L=\{-1,1\}=P^*_R$, the voter *V* is indifferent between the two candidates, therefore there is no possible "deviation" by the voter $V$. This is because, the two platforms are identical, and $V$ cannot update her belief on whether the candidates are captured.
+
+         We know from assumption that $R$ must include 1 and $L$ must include -1 in their platforms and from (iii) that they do not have an incentive to deviate to $\hat{P}_R=\{0,1\}$ or $\hat{P}_L=\{-1,0\}$. We also know from (b) (iii) that proposing only 1 or -1 means they would give the voter an expected utility of -1, 
+
+         Therefore, we now discuss the possibility of deviation $\hat{P}_J=\{-1,0,1\}$.
+
+         We now attempt to show that $R$ has no incentive to deviate in this way since $L$ simply mirrors $R$. From part(a), we know that if $R$ proposes $P_R=\{-1,0,1\}$ and gets elected, her policy choices would be:
+
+         \begin{align*}
+         p_R(1)&=1\\
+         p_R(0)&=1 \\
+         p_R(-1)&=0
+         \end{align*}
+
+         Therefore, this is identical to the platform $P_R=\{0,1\}$ as $R$ would never implement policy -1, which is also known to the voter $V$. Therefore, this platform is treated the same as the one in part (iii) and the voter $V$ would choose a candidate with platform $\{-1,1\}$ over $\{-1,0,1\}$.
+
+         In this case, the expected utility of $R$ from this deviation is the same as in part (iii), and it is not profitable.
+         
+         Similarly, a deviation to $\hat{P}_R=\{1\}$ or $\hat{P}_L=\{-1\}$ would not be profitable. This is because, offering such platforms only give the voter $V$ an expected utility of -1.
+         
+         Recall that a platform of $\{-1,1\}$ gives a payoff of:
+         
+         \begin{align*}
+         EU_V(P=\{-1,1\})&=-(1-q)(1-2\lambda)-q \\
+         &=-(1-2\lambda)+q(1-2\lambda-1) \\
+         &=-(1-2\lambda)-2\lambda \\
+         &=-1+2\lambda(1-q)\geq-1
+         \end{align*}
+         
+         Therefore, the voter would choose the candidate with $\{-1,1\}$. In case of not being elected, the expected utility of the deviator would be the same as in (iii), which is not profitable.
+
+         At this stage, we have shown that neither $V$ nor L nor R has an incentive to deviate when $P^*_L=\{-1,1\}=P^*_R$ and $V$ elects either candidate. Hence, an equilibrium exists in this case.
+
+         \color{black}
+
+(e) In this last formal question, we introduce the possibility that a populist runs in the election.
+
+    (i) Show that if elected $O$ implements policy $p^*_O = 0$.
+
+        \color{blue}
+
+        Since $O$ does not observe the state $\theta$, he uses his prior beliefs to maximise her payoff:
+
+        ```{=tex}
+        \begin{align*}
+        \Pr(\theta=-1)&=\lambda \\
+        \Pr(\theta=0)&=1-2\lambda\\
+        \Pr(\theta=1)&=\lambda
+        \end{align*}
+        ```
+        When elected, $O$'s expected payoffs are as follows:
+
+        ```{=tex}
+        \begin{align*}
+        EU_O(-1)&=\Pr(\theta=-1)(-|-1-(-1)|)+\Pr(\theta=0)(-|-1-0|)+\Pr(\theta=1)(-|-1-1|) \\
+        &=\lambda(0)+(1-2\lambda)(-1)+\lambda(-2) \\
+        &=2\lambda-1-2\lambda \\
+        &=-1 \\
+        EU_O(0)&=\Pr(\theta=-1)(-|0-(-1)|)+\Pr(\theta=0)(-|0-0|)+\Pr(\theta=1)(-|0-1|) \\ 
+        &=\lambda(-1)+(1-2\lambda)(0)+\lambda(-1) \\ 
+        &=-\lambda-\lambda \\
+        &=-2\lambda \\
+        EU_O(1)&=\Pr(\theta=-1)(-|1-(-1)|)+\Pr(\theta=0)(-|1-0|)+\Pr(\theta=1)(-|1-1|) \\ 
+        &=\lambda(-2)+(1-2\lambda)(-1)+\lambda(0) \\ 
+        &=-2\lambda-1+2\lambda \\ 
+        &=-1
+        \end{align*}
+        ```
+        Since $\lambda$ denotes the probability of the state being 1 and 0, $2\lambda\leq1$. Therefore, $-2\lambda\geq-1$. Hence. $EU_O(0)\geq EU_O(-1)=EU_O(1)$. Therefore, If elected $O$ implements policy $p^*_O=0$.
+
+        \color{black}
+
+    (ii) Suppose that $b_R\in[0, 1/2]$. Explain why $O$ wins if and only if $q > 2\lambda$.
+
+         \color{blue}
+
+         The voter's expected utility from electing $O$ is:
+
+         ```{=tex}
+         \begin{align*}
+         EU_V(O)&=\Pr(\theta=-1)(-|0-(-1)|)+\Pr(\theta=0)(-|0-0|)+\Pr(\theta=1)(-|0-1|) \\  
+         &=\lambda(-1)+(1-2\lambda)(0)+\lambda(-1) \\  
+         &=-\lambda-\lambda \\ &=-2\lambda \\
+         \end{align*}
+         ```
+         Recall from (c) (2) that, when $b_R\in[0,1/2]$, $L$ and $R$ propose $P_J=\{-1,0,1\}$ and electing $L$ or $R$ offers the voter a payoff of:
+
+         $$
+         EU_V(L)=EU_V(R)=-q
+         $$
+
+         Therefore, for $O$ to win, it requires:
+
+         ```{=tex}
+         \begin{align*}
+         EU_V(O)&\geq EU_V(L)=EU_V(R) \\
+         -2\lambda&\geq-q \\
+         2\lambda&\leq q \\
+         q&\geq2\lambda
+         \end{align*}
+         ```
+         \color{black}
+
+    (iii) Suppose that $b_R\in(1/2, 1]$. Explain why $O$ wins if and only if $q >1-\frac{1-2\lambda}{2\lambda}$ .
+
+          \color{blue}
+
+          Recall from (d) (i) that, when $b_R\in[0,1/2]$, $L$ and $R$ propose $P_J=\{-1,1\}$ and electing $L$ or $R$ offers the voter a payoff of:
+
+          $$
+          EU_V(L)=EU_V(R)=-(1-q)(1-2\lambda)-q
+          $$
+
+          Therefore, for $O$ to win, it requires:
+
+          ```{=tex}
+          \begin{align*}
+          EU_V(O)&\geq EU_V(L)=EU_V(R) \\
+          -2\lambda&\geq-(1-q)(1-2\lambda)-q \\
+          -2\lambda&\geq-(-2\lambda)(1-q)-(1-q)-q \\
+          -2\lambda(2-q)&\geq-1 \\
+          2-q&\leq \frac{1}{2\lambda} \\
+          q&\geq2-\frac{1}{2\lambda}\\
+          q&\geq1+\frac{2\lambda}{2\lambda}-\frac{1}{2\lambda} \\
+          g&\geq1-\frac{1-2\lambda}{2\lambda}
+          \end{align*}
+          ```
+          \color{black}
+
+    (iv) Suppose that $b_R\in(1, 3/2]$. Explain why $O$ wins if and only if $q>2-\frac{1-\lambda}{\lambda}$ .
+
+         \color{blue}
+
+         For $O$ to win, it is sufficient and necessary that $O$ beats $R$ in election.
+
+         Recall from (a) that, when $b_R\in(1,3/2]$, $R$ implements policy 1 when the state is 1 and 0, and 0 when the state is -1. In this case, the voter's expected payoff for electing $R$ is:
+
+         ```{=tex}
+         \begin{align*}
+         EU_V(R)=&\Pr(C_R=1)(-1)+\Pr(C_R=0)(\Pr(\theta=-1)(-|0-(-1)|)\\
+         &+\Pr(\theta=0)(-|1-0|)+\Pr(\theta=1)(-|1-1|)) \\
+         =&-q+(1-q)(\lambda(-1)+(1-2\lambda)(-1)+\lambda(0)) \\
+         =&-q+(1-q)(-\lambda-1+2\lambda) \\
+         =&-q+(1-q)(\lambda-1)
+         \end{align*}
+         ```
+         Therefore, for $O$ to win, it requires:
+
+         ```{=tex}
+         \begin{align*}
+         EU_V(O)&\geq EU_V(R) \\
+         -2\lambda&\geq-q+(1-q)(\lambda-1) \\
+         -2\lambda&\geq-q-q(\lambda-1)+\lambda-1 \\
+         -3\lambda+1&\geq(1+\lambda-1)(-q) \\
+         q&\geq\frac{3\lambda-1}{\lambda}=2+\frac{\lambda-1}{\lambda} \\
+         q&\geq2-\frac{1-\lambda}{\lambda}
+         \end{align*}
+         ```
+         \color{black}
+
+(f) Explain in words briefy, but clearly what explains the success of populist candidates in the model you just solved. Your short(!) answer should connect as much as possible with the materials we covered in GV482.
+
+    \color{blue}
+
+    Our results suggest that, the populist candidate $O$ wins when the mainstream candidates are likely captured by interest groups (high $q$), when the people/populist are informed (low $\lambda$) and when the mainstream candidate's personal interests do not align with the people's interests (high $b_R$).
+
+    The success of populism due to the capturing of the mainstream candidates (high $q$) echoes the representation question exploited by populists in the Populism lecture. When mainstream candidates are captured, they represent the interest groups they are tied to rather than the people. If the people feel that this is the case, they will vote in favour of the populists instead of the mainstream candidates - it does not matter whether the interest groups' interests are aligned with the people's.
+
+    The second factor, namely the good information argument (low $\lambda$) echoes the findings of Jablonski and Siem (2023). When the (populist) politician is better informed, she does cater more to people's needs. Since in our model the people are also more informed, they are more likely to vote for a candidate that is loyal to them (the populist).
+
+    The problem of no descriptive representation (high $b_R$), where the mainstream candidates' personal interests do not align with those of the people, is a central theme throughout the critique of democracy and populism topics in our lectures. This is a particularly strong argument against representative democracy, which is "by the elite, of the elite and sometimes, but not always for the people". When the misalignment is severe, the system is "less for the people" and the call for direct democracy and populism would arise.
+
+    \color{black}
+    
+# Section B (50 marks)
+
+## Question 2
+
+\textcolor{blue}{The final AI essay (in red):}
+
+\color{red}
+
+Title: Economic Crisis and Populist Rhetoric: The Rise of Javier Milei in Argentina
+
+Introduction
+
+The assertion by Curt Mills that "In inflationary times, the public's appetite for ideas and rhetoric once deemed beyond the pale is heightened," offers a critical lens to understand the electoral success of Javier Milei in Argentina. This essay explores the interplay between economic crises and the populist surge, focusing on how Milei’s radical economic policies gained traction amidst widespread economic distress and disillusionment with traditional political structures.
+
+Context and Theoretical Framework
+
+Argentina's history of economic instability, characterized by rampant inflation and fiscal mismanagement, sets a fertile ground for populist rhetoric. As Guillermo (2002) suggests, economic crises often reshape political landscapes, making radical alternatives more appealing. Milei's platform, which includes dollarization, deregulation, and drastic fiscal austerity, resonates in a context where traditional parties have failed to stabilize the economy or protect the populace from economic shocks (Kaufman & Stallings, 1991).
+
+Milei’s Radical Economic Policies
+
+Milei proposes solutions that are radical departures from conventional policies: dollarization to combat inflation, substantial deregulation to foster business freedom, massive spending cuts, and a reduction in the number of ministries to streamline governance. These policies, while appealing for their simplicity and directness, are typically unimplementable by mainstream parties due to political constraints, economic feasibility, and potential social backlash (Rodrik, 2018). His approach capitalizes on public frustration, positioning these policies not just as economic measures but as a rebuke to the political establishment.
+
+Populism’s Appeal and Media Influence
+
+The mediatization of politics, as discussed by Esser and Strömbäck (2014), amplifies the appeal of populist figures like Milei, who use media platforms to directly connect with the electorate, bypassing traditional political discourse and presenting themselves as authentic alternatives. This direct engagement enhances their appeal and enables them to shape public perception effectively.
+
+Cultural vs. Economic Factors
+
+While economic factors are significant in Milei’s rise, comparing this with other regions illustrates the nuanced drivers of populism. In Europe and North America, cultural backlash, particularly against immigration, plays a more prominent role (Tabellini, 2020; Pupaza & Wehner, 2023). However, in Argentina, the populist surge is primarily driven by economic grievances rather than cultural threats, distinguishing it from the cultural dynamics predominant in Western populism (Inglehart & Norris, 2016).
+
+Populism and Political Dynamics
+
+Populists like Milei exploit political cleavages, positioning themselves in stark contrast to mainstream parties (Laclau, 2005). They reject the fatalism of conventional politics, advocating for a politics of will and decisive action (Müller, 2011). This approach, coupled with their rejection of the unworkability of simplistic solutions (Guiso et al., 2018), makes their radical platforms particularly appealing during crises.
+
+Populism’s Fluctuating Success
+
+Despite the persistent presence of populist ideologies, their success is not constant but dependent on specific socio-economic conditions (Rodrik, 2018). The resurgence of populism in Latin America since the 2000s correlates with periods of intense economic upheaval, globalization, and significant social changes, highlighting the contextual nature of populist successes.
+
+Conclusion
+
+Curt Mills' claim regarding the heightened receptivity to radical ideas in times of economic crisis holds substantial validity in the context of Javier Milei’s political ascent in Argentina. While economic distress significantly contributes to the populist appeal, the role of mediatization, political cleavages, and the dynamic nature of populist strategies also play critical roles. Therefore, understanding the rise of populism requires a multifaceted approach that considers both economic and cultural factors, as well as the strategic responses of populist leaders to the evolving political landscape.
+
+References
+
+Esser, F., & Strömbäck, J. (2014). Mediatization of Politics: Understanding the Transformation of Western Democracies. Palgrave Macmillan.
+Guillermo, A. C. (2002). Economic Crises and Electoral Responses in Argentina. Latin American Politics and Society, 44(3), 1-30.
+Inglehart, R., & Norris, P. (2016). Trump, Brexit, and the Rise of Populism: Economic Have-Nots and Cultural Backlash. HKS Faculty Research Working Paper Series.
+Kaufman, R. R., & Stallings, B. (1991). The Political Economy of Latin American Populism. In Macroeconomics of Populism in Latin America. University of Chicago Press.
+Mudde, C. (2004). The Populist Zeitgeist. Government and Opposition, 39(4), 541-563.
+Roberts, K. M. (2006). Populism, Political Conflict, and Grass-roots Organization in Latin America. Comparative Politics, 38(2), 127-148.
+Rodrik, D. (2018). Populism and the Economics of Globalization. Journal of International Business Policy, 1(1-2), 12-33.
+
+\color{blue}
+
+Explanation (909 words):
+
+In my first prompt, I started by telling the AI to pretend to be a student at the London School of Economics and Political Science (LSE) studying Political Science and Political Economy. This is known as the "adopt a persona" technique recommended by the AI tool's developer. It is a common and costless approach to make the AI generate content that is more relevant to the user's needs. I then asked the AI to write a 750-word essay and pasted the given prompt and to include at least 5-7 academic references in the essay. Since they are the requirements of the assignment, I decided to include them in the first prompt so no attempts are wasted on generating unqualified essays. I did not manually input any references or bullet points as I wanted to test the AI's base performance - there is no need to waste effort in adding references or arguments that are already generated by the AI. It is more desirable to add them in the second prompt if the AI fails to generate them in the first one.
+
+The AI successfully generated a 708-word essay within the word limit. It included 8 references, 7 of which exist and one is made up. Of the existing reference, three actually appeared in our lecture, namely, Mudde (2004), Rodrik (2018) and Inglehard & Morris (2016)! This means our initial strategy of waiting for the AI to include its own references was successful. Moreover, the first AI essay correctly captures the "pure people" vs "corrupt elite" narrative of populism, which was highlighted in our lectures. The essay's counterarguments against the economic narrative cover many points (e.g. culture, globalisation, identity) but are rather shallow.
+
+Therefore, in my second prompt, I manually kept the existing references from the last essay and added additional references and bullet points from our first lecture on populism, for example, populism's rejection of fatalism and by Muller (2011) and Guiso et al. (2018) the cultural backlash argument by Inglehard and Morris (2016) and Margalit (2019). This is to make sure that the generated essay is more closely related to our course content. The cultural vs economic explanations for populism are a central debate to our course, I would like the AI to emphasise this point rather than dropping only a sentence of "Moreover, the role of cultural factors and national identity in shaping political behavior should not be underestimated (Chantal, 2005)."
+
+As a result of the additional references and bullet points, the second AI essay highlights Milei's rejection of fatalism on the economy, where "the electorate is impatient for change and skeptical of gradualist solutions, as observed in Milei's rhetoric and policies". The second essay also discusses the cultural vs economic factors as a separate section, which is desirable. However, the mentioning of the cultural factors in this version seems abrupt - it is not related to the Argentine context or experiences in other countries. Moreover, the AI did not mention the exact "radical" policies of Milei, and why such policies are appealing to the electorate and not implemented by mainstream parties.
+
+Hence, in my third and prompt I ask the AI to elaborate on Milei's economic policies and the cultural factors behind Milei's victory in Argentina, and if not possible, compare the Argentine case with experiences in Europe or the US where cultural factors play a more prominent role and the retrenchment of the welfare state is another source of populism. I included the Tabellini (2020) and Pupaza and Wehner (2023) as empirical evidence for the impact of migration on populism in US and Europe.
+
+It can be seen that the third AI essay unsatisfactorily addresses the additional prompts. The AI did touch upon some Milei's economic policies such as dollarisation and deregulation, but did not mention the massive spending cuts and the reduction in the number of ministries. Neither did it explain why the mainstream parties failed to propose similar policy solutions. Moreover, an incomplete list of references was generated, which is unacceptable for an academic essay.
+
+Finally, in my last prompt, I explicitly asked the AI to include the spending cuts and the reduction in the number of ministries in Milei's economic policies, reasons the mainstream parties failed to propose similar policy solutions and why they would be appeal to the people. I also warned the AI to include a *complete* list of references. Also, I noticed that the AI struggled to cover all arguments in depth within the tight word limit, so I deleted the less important bullet points from the prompt (e.g. weakness of the cultural argument) to make sure the AI elaborates on the most important points in adequent depths.
+
+Despite the explicit instructions in the last prompts, the AI still failed to generate a complete list of references or an in-depth explanation of why Milei's policies are appealing to the people and not implementable by the mainstream parties. At this stage, I accept that the AI tool is not capable of generating a satisfactory essay that meets the requirements of the assignment solely from improved prompting. If I were to continue, I would consider manually editing the generated essay to include the missing information from this point onwards.
+
+In short, I have followed a strategy of starting with a general prompt and gradually adding additional course information, and finalising with explicit instructions on format, structure and corrections. The overall philosophy is to exploit the AI's own potential and only intervene when necessary.
+
+Information about the AI tool used for this assignment, with all prompts and AI answers are presented in [Appendix](#sec-appendix), which is at the very end of this assignment (after Question 3).
+
+\color{black}
+
+## Question 3 (965 words)
+
+\color{blue}
+
+As discussed in the explanation, the AI tool was unable to generate a satisfactory essay that meets the requirements of the assignment solely from improved prompting. Out of the many aspects that can be improved on and complemented by human intervention, the following are considered the most important:
+
+First, the demand for *disinflationary policies* is at odds with the conventional poor vs rich narrative of populism. This is an aspect that I repeatedly asked the AI to elaborate on and the AI failed at. In our lecture, we defined populists as the people who "promote themselves as the commanders of the city of the poor/common people in its war against the city of the rich/elite," as inspired by Plato's Republic. However, the poor/common people's support for disinflationary measures are at odds with theory (international/comparative) political economy. Philips (1958) documents an inverse relationship between inflation and unemployment, which is known as the Phillips curve. This means that disinflationary policies, such as those proposed by Milei, would lead to higher unemployment. Such effects on unemployment can be direct, e.g. through public sector job cuts, labour market de-regulation and the weakening of the welfare state and trade unions, or indirect, e.g. through the reduction in aggregate demand. Conventional (international/comparative) political economy theories argue that, when such trade-off has to be made, the labour favours employment over price stability (Oatley, 2013). The political theory of populism also predicts that the direction of the populist bias should be left (Acemoglu et al., 2013), where as Milei is an example of right-wing populism. Therefore, the poor/rich class dichotomy cannot explain the populist support for disinflationary policies. Rather, more nuanced theoretical frameworks are needed. Two potential explanations can be considered. Firstly, the poor/common people's appetite for employment instead of price stability is relative rather than absolute. This means that the poor/common people are willing to accept higher unemployment rates as long as the current unemployment rate is relatively low and inflation is too high to be accepted. This seems to be the case in Argentina, where the unemployment rate is at 6.84% and inflation rate stands at 288%. The second explanation is that the electoral victory is a punishment of the establishment, rather than an endorsement of Milei's policies. This is consistent with the theory of retrospective voting, where the electorate punishes the incumbent for the poor economic performance, rather than endorsing the challenger's policies (Lewis-Beck and Stegmaier, 2000).
+
+Second, if one defines populism as pro-poor policy, then Milei's *predecessors'* approach to inflation in the 20th century better met the criteria of populism, an important Argentine historical context ommitted by the AI. Fernandez (1991) documents that, in 1989, the left-wing government sought to tackle inflation through measures such as additional taxes on durable goods, increased minimum wages, price freezing for necessities and exchange controls. It can be seen that these interventionist policies were intended to protect the poor people from inflation, albeit unsuccessfully. They are completely contrary to Milei's Austrian-school inspired laissez-faire capitalism, which disproportionately harms the poor, as demonstrated in the last paragraph. Therefore, Fernandez's (1991) macroeconomic definition of populism as "an approach that emphasizes income redistribution by government expenditures and income policies and deemphasizes the problems of deficit financing and inflation" better describes the predecessors of Milei, while the rise of Milei is exactly a *reaction* of these past left-wing populist attempts at tackling inflation.
+
+Third, the AI failed to mention that some of the *personal characteristics* of Milei also defy the conventional theories of populism. Populism is often characterized by anti-elitism and favouring popular will over expertise (Crutzen et al., 2020). Nevertheless, the success of Milei defies both characteristics: Milei is a highly educated economist, who has worked as a professor of macroeconomics and features part of the "elite establishment". This is in stark contrast to the image of the populist voters, who are, on average, much less educated and poorer than Milei. Instead, he is more likely to have enjoyed the populist support for his insults to his rivals, foul language and aggressive rhetoric (*The New York Times*, 2023). This combination of elite background and aggressive rhetoric echoes his American far-right populist counterpart, Donald Trump, who uses similar language and is a graduate of the Wharton School of the University of Pennsylvania in Economics. These cases question the assumptions in formal theories of populism, for example in Section 1 and in Crutzen et al. (2020), where populist politicians are assumed to be less informed than the mainstream politicians and genuinely care about implementing the right policy for the people. Instead, the success of Milei and Trump suggest that populist can be as informed and office-seeking as mainstream politicians, but they are good at pretending they are not. Their behaviour and success should be explained by other factors, for example, the different costs of a "populist signal" (higher for the mainstream candidates) and inherent utility derived from punishing the establishment for the voter.
+
+In conclusion, Curt Mills remark that "In inflationary times, the public's appetite for ideas and rhetoric once deemed beyond the pale is heightened" is valid, so long as one does not interpret radical "ideas and rhetoric" as populism, and one does not define populism as the uprising of the poor against the elite. As the AI essay discussed, the extraordinary inflation diminishes the explanatory power of the cultural factors in the success of populism in Argentina. Nor does the economic or class-based theories of populism perfectly explain Milei's victory. On the one hand, Milei's policy is not pro-poor as the theory prescribes, and on the other hand, Milei's own personal background aligns better with the elite than with the poor. This highlights the weaknesses of the current political economy literature on populism, which seeks to rationalise populist victories.
+
+\color{black}
+
+\appendix
+
+# Appendix: Prompts for and Answers by GPT-4 {#sec-appendix .appendix}
+
+## Attempt 1
+
+**Prompt**:
+You are a MSc Political Science and Political Economy student from LSE. Please can you write a 750-word essay with the following prompt:
+
+In attempting to explain the victory of Javier Milei (a politician often labelled as populist)
+in Argentina, Curt Mills wrote in Politico that "In inflationary times, the public's appetite
+for ideas and rhetoric once deemed beyond the pale is heightened." Discuss the strength of Curt Mills' claim.
+
+Please include at least 5-7 academic references in your essay.
+
+**AI Answer**:
+
+Title: Inflationary Times and Populist Appeal: Analyzing the Rise of Javier Milei in Argentina
+
+Introduction
+
+The political ascendancy of Javier Milei, a figure often labeled as a populist, in the context of Argentina's inflationary economy presents a compelling case study for examining the dynamics between economic crises and political shifts. Curt Mills, writing for Politico, asserts that "In inflationary times, the public's appetite for ideas and rhetoric once deemed beyond the pale is heightened." This essay critically evaluates Mills' claim, drawing on historical precedents and academic theories to understand the interplay between economic distress and the rise of populist leaders.
+
+Theoretical Framework
+
+The relationship between economic conditions and political outcomes is a central theme in political economy. Populism, characterized by a rhetoric that divides society into the 'pure people' versus the 'corrupt elite,' often gains traction during periods of economic turmoil (Mudde, 2004). According to Rodrik (2018), economic crises expose the vulnerabilities in existing political and economic structures, catalyzing the public's receptiveness to alternative, and sometimes radical, political solutions.
+
+Contextualizing Argentina's Economic Crisis
+
+Argentina's persistent inflation, which escalated into hyperinflation several times over the past decades, has eroded public trust in traditional political institutions and parties (Guillermo, 2002). As Kaufman and Stallings (1991) note, inflation can reduce real incomes, leading to increased poverty and socio-economic instability. In such contexts, populist figures like Milei can appear as a refreshing alternative who promise to dismantle the status quo and address the immediate needs of the populace.
+
+Analyzing Curt Mills' Claim
+
+Mills’ observation that inflation heightens public openness to extreme ideas is substantiated by the Argentine context. The correlation between economic instability and the electoral success of populists is evident in Latin America’s political history, where leaders like Hugo Chavez and Evo Morales rose to power amid economic dissatisfaction (Roberts, 2006). Milei's rhetoric, which vehemently criticizes the traditional political elites and promises drastic economic reforms, resonates with an electorate fatigued by recurrent economic crises and unfulfilled promises.
+
+Populism as a Response to Economic Crisis
+
+The appeal of populism in inflationary contexts can be further understood through the lens of political psychology. Inflation not only undermines economic stability but also contributes to a sense of uncertainty and fear among the populace (Inglehart and Norris, 2016). Populist leaders like Milei exploit these emotions effectively, presenting themselves as direct challengers to the ineffectual elites and as bearers of simple, albeit radical, solutions to complex economic problems.
+
+Counterarguments and Limitations
+
+However, attributing Milei's victory solely to economic factors would be an oversimplification. Political outcomes are influenced by a confluence of factors including media influence, political campaign strategies, and international dynamics (Esser and Strömbäck, 2014). Moreover, the role of cultural factors and national identity in shaping political behavior should not be underestimated (Chantal, 2005). Thus, while economic distress provides a fertile ground for populism, it is the interaction of these multiple dimensions that ultimately shapes electoral outcomes.
+
+Conclusion
+
+The claim made by Curt Mills regarding the impact of inflation on public receptiveness to radical political ideas is largely supported by both the specific case of Javier Milei in Argentina and broader academic literature. Economic crises, particularly inflation, do play a significant role in shaping the political landscape by creating conditions that are conducive to the rise of populist leaders. However, it is crucial to consider the multifaceted nature of political dynamics, where economic factors interact with social, cultural, and political influences to shape electoral outcomes.
+
+References
+
+Chantal, M. (2005). National Identity and Political Behavior. Cambridge: Cambridge University Press.
+Esser, F., & Strömbäck, J. (2014). Mediatization of Politics: Understanding the Transformation of Western Democracies. Palgrave Macmillan.
+Guillermo, A. C. (2002). Economic Crises and Electoral Responses in Argentina. Latin American Politics and Society, 44(3), 1-30.
+Inglehart, R., & Norris, P. (2016). Trump, Brexit, and the Rise of Populism: Economic Have-Nots and Cultural Backlash. HKS Faculty Research Working Paper Series.
+Kaufman, R. R., & Stallings, B. (1991). The Political Economy of Latin American Populism. In Macroeconomics of Populism in Latin America. University of Chicago Press.
+Mudde, C. (2004). The Populist Zeitgeist. Government and Opposition, 39(4), 541-563.
+Roberts, K. M. (2006). Populism, Political Conflict, and Grass-roots Organization in Latin America. Comparative Politics, 38(2), 127-148.
+Rodrik, D. (2018). Populism and the Economics of Globalization. Journal of International Business Policy, 1(1-2), 12-33.
+
+\newpage
+
+## Attempt 2
+
+**Prompt**:
+
+You are a MSc Political Science and Political Economy student from LSE. Please can you write a 750-word essay with the following prompt:
+
+In attempting to explain the victory of Javier Milei (a politician often labelled as populist)
+in Argentina, Curt Mills wrote in Politico that "In inflationary times, the public's appetite
+for ideas and rhetoric once deemed beyond the pale is heightened." Discuss the strength of Curt Mills' claim.
+
+Please include the following academic references in your essay, and feel free to include others in your knowledge:
+
+Esser, F., & Strömbäck, J. (2014). Mediatization of Politics: Understanding the Transformation of Western Democracies. Palgrave Macmillan.
+
+Inglehart, R., & Norris, P. (2016). Trump, Brexit, and the Rise of Populism: Economic Have-Nots and Cultural Backlash. HKS Faculty Research Working Paper Series.
+
+Guillermo, A. C. (2002). Economic Crises and Electoral Responses in Argentina. Latin American Politics and Society, 44(3), 1-30.
+
+Kaufman, R. R., & Stallings, B. (1991). The Political Economy of Latin American Populism. In Macroeconomics of Populism in Latin America. University of Chicago Press.
+
+Mudde, C. (2004). The Populist Zeitgeist. Government and Opposition, 39(4), 541-563.
+
+Roberts, K. M. (2006). Populism, Political Conflict, and Grass-roots Organization in Latin America. Comparative Politics, 38(2), 127-148.
+
+Rodrik, D. (2018). Populism and the Economics of Globalization. Journal of International Business Policy, 1(1-2), 12-33.
+
+Please mention the following arguments in the essay:
+
+Populists place themselves in contrast to main parties
+- As main parties adjust, so do populists
+- Populists look for cleavages (Laclau, 2005)
+Populists reject the idea of fatalism
+- Politics of the will over moderation (M¨uller, 2011)
+- Reject idea that simplistic solutions are unworkable (Guiso
+et al., 2018)
+
+Rodrick (2018): populism in Latin America is again on the rise since 2000s.
+
+Populism always present does not mean populism always successful
+
+Three causes have received most attention in the literature
+- Cultural changes: Norms of behavior
+- Economic upheaval: Globalization (see problem set) and
+automation
+- Immigration: Economic or culture?
+Another source has been the retrenchment of the welfare state
+(Dal B´o et al., 2020; Fetzer, 2019)
+
+The cultural backlash thesis is advanced in a paper by Inglehard
+and Norris (2016)
+- This is a white man phenomenon
+
+Cultural variables are better explanatory factors than
+economic variables (Margalit, 2019)
+
+Critiques
+- Survey evidence are often descriptive
+- Variables used are hard to interpret
+- Inglehard and Norris (2016) use: anti-immigration feeling,
+mistrust, authoritarian value, rightwing self-placement
+- Are those purely cultural? (Colantone and Stanig, 2018c)
+
+**AI Answer**:
+
+Title: The Rise of Populism in Inflationary Times: Analyzing Curt Mills' Claim through Javier Milei's Victory in Argentina
+
+Introduction
+
+In a Politico article, Curt Mills posits that economic turbulence, especially inflation, intensifies the public's receptivity to unconventional political ideas. This essay evaluates this assertion by exploring the election of Javier Milei, a populist leader in Argentina, examining whether economic distress indeed fuels a shift towards populist leaders. This analysis will incorporate a blend of academic insights including theories of populism, economic conditions, and political dynamics.
+
+Contextual Background and Theoretical Framework
+
+Argentina has faced enduring economic instability, marked by recurrent inflation that has undermined public trust in traditional political institutions. According to Guillermo (2002), economic crises can significantly alter voter behavior by heightening political discontent. Populists like Milei exploit these circumstances by presenting themselves as alternatives to the ineffectual political elites (Mudde, 2004). Mills' hypothesis suggests that during economic crises, like inflation, populations are more open to radical solutions proposed by such populist leaders.
+
+Populism and Economic Distress
+
+Economic upheaval has historically been a fertile ground for populism in Latin America. The resurgence of populism in the region since the 2000s, as noted by Rodrik (2018), can be largely attributed to the discontents spurred by globalization and economic instability. Kaufman and Stallings (1991) discuss how Latin American populism often arises from macroeconomic mismanagement, with leaders like Milei capitalizing on the public's disillusionment by criticizing prevailing economic policies and proposing simplistic, albeit appealing, solutions.
+
+Contrasting Mainstream and Populist Parties
+
+Populists distinctively position themselves against mainstream parties, continually adjusting their strategies based on mainstream responses (Laclau, 2005). This dynamic interaction enhances the appeal of populists during economic crises when traditional parties often struggle to offer convincing solutions. This adaptability is crucial in maintaining populist momentum, as noted by Roberts (2006), who emphasizes the importance of grassroots organization in sustaining populist movements.
+
+Populism’s Rejection of Fatalism
+
+A significant aspect of populist rhetoric is the rejection of political and economic fatalism, advocating a politics of will and immediate action over moderation (Müller, 2011). This approach resonates strongly during economic downturns, where the electorate is impatient for change and skeptical of gradualist solutions, as observed in Milei's rhetoric and policies, which boldly promise to rectify economic misfortunes swiftly and decisively.
+
+Cultural Versus Economic Factors
+
+While economic factors are pivotal, the role of cultural changes cannot be overlooked. Inglehart and Norris (2016) advance the cultural backlash thesis, suggesting that populism is partly driven by cultural grievances rather than purely by economic conditions. This thesis is significant in understanding the broader dimensions of populist support, which also encompasses reactions against immigration and perceived threats to traditional values.
+
+Critique and Limitations of Economic Determinism
+
+Despite the strong correlation between economic crises and the rise of populism, the relationship is not deterministic. As Esser and Strömbäck (2014) articulate, the mediatization of politics also plays a crucial role, with media shaping public perceptions and potentially amplifying populist messages. Moreover, survey evidence often used to link economic distress with populist success is sometimes merely descriptive and can overlook complex interactions between economic and cultural variables (Margalit, 2019).
+
+Conclusion
+
+Curt Mills' claim about the heightened appeal of populist ideas during inflationary times is substantiated by the case of Javier Milei in Argentina. Economic instability indeed creates a conducive environment for populists, who thrive on public dissatisfaction with the status quo. However, this effect is modulated by various factors, including how populists position themselves relative to mainstream parties, the role of media, and the interplay between economic and cultural dynamics. Thus, while economic conditions are critical, they are part of a multifaceted array of factors that contribute to the rise of populism.
+
+References
+
+Esser, F., & Strömbäck, J. (2014). Mediatization of Politics: Understanding the Transformation of Western Democracies. Palgrave Macmillan.
+Guillermo, A. C. (2002). Economic Crises and Electoral Responses in Argentina. Latin American Politics and Society, 44(3), 1-30.
+Inglehart, R., & Norris, P. (2016). Trump, Brexit, and the Rise of Populism: Economic Have-Nots and Cultural Backlash. HKS Faculty Research Working Paper Series.
+Kaufman, R. R., & Stallings, B. (1991). The Political Economy of Latin American Populism. In Macroeconomics of Populism in Latin America. University of Chicago Press.
+Mudde, C. (2004). The Populist Zeitgeist. Government and Opposition, 39(4), 541-563.
+Roberts, K. M. (2006). Populism, Political Conflict, and Grass-roots Organization in Latin America. Comparative Politics, 38(2), 127-148.
+Rodrik, D. (2018). Populism and the Economics of Globalization. Journal of International Business Policy, 1(1-2), 12-33.
+
+\newpage
+
+## Attempt 3
+
+**Prompt**:
+
+You are a MSc Political Science and Political Economy student from LSE. Please can you write a 750-word essay with the following prompt:
+
+In attempting to explain the victory of Javier Milei (a politician often labelled as populist)
+in Argentina, Curt Mills wrote in Politico that "In inflationary times, the public's appetite
+for ideas and rhetoric once deemed beyond the pale is heightened." Discuss the strength of Curt Mills' claim.
+
+Please include the following academic references in your essay, and feel free to include others in your knowledge:
+
+Esser, F., & Strömbäck, J. (2014). Mediatization of Politics: Understanding the Transformation of Western Democracies. Palgrave Macmillan.
+
+Inglehart, R., & Norris, P. (2016). Trump, Brexit, and the Rise of Populism: Economic Have-Nots and Cultural Backlash. HKS Faculty Research Working Paper Series.
+
+Guillermo, A. C. (2002). Economic Crises and Electoral Responses in Argentina. Latin American Politics and Society, 44(3), 1-30.
+
+Kaufman, R. R., & Stallings, B. (1991). The Political Economy of Latin American Populism. In Macroeconomics of Populism in Latin America. University of Chicago Press.
+
+Mudde, C. (2004). The Populist Zeitgeist. Government and Opposition, 39(4), 541-563.
+
+Roberts, K. M. (2006). Populism, Political Conflict, and Grass-roots Organization in Latin America. Comparative Politics, 38(2), 127-148.
+
+Rodrik, D. (2018). Populism and the Economics of Globalization. Journal of International Business Policy, 1(1-2), 12-33.
+
+Please make sure that you elaborate on Milei's radical economic policies and explain why they are appealing to the public and not implementable by the mainstream parties. Also, when discussing the cultural vs economic factor debate, draw example from the Argentine case; if this is not possible, compare the Argentine case with Europe or America, where cultural factors may be more prominent. You can refer to Tabellini (2020) and Pupaza and Wehner (2023) as empirical evidence for the US and Europe, respectively, for the impacts of immigration on populism. Moreover, You can discuss the impact of the retrenchment of the welfare state on populism (Dal B´o et al., 2020; Fetzer, 2019), which may or may not apply to the case of Argentina.
+
+Please mention the following arguments in the essay:
+
+Populists place themselves in contrast to main parties
+- As main parties adjust, so do populists
+- Populists look for cleavages (Laclau, 2005)
+Populists reject the idea of fatalism
+- Politics of the will over moderation (M¨uller, 2011)
+- Reject idea that simplistic solutions are unworkable (Guiso
+et al., 2018)
+
+Rodrick (2018): populism in Latin America is again on the rise since 2000s.
+
+Populism always present does not mean populism always successful
+
+Three causes have received most attention in the literature
+- Cultural changes: Norms of behavior
+- Economic upheaval: Globalization (see problem set) and
+automation
+- Immigration: Economic or culture?
+
+The cultural backlash thesis is advanced in a paper by Inglehard
+and Norris (2016)
+- This is a white man phenomenon
+
+Cultural variables are better explanatory factors than
+economic variables (Margalit, 2019)
+
+Critiques
+- Survey evidence are often descriptive
+- Variables used are hard to interpret
+- Inglehard and Norris (2016) use: anti-immigration feeling,
+mistrust, authoritarian value, rightwing self-placement
+- Are those purely cultural? (Colantone and Stanig, 2018c)
+
+**AI Answer**:
+
+Title: The Role of Inflation and Populism in Javier Milei's Political Ascent
+
+Introduction
+
+The victory of Javier Milei in Argentina has drawn significant attention to the role of economic turmoil in influencing political outcomes. Curt Mills' assertion in Politico that "In inflationary times, the public's appetite for ideas and rhetoric once deemed beyond the pale is heightened" serves as a lens through which to examine Milei's rise. This essay assesses the strength of Mills' claim by delving into how economic crises, particularly inflation, cultivate fertile ground for populist ideologies, while also contrasting economic and cultural factors that drive the populist agenda.
+
+Economic Crises and Populist Responses
+
+Argentina has experienced severe economic fluctuations, marked notably by persistent inflation, which has significantly influenced electoral behavior (Guillermo, 2002). Populist leaders like Milei often emerge in such volatile environments, proposing radical economic policies that mainstream parties are typically hesitant to adopt. Milei's approach includes drastic measures such as the adoption of the dollar to combat inflation and massive deregulation plans, appealing directly to those hardest hit by economic instability (Rodrik, 2018). This scenario supports Mills' view as Milei's radical solutions gain traction, echoing Kaufman and Stallings' (1991) observations on the economic roots of Latin American populism.
+
+Mediatization and Populism
+
+The mediatization of politics plays a crucial role in shaping political narratives and influencing public perception (Esser & Strömbäck, 2014). In Milei's case, media portrayal of his unorthodox approaches and candid demeanor has amplified his appeal, making his radical solutions appear as credible alternatives to conventional policies. This interaction between media dynamics and populist rhetoric confirms that in contexts of widespread dissatisfaction and uncertainty, the public is more receptive to distinct and even extreme political messages.
+
+Cultural vs. Economic Factors in Populism
+
+While economic factors are pivotal in explaining Milei's success, contrasting this with the role of cultural factors in other regions provides a broader understanding. In Europe and America, cultural backlash, particularly regarding immigration, plays a more prominent role in the rise of populism (Tabellini, 2020; Pupaza & Wehner, 2023). Inglehart and Norris (2016) argue that cultural backlash is a significant driver of populism in these regions, often framed as a response by predominantly white demographics to perceived threats against their cultural norms. However, in Argentina, economic distress rather than cultural factors appears to be the primary catalyst for populist success, though the global trend suggests a complex interplay between both dynamics.
+
+Populist Strategy: Rejecting Fatalism and Exploiting Cleavages
+
+Populists like Milei exploit societal cleavages, not just in economic terms but also in portraying a stark contrast between themselves and the mainstream parties (Laclau, 2005). By rejecting the idea of fatalism and advocating for decisive actions over moderate policies, Milei aligns with Müller's (2011) notion of the "politics of the will." His straightforward, albeit simplistic, solutions to complex problems, such as hyperinflation and economic mismanagement, resonate with a populace weary of traditional political rhetoric, which often seems detached from their immediate struggles (Guiso et al., 2018).
+
+Impact of Welfare State Retrenchment
+
+The retrenchment of the welfare state, discussed by Dal Bò et al. (2020) and Fetzer (2019), also influences the rise of populism by exacerbating economic insecurity. Although this factor is more relevant in the European context, its implications are observable in Argentina, where reduced social support amidst economic crises can accelerate the public's shift towards populist options promising swift and radical reforms.
+
+Conclusion
+
+Curt Mills' claim about the heightened public appetite for unconventional political ideas during inflationary times is strongly supported by the case of Javier Milei in Argentina. The economic turmoil, characterized by rampant inflation, has indeed set the stage for Milei’s populist rhetoric to flourish. However, the Argentine scenario also underscores the importance of not oversimplifying the causes of populism to purely economic factors. The interplay of mediatization, cultural influences, and political strategy also plays critical roles. Thus, while Mills’ observation holds significant merit, it must be contextualized within a broader framework that considers both the economic and cultural dimensions of political behavior.
+
+References
+
+Esser, F., & Strömbäck, J. (2014). Mediatization of Politics: Understanding the Transformation of Western Democracies. Palgrave Macmillan.
+Guillermo, A. C. (2002). Economic Crises and Electoral Responses in Argentina. Latin American Politics and Society, 44(3), 1-30.
+Inglehart, R., & Norris, P. (2016). Trump, Brexit, and the Rise of Populism: Economic Have-Nots and Cultural Backlash. HKS Faculty Research Working Paper Series.
+Kaufman, R. R., & Stallings, B. (1991). The Political Economy of Latin American Populism. In Macroeconomics of Populism in Latin America. University of Chicago Press.
+Mudde, C. (2004). The Populist Zeitgeist. Government and Opposition, 39(4), 541-563.
+Roberts, K. M. (2006). Populism, Political Conflict, and Grass-roots Organization in Latin America. Comparative Politics, 38(2), 127-148.
+Rodrik, D. (2018). Populism and the Economics of Globalization. Journal of International Business Policy, 1(1-2), 12-33.
+
+\newpage
+
+## Attempt 4
+**Prompt**:
+You are a MSc Political Science and Political Economy student from LSE. Please can you write a 750-word essay with the following prompt:
+
+In attempting to explain the victory of Javier Milei (a politician often labelled as populist)
+in Argentina, Curt Mills wrote in Politico that "In inflationary times, the public's appetite
+for ideas and rhetoric once deemed beyond the pale is heightened." Discuss the strength of Curt Mills' claim.
+
+Please include the following academic references in your essay, and feel free to include others in your knowledge, and add ALL cited materials to the list of references:
+
+Esser, F., & Strömbäck, J. (2014). Mediatization of Politics: Understanding the Transformation of Western Democracies. Palgrave Macmillan.
+
+Inglehart, R., & Norris, P. (2016). Trump, Brexit, and the Rise of Populism: Economic Have-Nots and Cultural Backlash. HKS Faculty Research Working Paper Series.
+
+Guillermo, A. C. (2002). Economic Crises and Electoral Responses in Argentina. Latin American Politics and Society, 44(3), 1-30.
+
+Kaufman, R. R., & Stallings, B. (1991). The Political Economy of Latin American Populism. In Macroeconomics of Populism in Latin America. University of Chicago Press.
+
+Mudde, C. (2004). The Populist Zeitgeist. Government and Opposition, 39(4), 541-563.
+
+Roberts, K. M. (2006). Populism, Political Conflict, and Grass-roots Organization in Latin America. Comparative Politics, 38(2), 127-148.
+
+Rodrik, D. (2018). Populism and the Economics of Globalization. Journal of International Business Policy, 1(1-2), 12-33.
+
+Please make sure that you elaborate on Milei's radical economic policies (including dollarisation, deregulation, massive spending cuts and reduction in the number of ministries) and explain why they are appealing to the public and why they are not implementable by the mainstream parties. Also, when discussing the cultural vs economic factor debate, draw example from the Argentine case; if this is not possible, compare the Argentine case with Europe or America, where cultural factors may be more prominent. You can refer to Tabellini (2020) and Pupaza and Wehner (2023) as empirical evidence for the US and Europe, respectively, for the impacts of immigration on populism. Moreover, You can discuss the impact of the retrenchment of the welfare state on populism (Dal B´o et al., 2020; Fetzer, 2019), which may not apply to the case of Argentina.
+
+Please mention the following arguments in the essay:
+
+Populists place themselves in contrast to main parties
+- As main parties adjust, so do populists
+- Populists look for cleavages (Laclau, 2005)
+Populists reject the idea of fatalism
+- Politics of the will over moderation (M¨uller, 2011)
+- Reject idea that simplistic solutions are unworkable (Guiso
+et al., 2018)
+
+Rodrick (2018): populism in Latin America is again on the rise since 2000s.
+
+Populism always present does not mean populism always successful
+
+Three causes have received most attention in the literature
+- Cultural changes: Norms of behavior
+- Economic upheaval: Globalization and
+automation
+- Immigration: Economic or culture?
+
+The cultural backlash thesis is advanced in a paper by Inglehard
+and Norris (2016)
+- This is a white man phenomenon
+
+Cultural variables are better explanatory factors than
+economic variables (Margalit, 2019)
+
+**AI Essay**:
+
+Title: Economic Crisis and Populist Rhetoric: The Rise of Javier Milei in Argentina
+
+Introduction
+
+The assertion by Curt Mills that "In inflationary times, the public's appetite for ideas and rhetoric once deemed beyond the pale is heightened," offers a critical lens to understand the electoral success of Javier Milei in Argentina. This essay explores the interplay between economic crises and the populist surge, focusing on how Milei’s radical economic policies gained traction amidst widespread economic distress and disillusionment with traditional political structures.
+
+Context and Theoretical Framework
+
+Argentina's history of economic instability, characterized by rampant inflation and fiscal mismanagement, sets a fertile ground for populist rhetoric. As Guillermo (2002) suggests, economic crises often reshape political landscapes, making radical alternatives more appealing. Milei's platform, which includes dollarization, deregulation, and drastic fiscal austerity, resonates in a context where traditional parties have failed to stabilize the economy or protect the populace from economic shocks (Kaufman & Stallings, 1991).
+
+Milei’s Radical Economic Policies
+
+Milei proposes solutions that are radical departures from conventional policies: dollarization to combat inflation, substantial deregulation to foster business freedom, massive spending cuts, and a reduction in the number of ministries to streamline governance. These policies, while appealing for their simplicity and directness, are typically unimplementable by mainstream parties due to political constraints, economic feasibility, and potential social backlash (Rodrik, 2018). His approach capitalizes on public frustration, positioning these policies not just as economic measures but as a rebuke to the political establishment.
+
+Populism’s Appeal and Media Influence
+
+The mediatization of politics, as discussed by Esser and Strömbäck (2014), amplifies the appeal of populist figures like Milei, who use media platforms to directly connect with the electorate, bypassing traditional political discourse and presenting themselves as authentic alternatives. This direct engagement enhances their appeal and enables them to shape public perception effectively.
+
+Cultural vs. Economic Factors
+
+While economic factors are significant in Milei’s rise, comparing this with other regions illustrates the nuanced drivers of populism. In Europe and North America, cultural backlash, particularly against immigration, plays a more prominent role (Tabellini, 2020; Pupaza & Wehner, 2023). However, in Argentina, the populist surge is primarily driven by economic grievances rather than cultural threats, distinguishing it from the cultural dynamics predominant in Western populism (Inglehart & Norris, 2016).
+
+Populism and Political Dynamics
+
+Populists like Milei exploit political cleavages, positioning themselves in stark contrast to mainstream parties (Laclau, 2005). They reject the fatalism of conventional politics, advocating for a politics of will and decisive action (Müller, 2011). This approach, coupled with their rejection of the unworkability of simplistic solutions (Guiso et al., 2018), makes their radical platforms particularly appealing during crises.
+
+Populism’s Fluctuating Success
+
+Despite the persistent presence of populist ideologies, their success is not constant but dependent on specific socio-economic conditions (Rodrik, 2018). The resurgence of populism in Latin America since the 2000s correlates with periods of intense economic upheaval, globalization, and significant social changes, highlighting the contextual nature of populist successes.
+
+Conclusion
+
+Curt Mills' claim regarding the heightened receptivity to radical ideas in times of economic crisis holds substantial validity in the context of Javier Milei’s political ascent in Argentina. While economic distress significantly contributes to the populist appeal, the role of mediatization, political cleavages, and the dynamic nature of populist strategies also play critical roles. Therefore, understanding the rise of populism requires a multifaceted approach that considers both economic and cultural factors, as well as the strategic responses of populist leaders to the evolving political landscape.
+
+References
+
+Esser, F., & Strömbäck, J. (2014). Mediatization of Politics: Understanding the Transformation of Western Democracies. Palgrave Macmillan.
+Guillermo, A. C. (2002). Economic Crises and Electoral Responses in Argentina. Latin American Politics and Society, 44(3), 1-30.
+Inglehart, R., & Norris, P. (2016). Trump, Brexit, and the Rise of Populism: Economic Have-Nots and Cultural Backlash. HKS Faculty Research Working Paper Series.
+Kaufman, R. R., & Stallings, B. (1991). The Political Economy of Latin American Populism. In Macroeconomics of Populism in Latin America. University of Chicago Press.
+Mudde, C. (2004). The Populist Zeitgeist. Government and Opposition, 39(4), 541-563.
+Roberts, K. M. (2006). Populism, Political Conflict, and Grass-roots Organization in Latin America. Comparative Politics, 38(2), 127-148.
+Rodrik, D. (2018). Populism and the Economics of Globalization. Journal of International Business Policy, 1(1-2), 12-33.

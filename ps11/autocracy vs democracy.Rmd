@@ -17,7 +17,7 @@ knitr::opts_chunk$set(echo = FALSE,
 setwd("D:/OneDrive - London School of Economics/Desktop/lse assignments/GV482/ps11") #change to your own directory
 
 need <- c('tidyverse','haven','modelsummary',"fixest","estimatr","kableExtra",
-          "arsenal","car","ggfixest") # list packages
+          "arsenal","car","ggfixest","plm") # list packages
 have <- need %in% rownames(installed.packages()) # checks packages you have
 if(any(!have)) install.packages(need[!have]) # install missing packages
 invisible(lapply(need, library, character.only=T))
@@ -395,6 +395,25 @@ gof_map <- list(list("raw" = "nobs", "clean" = "$N$", "fmt" = 0),
 msummary(mods, stars = TRUE, coef_map=coef_map, 
          gof_map=gof_map, escape=F,
          title="Impact of Democracy on GDP per Capita",)
+```
+
+```{r ab}
+data_plm <- pdata.frame(data, index = c("wbcode2", "year"))
+within0 <- feols(y ~ dem|wbcode2+year, data = data)
+ab1 <- pgmm(y ~ dem + lag(y,1)|lag(y,2:50)+lag(dem,1:50),
+            collapse=F,
+                 effect="twoways",
+                 model="onestep",
+                            data=data_plm)
+ab_total_attack_geo <- pgmm(as.formula(paste0(outcome,"lag(PopulistTotal,1)+",
+                                              homeattacks,geoattacks,controls,
+                                              "+Year|lag(PopulistTotal,2)")), 
+                            effect="individual",
+                            weights=data_ab_pdata$weight,
+                            data=data_ab_pdata)
+within2 <- feols(y ~ dem + l(y,1) + l(y,2)|wbcode2+year, data = data, panel.id=~wbcode2+year)
+within3 <- feols(y ~ dem + l(y,1) + l(y,2) + l(y,3) + l(y,4)|wbcode2+year, data = data, panel.id=~wbcode2+year)
+within4 <- feols(y ~ dem + l(y,1:8)|wbcode2+year, data = data, panel.id=~wbcode2+year)
 ```
 
 **Q5** ANRR contend that this approach solve the issues associated with the parallel trend assumption, but they do not really provide evidence this is so. One way to do so is to construct leads and lags of the treatment and plot the estimates. We will use five years around the treatment (5 leads and 5 lags). A $x$-year lead, with $x \in \{1,...,5\}$, is a dummy variable which takes value one $x$ years before a country transition and zero otherwise. A $x$-year lag corresponds to a dummy variable which takes a value one $x$ years after a country transition and zero otherwise. When the parallel trend assumption holds, then all leads should be statistically insignificant (**beware** this is a necessary, but not sufficient condition: all leads being statistically insignificant do not prove that the parallel trends assumption holds).^[A probably better way to check for this would be to perform an event study. For those of you interested, here is a useful guide on how to do so:  [link](https://lost-stats.github.io/Model_Estimation/Research_Design/event_study.html).]
