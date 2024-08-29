@@ -20,10 +20,11 @@ contributes:
       template-partials:
         - before-body.tex
       geometry:
-        - top=30mm
-        - left=30mm
-        - right=30mm
+        - top=25mm
+        - left=25mm
+        - right=25mm
+        - bottom=25mm
         - heightrounded
-      linkcolor: blue
+      linkcolor: black
       link-citations: true
       

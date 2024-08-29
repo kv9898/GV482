@@ -36,9 +36,7 @@ load("cleaned/data.RData")
 
 # Introduction
 
-Motivated by the wide-spread association of terrorism and the recent rise of populism in Europe [@Mudde2016], this project explores the impact of terrorism on populism in Europe. Using data from 33 (former) EU countries from 1980 and 2020 and a Two Way Fixed Effects (TWFE) approach, this project finds no evidence for an *overall* effect of domestic terrorism on electoral support for populist parties in legislative elections, due to neutralising effects of different terrorist ideologies. Nevertheless, casualties from terrorism in *neighbouring* countries are found to weakly increase home support
-for populism. Terrorist attacks in neighbouring countries are found to substantively increase support for
-populism in the *next* year, although this effect offset by earlier attacks.
+Motivated by the wide-spread association of terrorism and the recent rise of populism in Europe [@Mudde2016], this project explores the impact of terrorism on populism in Europe. Using data from 33 (former) EU countries from 1980 and 2020 and a Two Way Fixed Effects (TWFE) approach, this project finds no evidence for an *overall* effect of domestic terrorism on electoral support for populist parties in legislative elections, due to neutralising effects of different terrorist ideologies. Nevertheless, casualties from terrorism in *neighbouring* countries are found to weakly increase home support for populism. Terrorist attacks in neighbouring countries are found to substantively increase support for populism in the *next* year, although this effect offset by earlier attacks.
 
 Counter-intuitively, the numbers of attacks by Islamic and right-wing attacks are found to have opposite effects to the *casualties* from such attacks. The former are found to increase support for populism while the latter are found to reduce it. This suggests that different types of terrorism (demonstrative and destructive) have different impacts as they are strategically implemented to achieve different goals.
 
@@ -279,6 +277,7 @@ data <- data |>
          HomencaspopY4    = HomencasY4 * 1000000 / populationY1,
   )
 ```
+
 -   (Proxies for) Number of terrorist attacks attributed to Left/Right/Islamic groups in home country $i$, $l$ year(s) before election (`HomeleftproxyY*`/`HomerightproxyY*`/`HomeIslClaimY*`) per million population.
 
 -   (Proxies for) Casualties attributed to Left/Right/Islamic groups in home country $i$, $l$ year(s) before election (`Homenkill_*Y*`+`Homenwound_*Y*`) per million population.
@@ -524,7 +523,7 @@ ggplot(results, aes(x=time, y=estimate, color=region, shape=significant)) + them
 
 The results of the main analysis are presented in @tbl-collapsed with terrorist measures aggregated across years, and in @tbl-twfe with year-disaggregated measures. For both tables, columns (1) to (4) measure populism by total attacks per million population; columns (5) to (8) measure it by total casualties. Columns (1), (2), (5) and (6) *exclude* foreign terrorism ($c_{i,i'}=0$). In contrast, columns (3) and (7) include terrorism in neighbouring countries ($c=c^{geo}$); columns (4) and (8) weight foreign countries by cultural proximity to the home country ($c=c^{cul}$), as explained in @sec-foreign-attack. @fig-twfe visualises the coefficients of column (3) in @tbl-twfe, which is the preferred specification with the highest explanatory power ($R^2$ Adj.=`r get_gof(twfe_total[[3]])[["adj.r.squared"]]|>round(3)`), as well as the corresponding aggregated estimates in @tbl-collapsed.
 
-The results suggest that, overall, home terrorism within four years preceding elections, measured by number of attacks or casualties, does *not* have a statistically significant effect on total populist vote shares, as neither @tbl-collapsed nor @tbl-twfe shows statistically significant coefficients of home terrorism that are consistent and robust with control variables. @sec-disaggregated reveals that the null result is due to the cancelling effects of terrorism of different ideologies. 
+The results suggest that, overall, home terrorism within four years preceding elections, measured by number of attacks or casualties, does *not* have a statistically significant effect on total populist vote shares, as neither @tbl-collapsed nor @tbl-twfe shows statistically significant coefficients of home terrorism that are consistent and robust with control variables. @sec-disaggregated reveals that the null result is due to the cancelling effects of terrorism of different ideologies.
 
 Although columns (4) and (7) of @tbl-twfe suggest a significantly *negative* effect of terrorism on populism, their coefficients do not match other specifications and are thus not robust. Moreover, even if they had an effect, they were likely offset by the positive effects from other years, as suggested by their close-to-zero aggregated coefficients in @tbl-collapsed.
 
@@ -619,10 +618,9 @@ load("output/twfe_collapsed.RData")
 twfe_collapsed_table
 ```
 
-```{=tex}
 \newpage
 \blandscape
-```
+
 ```{r twfe-analysis}
 #| eval: false
 load("cleaned/data.RData")
@@ -1147,8 +1145,8 @@ The results imply that, when analysing the effect of terrorism on populism, poli
 ::: {#refs}
 :::
 
-
 \appendix
+
 # Combined Regressions {#sec-combined .appendix}
 
 ```{r twfe_total_combined}
@@ -1368,7 +1366,7 @@ twfe_left_combined_table
 
 # External Data Source for Population {#sec-population-data .appendix}
 
-To measure foreign terrorism with respect to the population of the foreign country, the existing population data in the dataset are insufficient and external population data are needed. To maximise the cohenrence of existing data and external data, the same source of data is used (Eurostat). 
+To measure foreign terrorism with respect to the population of the foreign country, the existing population data in the dataset are insufficient and external population data are needed. To maximise the cohenrence of existing data and external data, the same source of data is used (Eurostat).
 
 Specifically, the Population on 1 January by age and sex data (code: demo_pjan) is used [@Eurostat2022]. As an option, the data of both sexes are aggregated on the Eurostat website before they are downloaded. In general, the external data aligns well with existing data, but minor discrepancies existed (up to 2 people per observation). In this case, the existing data are used first, and the missing values are filled with external data.
 
