@@ -2,3 +2,4 @@
 * text=auto
 *.qmd linguist-detectable
 *.rmd linguist-detectable
+*.Rmd linguist-detectable
