@@ -4,3 +4,6 @@
 *.qmd linguist-detectable
 *.rmd linguist-detectable
 *.Rmd linguist-detectable
+
+# Exclude `_extensions/` from GitHub language statistics
+**/_extensions/** linguist-vendored
